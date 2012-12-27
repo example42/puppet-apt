@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# File managed by puppet: do not modify!
+
+#
+# Simplified and unified apt cron script for both Debian and Ubuntu
+#
+
+set -e
+
+# apt-get update
+if apt-get -qq update 2>/dev/null; then
+  if which dbus-send >/dev/null && pidof dbus-daemon >/dev/null; then
+    dbus-send --system / app.apt.dbus.updated boolean:true
+  fi
+  touch /var/lib/apt/periodic/update-stamp
+fi
+
+# download packages
+apt-get -qq -d dist-upgrade 2>/dev/null
+touch /var/lib/apt/periodic/download-upgradeable-stamp
+
+# check for unattended-upgrade and run it
+UnattendedUpgrade='0'
+eval $(apt-config shell UnattendedUpgrade APT::Periodic::Unattended-Upgrade)
+if [ $UnattendedUpgrade -eq 1 ]; then
+  unattended-upgrade
+  touch /var/lib/apt/periodic/upgrade-stamp
+fi
+
+# apt-get autoclean
+apt-get -qq autoclean
+touch /var/lib/apt/periodic/autoclean-stamp
