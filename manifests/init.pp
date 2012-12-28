@@ -46,7 +46,7 @@ class apt (
   # Logic management according to parameters provided by users
   $manage_package = $apt::bool_absent ? {
     true  => 'absent',
-    false => $apt::version,
+    false => 'present',
   }
   $manage_file = $apt::bool_absent ? {
     true    => 'absent',
@@ -88,7 +88,7 @@ class apt (
   }
 
   # The whole apt configuration directory is managed only
-  # if $apt::source_dir is provided 
+  # if $apt::source_dir is provided
   if $apt::source_dir and $apt::config_dir != '' {
     file { 'apt.dir':
       ensure  => directory,
@@ -104,11 +104,11 @@ class apt (
   }
 
   exec { 'aptget_update':
-    command     => $apt::update_command",
+    command     => $apt::update_command,
     logoutput   => false,
     refreshonly => true,
   }
-  
+
   ### Include custom class if $my_class is set
   if $apt::my_class {
     include $apt::my_class
