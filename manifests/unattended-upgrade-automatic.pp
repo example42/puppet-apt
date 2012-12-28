@@ -1,7 +1,6 @@
 define apt::unattended-upgrade-automatic($mail = '') {
-  package {"unattended-upgrades":
-    ensure => present,
-  }
+
+  include apt::unattended-upgrade
   
   apt::conf{"99unattended-upgrade":
     ensure  => present,

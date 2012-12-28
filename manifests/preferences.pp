@@ -8,24 +8,33 @@
 #  + uninstall a preference file
 #  apt::preferences { "packagename": enabled => false, }
 #
-
 define apt::preferences (
-    enabled='true'
-) {
-    file { "apt-preferences-${name}":
-        path   => "/etc/apt/preferences.d/${name}",
-        mode   => "0644",
-        owner  => "root",
-        group  => "root",
-        ensure => $enabled ? {
-	    'true'  => present,
-	    default => absent,
-	},
-        source => ["puppet:///modules/apt/seat/${name}--${hostname}",
-                   "puppet:///modules/apt/seat/${name}-${role}-${type}",
-                   "puppet:///modules/apt/seat/${name}-${role}",
-                   "puppet:///modules/apt/seat/${name}-${type}",
-                   "puppet:///modules/apt/seat/${name}",
-        ],
-    }
+  $source  = '' ,
+  $content = '' ,
+  $ensure  = present ) {
+
+  $manage_file_source = $source ? {
+    ''        => undef,
+    default   => $source,
+  }
+
+  $manage_file_content = $content ? {
+    ''        => undef,
+    default   => $content,
+  }
+
+  file { "preferences_$name":
+    ensure  => $ensure,
+    path    => "${apt::preferences_dir}/${name}",
+    mode    => $apt::config_file_mode,
+    owner   => $apt::config_file_owner,
+    group   => $apt::config_file_group,
+    require => Package['apt'],
+    before  => Exec['aptget_update'],
+    notify  => Exec['aptget_update'],
+    source  => $manage_file_source,
+    content => $manage_file_content,
+    audit   => $apt::manage_audit,
+  }
+
 }
