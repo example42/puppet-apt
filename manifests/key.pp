@@ -7,12 +7,6 @@
 #    url => 'key url',
 #  }
 #
-# For example, to add the standard Seat key, you can use
-#
-#   apt::key { "952C4F3A":
-#     url => "http://debian.pgol.com/seat/seat.asc",
-#   } 
-#
 define apt::key ( 
   $url         = '',
   $environment = undef,

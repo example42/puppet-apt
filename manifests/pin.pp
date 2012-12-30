@@ -61,7 +61,7 @@ define apt::pin (
     require => Package[$apt::package],
     before  => Exec['aptget_update'],
     notify  => Exec['aptget_update'],
-    content => $manage_file_content,
+    content => template($manage_file_content),
     audit   => $apt::manage_audit,
   }
 
