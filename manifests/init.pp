@@ -83,6 +83,7 @@ class apt (
     require => Package[$apt::package],
     source  => $apt::manage_file_source,
     content => $apt::manage_file_content,
+    notify  => Exec['aptget_update'],
     replace => $apt::manage_file_replace,
     audit   => $apt::manage_audit,
   }
@@ -95,12 +96,17 @@ class apt (
       path    => $apt::config_dir,
       require => Package[$apt::package],
       source  => $apt::source_dir,
+      notify  => Exec['aptget_update'],
       recurse => true,
       purge   => $apt::bool_source_dir_purge,
       force   => $apt::bool_source_dir_purge,
       replace => $apt::manage_file_replace,
       audit   => $apt::manage_audit,
     }
+  }
+
+  apt::conf { 'update_trigger':
+    content => "// File managed by Puppet. Triggers an apt-get update on first run\n",
   }
 
   exec { 'aptget_update':
