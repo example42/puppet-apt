@@ -49,6 +49,7 @@ define apt::pin (
       ''      => 'apt/pin-release.erb',
       default => 'apt/pin-version.erb',
     default   => $content,
+    }
   }
 
   file { "apt_pin_$name":
