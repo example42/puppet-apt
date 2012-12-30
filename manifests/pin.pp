@@ -42,6 +42,8 @@ define apt::pin (
   $ensure   = 'present'
 ) {
 
+  include apt
+
   $manage_file_content = $content ? {
     ''        => $version ? {
       ''      => 'apt/pin-release.erb',
@@ -55,7 +57,7 @@ define apt::pin (
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
-    require => Package['apt'],
+    require => Package[$apt::package],
     before  => Exec['aptget_update'],
     notify  => Exec['aptget_update'],
     content => $manage_file_content,

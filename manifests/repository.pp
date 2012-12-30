@@ -31,13 +31,15 @@ define apt::repository (
   $url,
   $distro,
   $repository,
-  $key      = '',
-  $key_url  = '',
-  $template = 'apt/repository.list.erb',
-  $source   = false,
-  $ensure   = 'present'
+  $key         = '',
+  $key_url     = '',
+  $template    = 'apt/repository.list.erb',
+  $source      = false,
+  $environment = undef,
+  $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
+  $ensure      = 'present'
   ) {
-  require apt
+  include apt
 
   file { "repository_${name}":
     ensure  => $ensure,
@@ -45,7 +47,7 @@ define apt::repository (
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
-    require => Package['apt'],
+    require => Package[$apt::package],
     before  => Exec['aptget_update'],
     notify  => Exec['aptget_update'],
     source  => $manage_file_source,
@@ -57,14 +59,18 @@ define apt::repository (
     case $key_url {
       '' : {
         exec { "aptkey_add_${key}":
-          command => "gpg --recv-key ${key} ; gpg -a --export | apt-key add -",
-          unless  => "apt-key list | grep -q ${key}",
+          command     => "gpg --recv-key ${key} ; gpg -a --export | apt-key add -",
+          unless      => "apt-key list | grep -q ${key}",
+          environment => $environment,
+          path        => $path,
         }
       }
       default: {
         exec { "aptkey_add_${key}":
-          command => "wget -O - ${key_url} | apt-key add -",
-          unless  => "apt-key list | grep -q ${key}",
+          command     => "wget -O - ${key_url} | apt-key add -",
+          unless      => "apt-key list | grep -q ${key}",
+          environment => $environment,
+          path        => $path,
         }
       }
     }

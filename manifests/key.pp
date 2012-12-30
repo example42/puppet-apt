@@ -15,7 +15,7 @@
 #
 define apt::key ( 
   $url         = '',
-  $environment = '',
+  $environment = undef,
   $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
   $keyserver   = '',
   $fingerprint = ''
