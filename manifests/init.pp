@@ -46,7 +46,7 @@ class apt (
   # Logic management according to parameters provided by users
   $manage_package = $apt::bool_absent ? {
     true  => 'absent',
-    false => 'present',
+    false => $apt::version,
   }
   $manage_file = $apt::bool_absent ? {
     true    => 'absent',
