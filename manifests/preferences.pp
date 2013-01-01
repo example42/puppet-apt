@@ -24,7 +24,7 @@ define apt::preferences (
     default   => $content,
   }
 
-  file { "preferences_${name}":
+  file { "apt_preferences_${name}":
     ensure  => $ensure,
     path    => "${apt::preferences_dir}/${name}",
     mode    => $apt::config_file_mode,
