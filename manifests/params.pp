@@ -3,6 +3,7 @@
 class apt::params  {
 
   $package = 'apt'
+  $extra_packages = 'debconf-utils'
 
   $config_file = '/etc/apt/apt.conf'
   $config_dir = '/etc/apt'

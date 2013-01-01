@@ -8,6 +8,7 @@ describe 'apt' do
 
   describe 'Test standard installation' do
     it { should contain_package('apt').with_ensure('present') }
+    it { should contain_package('debconf-utils').with_ensure('present') }
     it { should_not contain_service('apt') }
     it { should contain_file('apt.conf').with_ensure('present') }
   end
@@ -19,10 +20,23 @@ describe 'apt' do
 
   describe 'Test standard installation with monitoring and firewalling' do
     it { should contain_package('apt').with_ensure('present') }
+    it { should contain_package('debconf-utils').with_ensure('present') }
     it { should_not contain_service('apt') }
     it { should contain_file('apt.conf').with_ensure('present') }
     it { should_not contain_monitor__process }
     it { should_not contain_firewall }
+  end
+
+  describe 'Test installation of extra packages, as string' do
+    let(:params) { {:extra_packages => 'aptitude,apt-utils' } }
+    it { should contain_package('aptitude').with_ensure('present') }
+    it { should contain_package('apt-utils').with_ensure('present') }
+  end
+
+  describe 'Test installation of extra packages, as array' do
+    let(:params) { {:extra_packages => [ 'aptitude','apt-utils' ] } }
+    it { should contain_package('aptitude').with_ensure('present') }
+    it { should contain_package('apt-utils').with_ensure('present') }
   end
 
   describe 'Test decommissioning - absent' do
