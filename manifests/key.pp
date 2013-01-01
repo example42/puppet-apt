@@ -7,7 +7,7 @@
 #    url => 'key url',
 #  }
 #
-define apt::key ( 
+define apt::key (
   $url         = '',
   $environment = undef,
   $path        = '/usr/sbin:/usr/bin:/sbin:/bin',

@@ -21,6 +21,7 @@ class apt (
   $absent              = params_lookup( 'absent' ),
   $audit_only          = params_lookup( 'audit_only' , 'global' ),
   $package             = params_lookup( 'package' ),
+  $extra_packages      = params_lookup( 'extra_packages' ),
   $config_dir          = params_lookup( 'config_dir' ),
   $config_file         = params_lookup( 'config_file' )
   ) inherits apt::params {
@@ -38,6 +39,14 @@ class apt (
   $preferences_dir = "${config_dir}/preferences.d"
 
 
+  $array_extra_packages = is_array($apt::extra_packages) ? {
+    false     => $apt::extra_packages ? {
+      ''      => [],
+      default => split($apt::extra_packages, ','),
+    },
+    default   => $apt::extra_packages,
+  }
+
   # Sanitize of booleans
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_absent=any2bool($absent)
@@ -46,7 +55,7 @@ class apt (
   # Logic management according to parameters provided by users
   $manage_package = $apt::bool_absent ? {
     true  => 'absent',
-    false => 'present',
+    false => $apt::version,
   }
   $manage_file = $apt::bool_absent ? {
     true    => 'absent',
@@ -71,6 +80,10 @@ class apt (
 
   ### Resources managed by the module
   package { $apt::package:
+    ensure => $apt::manage_package,
+  }
+
+  package { $apt::array_extra_packages:
     ensure => $apt::manage_package,
   }
 
