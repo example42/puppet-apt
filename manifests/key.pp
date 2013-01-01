@@ -11,7 +11,7 @@ define apt::key (
   $url         = '',
   $environment = undef,
   $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
-  $keyserver   = '',
+  $keyserver   = 'subkeys.pgp.net',
   $fingerprint = ''
 ) {
 
