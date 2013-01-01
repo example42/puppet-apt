@@ -44,12 +44,12 @@ define apt::pin (
 
   include apt
 
-  $manage_file_content = $content ? {
+  $manage_file_content = $template ? {
     ''        => $version ? {
       ''      => 'apt/pin-release.erb',
       default => 'apt/pin-version.erb',
-    default   => $content,
-    }
+    },
+    default   => $template,
   }
 
   file { "apt_pin_${name}":
