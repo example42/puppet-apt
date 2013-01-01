@@ -20,7 +20,7 @@ define apt::sources_list (
     default   => $content,
   }
 
-  file { "sourcelist_${name}":
+  file { "apt_sourceslist_${name}":
     ensure  => $ensure,
     path    => "${apt::sourcelist_dir}/${name}.list",
     mode    => $apt::config_file_mode,

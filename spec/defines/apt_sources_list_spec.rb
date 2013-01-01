@@ -12,11 +12,11 @@ describe 'apt::sources_list' do
 
   describe 'Test apt sources.list file creation by content' do
     it 'should create a sample1.list file' do
-      should contain_file('sourceslist_sample1').with_ensure('present')
-      should contain_file('sourceslist_sample1').with_path('/etc/apt/sources.list.d/sample1.list')
+      should contain_file('apt_sourceslist_sample1').with_ensure('present')
+      should contain_file('apt_sourceslist_sample1').with_path('/etc/apt/sources.list.d/sample1.list')
     end
     it 'should populate correctly sample1.list file' do
-      content = catalogue.resource('file', 'sourceslist_sample1').send(:parameters)[:content]
+      content = catalogue.resource('file', 'apt_sourceslist_sample1').send(:parameters)[:content]
       content.should match(/content from template/)
     end
   end
@@ -29,11 +29,11 @@ describe 'apt::sources_list' do
     }
 
     it 'should create a sample2.list file' do
-      should contain_file('sourceslist_sample2').with_ensure('present')
-      should contain_file('sourceslist_sample2').with_path('/etc/apt/sources.list.d/sample2.list')
+      should contain_file('apt_sourceslist_sample2').with_ensure('present')
+      should contain_file('apt_sourceslist_sample2').with_path('/etc/apt/sources.list.d/sample2.list')
     end
     it 'should request a valid source' do
-      content = catalogue.resource('file', 'sourceslist_sample2').send(:parameters)[:source]
+      content = catalogue.resource('file', 'apt_sourceslist_sample2').send(:parameters)[:source]
       content.should == "puppet://modules/apt/spec"
     end
   end
@@ -46,7 +46,7 @@ describe 'apt::sources_list' do
     }
 
     it 'should not create a sample3.list file' do
-      should contain_file('sourceslist_sample3').with_ensure('absent')
+      should contain_file('apt_sourceslist_sample3').with_ensure('absent')
     end
   end
 

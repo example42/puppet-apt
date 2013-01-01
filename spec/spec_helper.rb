@@ -18,7 +18,8 @@ RSpec.configure do |c|
   c.filter_run_excluding :broken => true
 
   c.after :each do
-    FileUtils.remove_entry_secure(@puppetdir)
+#    FileUtils.remove_entry_secure(@puppetdir) # This breaks with multiple spec files
+    FileUtils.rm_rf(Dir.glob('/tmp/apt20*') , :secure => true)
   end
 
   c.module_path = File.join(File.dirname(__FILE__), '../../')
