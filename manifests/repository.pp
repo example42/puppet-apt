@@ -41,7 +41,7 @@ define apt::repository (
   ) {
   include apt
 
-  file { "repository_${name}":
+  file { "apt_repository_${name}":
     ensure  => $ensure,
     path    => "${apt::sourcelist_dir}/${name}.list",
     mode    => $apt::config_file_mode,
