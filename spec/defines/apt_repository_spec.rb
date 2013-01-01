@@ -90,9 +90,9 @@ deb-src url2 distro2 repo2/)
 # sample4 repository
 deb url4 distro4 repo4/)
     end
-    it 'should execute a key add command' do
-      should contain_exec('aptkey_add_key4').with_command('gpg --recv-key key4 ; gpg -a --export | apt-key add -')
-      should contain_exec('aptkey_add_key4').with_unless('apt-key list | grep -q key4')
+    it 'should execute an adv command' do
+      should contain_exec('aptkey_adv_key4').with_command('apt-key adv --keyserver subkeys.pgp.net --recv key4')
+      should contain_exec('aptkey_adv_key4').with_unless('apt-key list | grep -q key4')
     end
   end
 

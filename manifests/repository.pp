@@ -56,23 +56,11 @@ define apt::repository (
   }
 
   if $key {
-    case $key_url {
-      '' : {
-        exec { "aptkey_add_${key}":
-          command     => "gpg --recv-key ${key} ; gpg -a --export | apt-key add -",
-          unless      => "apt-key list | grep -q ${key}",
-          environment => $environment,
-          path        => $path,
-        }
-      }
-      default: {
-        exec { "aptkey_add_${key}":
-          command     => "wget -O - ${key_url} | apt-key add -",
-          unless      => "apt-key list | grep -q ${key}",
-          environment => $environment,
-          path        => $path,
-        }
-      }
+    apt::key { $key:
+      url         => $key_url,
+      environment => $environment,
+      path        => $path,
+      fingerprint => $key,
     }
   }
 }
