@@ -9,10 +9,10 @@ class apt::params  {
   $config_dir = '/etc/apt'
 
   $update_command = '/usr/bin/apt-get -qq update'
-  
+
   $manage_preferences = true
   $manage_sourceslist = true
-  
+
   $config_dir_mode = '0755'
   $config_file_mode = '0644'
   $config_file_owner = 'root'

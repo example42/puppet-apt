@@ -20,7 +20,7 @@
 #   apt::pin { "cassandra":
 #     version  => "0.7.5",
 #     priority => "1001",
-#   } 
+#   }
 #
 # Or, you can force installation of firefox from the intrepid release
 #
@@ -34,7 +34,7 @@
 #     template => 'my_site/apt/pin.erb',
 #   }
 #
-define apt::pin ( 
+define apt::pin (
   $version  = '',
   $release  = '',
   $priority = '',
@@ -52,7 +52,7 @@ define apt::pin (
     }
   }
 
-  file { "apt_pin_$name":
+  file { "apt_pin_${name}":
     ensure  => $ensure,
     path    => "${apt::preferences_dir}/pin-${name}",
     mode    => $apt::config_file_mode,

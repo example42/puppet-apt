@@ -47,6 +47,6 @@ files should be placed in the $my_project classes.
 
 # Set automatic unattended security updates
 
-        apt::unattended-upgrade-automatic{ 'updates':
+        apt::unattended_upgrade_automatic{ 'updates':
           mail => 'boian.mihailov@cvalka.com',
         }
