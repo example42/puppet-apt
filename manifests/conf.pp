@@ -3,7 +3,7 @@
 define apt::conf (
   $source    = '' ,
   $content   = '' ,
-  $prioritty = '10' ,
+  $priority  = '10' ,
   $ensure    = present ) {
 
   include apt
