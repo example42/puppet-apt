@@ -3,7 +3,7 @@
 define apt::conf (
   $source    = '' ,
   $content   = '' ,
-  $prioritty = '10' ,
+  $priority  = '10' ,
   $ensure    = present ) {
 
   include apt
@@ -18,7 +18,7 @@ define apt::conf (
     default   => $content,
   }
 
-  file { "apt_conf_$name":
+  file { "apt_conf_${name}":
     ensure  => $ensure,
     path    => "${apt::aptconf_dir}/${priority}${name}.conf",
     mode    => $apt::config_file_mode,
