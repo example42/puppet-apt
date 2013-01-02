@@ -50,7 +50,7 @@ define apt::repository (
     require => Package[$apt::package],
     before  => Exec['aptget_update'],
     notify  => Exec['aptget_update'],
-    source  => $manage_file_source,
+    source  => $apt::manage_file_source,
     content => template($template),
     audit   => $apt::manage_audit,
   }
