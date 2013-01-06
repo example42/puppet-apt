@@ -18,6 +18,9 @@
 # [*repository*]
 #   Name of the sections (ie main, contrib, non-free, ...) to use
 #
+# [*src_repo*]
+#   Is this repository a source one (ie deb-src instead of deb)
+#
 # [*key*]
 #   Fingerprint of the key to retrieve
 #
@@ -70,15 +73,29 @@ define apt::repository (
   $url,
   $distro,
   $repository,
+  $src_repo    = false,
   $key         = '',
   $key_url     = '',
-  $template    = 'apt/repository.list.erb',
-  $source      = false,
+  $template    = '',
+  $source      = '',
   $environment = undef,
   $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
   $ensure      = 'present'
   ) {
   include apt
+
+  $manage_file_source = $source ? {
+    ''        => undef,
+    default   => $source,
+  }
+
+  $manage_file_content = $source ? {
+    ''        => $template ? {
+      ''      => template('apt/repository.list.erb'),
+      default => template($template),
+    },
+    default   => undef,
+  }
 
   file { "apt_repository_${name}":
     ensure  => $ensure,
@@ -89,8 +106,8 @@ define apt::repository (
     require => Package[$apt::package],
     before  => Exec['aptget_update'],
     notify  => Exec['aptget_update'],
-    source  => $apt::manage_file_source,
-    content => template($template),
+    source  => $manage_file_source,
+    content => $manage_file_content,
     audit   => $apt::manage_audit,
   }
 

@@ -57,6 +57,10 @@ describe 'apt' do
       content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
       content.should match "fqdn: rspec.example42.com"
     end
+    it 'should not request a source ' do
+      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:source]
+      content.should be_nil
+    end
     it 'should generate a template that uses custom options' do
       content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
       content.should match "value_a"
@@ -69,11 +73,15 @@ describe 'apt' do
 
     it 'should request a valid source ' do
       content = catalogue.resource('file', 'apt.conf').send(:parameters)[:source]
-      content.should == "puppet://modules/apt/spec"
+      content.should == 'puppet://modules/apt/spec'
+    end
+    it 'should not have content' do
+      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
+      content.should be_nil
     end
     it 'should request a valid source dir' do
       content = catalogue.resource('file', 'apt.dir').send(:parameters)[:source]
-      content.should == "puppet://modules/apt/dir/spec"
+      content.should == 'puppet://modules/apt/dir/spec'
     end
     it 'should purge source dir if source_dir_purge is true' do
       content = catalogue.resource('file', 'apt.dir').send(:parameters)[:purge]
