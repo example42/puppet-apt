@@ -4,6 +4,8 @@ class apt::params  {
 
   $package = 'apt'
   $extra_packages = 'debconf-utils'
+  $force_conf_d = false
+  $force_sources_list_d = false
 
   $config_dir = '/etc/apt'
   $config_file = "${apt::params::config_dir}/apt.conf"

@@ -45,6 +45,7 @@ describe 'apt' do
     it 'should remove Package[apt]' do should contain_package('apt').with_ensure('absent') end 
     it { should_not contain_service('apt') }
     it 'should remove apt configuration file' do should contain_file('apt.conf').with_ensure('absent') end
+    it 'should remove sources.list file' do should contain_file('apt_sources.list').with_ensure('absent') end
     it { should_not contain_monitor__process }
     it { should_not contain_firewall }
   end
@@ -86,6 +87,18 @@ describe 'apt' do
       content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
       content.should match "fqdn: rspec.example42.com"
     end
+  end
+
+  describe 'Test installation without apt.conf file' do
+    let(:params) { {:force_conf_d => true } }
+    it { should contain_package('apt').with_ensure('present') }
+    it { should contain_file('apt.conf').with_ensure('absent') }
+  end
+
+  describe 'Test installation without sources.list file' do
+    let(:params) { {:force_sources_list_d => true } }
+    it { should contain_package('apt').with_ensure('present') }
+    it { should contain_file('apt_sources.list').with_ensure('absent') }
   end
 
 end

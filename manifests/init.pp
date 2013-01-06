@@ -14,6 +14,12 @@
 #   Extra packages to install, in addition of the one defined by the package parameter.
 #   Can be a comma separated string, or an array.
 #
+# [*force_conf_d*]
+#   Whether or not to delete the apt.conf file and only use the apt.conf.d directory
+#
+# [*force_sources_list_d*]
+#   Whether or not to delete the sources.list file and only use the sources.list.d directory
+#
 # Standard class parameters
 # Define the general class behaviour and customizations
 #
@@ -118,28 +124,30 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class apt (
-  $update_command      = params_lookup( 'update_command' ),
-  $extra_packages      = params_lookup( 'extra_packages' ),
-  $my_class            = params_lookup( 'my_class' ),
-  $source              = params_lookup( 'source' ),
-  $source_dir          = params_lookup( 'source_dir' ),
-  $source_dir_purge    = params_lookup( 'source_dir_purge' ),
-  $template            = params_lookup( 'template' ),
-  $options             = params_lookup( 'options' ),
-  $version             = params_lookup( 'version' ),
-  $absent              = params_lookup( 'absent' ),
-  $audit_only          = params_lookup( 'audit_only' , 'global' ),
-  $package             = params_lookup( 'package' ),
-  $config_dir          = params_lookup( 'config_dir' ),
-  $config_file         = params_lookup( 'config_file' ),
-  $sourceslist_file    = params_lookup( 'sourceslist_file' ),
-  $aptconfd_dir        = params_lookup( 'aptconfd_dir' ),
-  $sourceslist_dir     = params_lookup( 'sourceslist_dir' ),
-  $preferences_dir     = params_lookup( 'preferences_dir' ),
-  $config_dir_mode     = params_lookup( 'config_dir_mode' ),
-  $config_file_mode    = params_lookup( 'config_file_mode' ),
-  $config_file_owner   = params_lookup( 'config_file_owner' ),
-  $config_file_group   = params_lookup( 'config_file_group' )
+  $update_command       = params_lookup( 'update_command' ),
+  $extra_packages       = params_lookup( 'extra_packages' ),
+  $force_conf_d         = params_lookup( 'force_conf_d' ),
+  $force_sources_list_d = params_lookup( 'force_sources_list_d' ),
+  $my_class             = params_lookup( 'my_class' ),
+  $source               = params_lookup( 'source' ),
+  $source_dir           = params_lookup( 'source_dir' ),
+  $source_dir_purge     = params_lookup( 'source_dir_purge' ),
+  $template             = params_lookup( 'template' ),
+  $options              = params_lookup( 'options' ),
+  $version              = params_lookup( 'version' ),
+  $absent               = params_lookup( 'absent' ),
+  $audit_only           = params_lookup( 'audit_only' , 'global' ),
+  $package              = params_lookup( 'package' ),
+  $config_dir           = params_lookup( 'config_dir' ),
+  $config_file          = params_lookup( 'config_file' ),
+  $sourceslist_file     = params_lookup( 'sourceslist_file' ),
+  $aptconfd_dir         = params_lookup( 'aptconfd_dir' ),
+  $sourceslist_dir      = params_lookup( 'sourceslist_dir' ),
+  $preferences_dir      = params_lookup( 'preferences_dir' ),
+  $config_dir_mode      = params_lookup( 'config_dir_mode' ),
+  $config_file_mode     = params_lookup( 'config_file_mode' ),
+  $config_file_owner    = params_lookup( 'config_file_owner' ),
+  $config_file_group    = params_lookup( 'config_file_group' )
   ) inherits apt::params {
 
   ### Definition of some variables used in the module
@@ -152,6 +160,8 @@ class apt (
   }
 
   # Sanitize of booleans
+  $bool_force_conf_d=any2bool($force_conf_d)
+  $bool_force_sources_list_d=any2bool($force_sources_list_d)
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_absent=any2bool($absent)
   $bool_audit_only=any2bool($audit_only)
@@ -161,9 +171,19 @@ class apt (
     true  => 'absent',
     false => $apt::version,
   }
-  $manage_file = $apt::bool_absent ? {
-    true    => 'absent',
-    default => 'present',
+  $manage_config_file = $apt::bool_absent ? {
+    true      => 'absent',
+    default   => $bool_force_conf_d ? {
+      true    => 'absent',
+      default => 'present',
+    }
+  }
+  $manage_sourceslist_file = $apt::bool_absent ? {
+    true      => 'absent',
+    default   => $bool_force_sources_list_d ? {
+      true    => 'absent',
+      default => 'present',
+    }
   }
   $manage_audit = $apt::bool_audit_only ? {
     true  => 'all',
@@ -192,7 +212,7 @@ class apt (
   }
 
   file { 'apt.conf':
-    ensure  => $apt::manage_file,
+    ensure  => $apt::manage_config_file,
     path    => $apt::config_file,
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
@@ -200,6 +220,18 @@ class apt (
     require => Package[$apt::package],
     source  => $apt::manage_file_source,
     content => $apt::manage_file_content,
+    notify  => Exec['aptget_update'],
+    replace => $apt::manage_file_replace,
+    audit   => $apt::manage_audit,
+  }
+
+  file { 'apt_sources.list':
+    ensure  => $apt::manage_sourceslist_file,
+    path    => $apt::sourceslist_file,
+    mode    => $apt::config_file_mode,
+    owner   => $apt::config_file_owner,
+    group   => $apt::config_file_group,
+    require => Package[$apt::package],
     notify  => Exec['aptget_update'],
     replace => $apt::manage_file_replace,
     audit   => $apt::manage_audit,
