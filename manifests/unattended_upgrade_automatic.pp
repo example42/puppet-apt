@@ -1,3 +1,20 @@
+# =Define: apt::unattended_upgrade_automatic
+#
+# This define configures APT unattended upgrades
+#
+#
+# == Parameters
+#
+# [*mail*]
+#   E-mail address to which send reports
+#
+#
+# == Examples
+#
+# Usage:
+#  apt::unattended_upgrade_automatic { }
+#
+#
 define apt::unattended_upgrade_automatic($mail = '') {
 
   include apt::unattended_upgrade

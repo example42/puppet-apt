@@ -1,6 +1,31 @@
-# Define: apt::pin
+# = Define: apt::pin
 #
 # Pinning packages
+#
+#
+# == Parameters
+#
+# [*name*]
+#   Implicit parameter.
+#   Name of the pin to add
+#
+# [*version*]
+#   Version to pin
+#
+# [*release*]
+#   Release to pin
+#
+# [*priority*]
+#   Priority of the configuration to add
+#
+# [*template*]
+#   Custom template to use, instead of the default one
+#
+# [*ensure*]
+#   Whether to add or delete this pin
+#
+#
+# == Examples
 #
 # Usage:
 #  apt::pin { "packageName":
