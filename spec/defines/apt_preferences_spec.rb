@@ -19,6 +19,10 @@ describe 'apt::preferences' do
       content = catalogue.resource('file', 'apt_preferences_sample1').send(:parameters)[:content]
       content.should match(/content from template/)
     end
+    it 'should not request a source' do
+      content = catalogue.resource('file', 'apt_preferences_sample1').send(:parameters)[:source]
+      content.should be_nil
+    end
   end
 
   describe 'Test apt preferences file creation by source' do
@@ -35,6 +39,10 @@ describe 'apt::preferences' do
     it 'should request a valid source' do
       content = catalogue.resource('file', 'apt_preferences_sample2').send(:parameters)[:source]
       content.should == "puppet://modules/apt/spec"
+    end
+    it 'should not have content' do
+      content = catalogue.resource('file', 'apt_preferences_sample2').send(:parameters)[:content]
+      content.should be_nil
     end
   end
 

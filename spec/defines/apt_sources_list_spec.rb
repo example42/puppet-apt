@@ -19,6 +19,10 @@ describe 'apt::sources_list' do
       content = catalogue.resource('file', 'apt_sourceslist_sample1').send(:parameters)[:content]
       content.should match(/content from template/)
     end
+    it 'should not request a source' do
+      content = catalogue.resource('file', 'apt_sourceslist_sample1').send(:parameters)[:source]
+      content.should be_nil
+    end
   end
 
   describe 'Test apt sources.list file creation by source' do
@@ -34,7 +38,11 @@ describe 'apt::sources_list' do
     end
     it 'should request a valid source' do
       content = catalogue.resource('file', 'apt_sourceslist_sample2').send(:parameters)[:source]
-      content.should == "puppet://modules/apt/spec"
+      content.should == 'puppet://modules/apt/spec'
+    end
+    it 'should not have content' do
+      content = catalogue.resource('file', 'apt_sourceslist_sample2').send(:parameters)[:content]
+      content.should be_nil
     end
   end
 

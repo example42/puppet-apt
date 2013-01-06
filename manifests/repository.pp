@@ -1,13 +1,55 @@
-# Define: apt::repository
+# =Define: apt::repository
 #
 # Add repository to /etc/apt/sources.list.d
+#
+#
+# == Parameters
+#
+# [*name*]
+#   Implicit parameter.
+#   Name of the repository to add
+#
+# [*url*]
+#   Url of the repository to add
+#
+# [*distro*]
+#   Name of the distribution to use
+#
+# [*repository*]
+#   Name of the sections (ie main, contrib, non-free, ...) to use
+#
+# [*src_repo*]
+#   Is this repository a source one (ie deb-src instead of deb)
+#
+# [*key*]
+#   Fingerprint of the key to retrieve
+#
+# [*key_url*]
+#   Url from which fetch the key
+#
+# [*template*]
+#   Custom template to use to fill the repository configuration (instead of the default one)
+#
+# [*source*]
+#   Source to copy for this repository configuration
+#
+# [*environment*]
+#   Environment to pass to the executed commands
+#
+# [*path*]
+#   Path to pass to the executed commands
+#
+# [*ensure*]
+#   Whether to add or delete this repository
+#
+#
+# == Examples
 #
 # Usage:
 #  apt::repository { "name":
 #    url        => 'repository url',
 #    distro     => 'distrib name',
 #    repository => 'repository name(s)'
-#    source     => false
 #  }
 #
 # For example, to add the standard Ubuntu Lucid repository, you can use
@@ -31,19 +73,33 @@ define apt::repository (
   $url,
   $distro,
   $repository,
+  $src_repo    = false,
   $key         = '',
   $key_url     = '',
-  $template    = 'apt/repository.list.erb',
-  $source      = false,
+  $template    = '',
+  $source      = '',
   $environment = undef,
   $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
   $ensure      = 'present'
   ) {
   include apt
 
+  $manage_file_source = $source ? {
+    ''        => undef,
+    default   => $source,
+  }
+
+  $manage_file_content = $source ? {
+    ''        => $template ? {
+      ''      => template('apt/repository.list.erb'),
+      default => template($template),
+    },
+    default   => undef,
+  }
+
   file { "apt_repository_${name}":
     ensure  => $ensure,
-    path    => "${apt::sourcelist_dir}/${name}.list",
+    path    => "${apt::sourceslist_dir}/${name}.list",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
@@ -51,7 +107,7 @@ define apt::repository (
     before  => Exec['aptget_update'],
     notify  => Exec['aptget_update'],
     source  => $manage_file_source,
-    content => template($template),
+    content => $manage_file_content,
     audit   => $apt::manage_audit,
   }
 

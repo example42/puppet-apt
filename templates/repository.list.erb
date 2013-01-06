@@ -1,6 +1,6 @@
 # File managed by Puppet
 
-<% if (source == false) -%>
+<% if (src_repo == false) -%>
 # <%= name %> repository
 deb <%= url %> <%= distro %> <%= repository %>
 <% else -%>

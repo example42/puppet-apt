@@ -1,4 +1,35 @@
-# Define apt::conf
+# = Define: apt::conf
+#
+# Add an APT configuration file.
+#
+#
+# == Parameters
+#
+# [*name*]
+#   Implicit parameter.
+#   Name of the configuration to add
+#
+# [*source*]
+#   Source (via puppet files) of the configuration to add
+#
+# [*content*]
+#   Content (via templates) of the configuration to add
+#
+# [*priority*]
+#   Priority of the configuration to add, defaults to 10
+#
+# [*ensure*]
+#   Whether to add or delete this configuration
+#
+#
+# == Examples
+#
+# Usage:
+# apt::conf { 'DisablePdiff':
+#   content  => 'Acquire::PDiffs "false";',
+#   priority => '99',
+# }
+#
 #
 define apt::conf (
   $source    = '' ,
@@ -20,7 +51,7 @@ define apt::conf (
 
   file { "apt_conf_${name}":
     ensure  => $ensure,
-    path    => "${apt::aptconf_dir}/${priority}${name}.conf",
+    path    => "${apt::aptconfd_dir}/${priority}${name}.conf",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,

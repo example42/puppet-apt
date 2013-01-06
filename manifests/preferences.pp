@@ -1,6 +1,25 @@
-# Define: apt::preferences
+# =Define: apt::preferences
 #
 # Copy preferences to /etc/apt/preferences.d/ directory
+#
+#
+# == Parameters
+#
+# [*name*]
+#   Implicit parameter.
+#   Name of the preference to add
+#
+# [*source*]
+#   Source (via puppet files) of the preference to add
+#
+# [*content*]
+#   Content (via templates) of the preference to add
+#
+# [*ensure*]
+#   Whether to add or delete this preference
+#
+#
+# == Examples
 #
 # Usage:
 #  + install a preference file for "packagename"

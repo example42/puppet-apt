@@ -3,42 +3,154 @@
 # Manages apt.
 #
 #
+# == Parameters
+#
+# Module specific parameters
+#
+# [*update_commad*]
+#   Command to run to update index files listing available packages
+#
+# [*extra_packages*]
+#   Extra packages to install, in addition of the one defined by the package parameter.
+#   Can be a comma separated string, or an array.
+#
+# [*force_conf_d*]
+#   Whether or not to delete the apt.conf file and only use the apt.conf.d directory
+#
+# [*force_sources_list_d*]
+#   Whether or not to delete the sources.list file and only use the sources.list.d directory
+#
+# Standard class parameters
+# Define the general class behaviour and customizations
+#
+# [*my_class*]
+#   Name of a custom class to autoload to manage module's customizations
+#   If defined, ntp class will automatically "include $my_class"
+#   Can be defined also by the (top scope) variable $ntp_myclass
+#
+# [*source*]
+#   Sets the content of source parameter for main configuration file
+#   If defined, ntp main config file will have the param: source => $source
+#   Can be defined also by the (top scope) variable $ntp_source
+#
+# [*source_dir*]
+#   If defined, the whole ntp configuration directory content is retrieved
+#   recursively from the specified source
+#   (source => $source_dir , recurse => true)
+#   Can be defined also by the (top scope) variable $ntp_source_dir
+#
+# [*source_dir_purge*]
+#   If set to true (default false) the existing configuration directory is
+#   mirrored with the content retrieved from source_dir
+#   (source => $source_dir , recurse => true , purge => true)
+#   Can be defined also by the (top scope) variable $ntp_source_dir_purge
+#
+# [*template*]
+#   Sets the path to the template to use as content for main configuration file
+#   If defined, ntp main config file has: content => content("$template")
+#   Note source and template parameters are mutually exclusive: don't use both
+#   Can be defined also by the (top scope) variable $ntp_template
+#
+# [*options*]
+#   An hash of custom options to be used in templates for arbitrary settings.
+#   Can be defined also by the (top scope) variable $ntp_options
+#
+# [*version*]
+#   The package version, used in the ensure parameter of package type.
+#   Default: present. Can be 'latest' or a specific version number.
+#   Note that if the argument absent (see below) is set to true, the
+#   package is removed, whatever the value of version parameter.
+#
+# [*absent*]
+#   Set to 'true' to remove package(s) installed by module
+#   Can be defined also by the (top scope) variable $ntp_absent
+#
+# [*audit_only*]
+#   Set to 'true' if you don't intend to override existing configuration files
+#   and want to audit the difference between existing files and the ones
+#   managed by Puppet.
+#   Can be defined also by the (top scope) variables $ntp_audit_only
+#   and $audit_only
+#
+# Default class params - As defined in apt::params.
+# Note that these variables are mostly defined and used in the module itself,
+# overriding the default values might not affected all the involved components.
+# Set and override them only if you know what you're doing.
+# Note also that you can't override/set them via top scope variables.
+#
+# [*package*]
+#   The name of ntp package
+#
+# [*config_dir*]
+#   Main configuration directory. Used by puppi
+#
+# [*config_file*]
+#   Main configuration file path
+#
+# [*sourceslist_file*]
+#   The sources.list file
+#
+# [*aptconfd_dir]
+#   The apt.conf.d directory
+#
+# [*sourceslist_dir]
+#   The sources.list.d directory
+#
+# [*preferences_dir]
+#   The preferences.d directory
+#
+# [*config_file_mode*]
+#   Main configuration file path mode
+#
+# [*config_file_owner*]
+#   Main configuration file path owner
+#
+# [*config_file_group*]
+#   Main configuration file path group
+#
+#
+# == Examples
+#
 # Include it to install and run apt
 # It defines package, service, main configuration file.
 #
 # Usage:
 # include apt
 #
+# See README for details.
+#
+#
+# == Author
+#   Alessandro Franceschi <al@lab42.it/>
+#
 class apt (
-  $update_command      = params_lookup( 'update_command' ),
-  $my_class            = params_lookup( 'my_class' ),
-  $source              = params_lookup( 'source' ),
-  $source_dir          = params_lookup( 'source_dir' ),
-  $source_dir_purge    = params_lookup( 'source_dir_purge' ),
-  $template            = params_lookup( 'template' ),
-  $options             = params_lookup( 'options' ),
-  $version             = params_lookup( 'version' ),
-  $absent              = params_lookup( 'absent' ),
-  $audit_only          = params_lookup( 'audit_only' , 'global' ),
-  $package             = params_lookup( 'package' ),
-  $extra_packages      = params_lookup( 'extra_packages' ),
-  $config_dir          = params_lookup( 'config_dir' ),
-  $config_file         = params_lookup( 'config_file' )
+  $update_command       = params_lookup( 'update_command' ),
+  $extra_packages       = params_lookup( 'extra_packages' ),
+  $force_conf_d         = params_lookup( 'force_conf_d' ),
+  $force_sources_list_d = params_lookup( 'force_sources_list_d' ),
+  $my_class             = params_lookup( 'my_class' ),
+  $source               = params_lookup( 'source' ),
+  $source_dir           = params_lookup( 'source_dir' ),
+  $source_dir_purge     = params_lookup( 'source_dir_purge' ),
+  $template             = params_lookup( 'template' ),
+  $options              = params_lookup( 'options' ),
+  $version              = params_lookup( 'version' ),
+  $absent               = params_lookup( 'absent' ),
+  $audit_only           = params_lookup( 'audit_only' , 'global' ),
+  $package              = params_lookup( 'package' ),
+  $config_dir           = params_lookup( 'config_dir' ),
+  $config_file          = params_lookup( 'config_file' ),
+  $sourceslist_file     = params_lookup( 'sourceslist_file' ),
+  $aptconfd_dir         = params_lookup( 'aptconfd_dir' ),
+  $sourceslist_dir      = params_lookup( 'sourceslist_dir' ),
+  $preferences_dir      = params_lookup( 'preferences_dir' ),
+  $config_dir_mode      = params_lookup( 'config_dir_mode' ),
+  $config_file_mode     = params_lookup( 'config_file_mode' ),
+  $config_file_owner    = params_lookup( 'config_file_owner' ),
+  $config_file_group    = params_lookup( 'config_file_group' )
   ) inherits apt::params {
 
-  ### Internal variables setting
-  # Configurations directly retrieved from apt::params
-  $config_file_mode=$apt::params::config_file_mode
-  $config_dir_mode=$apt::params::config_dir_mode
-  $config_file_owner=$apt::params::config_file_owner
-  $config_file_group=$apt::params::config_file_group
-
-  $aptconf_dir = "${config_dir}/apt.conf.d"
-  $sourcelist = "${config_dir}/sources.list"
-  $sourcelist_dir = "${config_dir}/sources.list.d"
-  $preferences_dir = "${config_dir}/preferences.d"
-
-
+  ### Definition of some variables used in the module
   $array_extra_packages = is_array($apt::extra_packages) ? {
     false     => $apt::extra_packages ? {
       ''      => [],
@@ -48,6 +160,8 @@ class apt (
   }
 
   # Sanitize of booleans
+  $bool_force_conf_d=any2bool($force_conf_d)
+  $bool_force_sources_list_d=any2bool($force_sources_list_d)
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_absent=any2bool($absent)
   $bool_audit_only=any2bool($audit_only)
@@ -57,9 +171,19 @@ class apt (
     true  => 'absent',
     false => $apt::version,
   }
-  $manage_file = $apt::bool_absent ? {
-    true    => 'absent',
-    default => 'present',
+  $manage_config_file = $apt::bool_absent ? {
+    true      => 'absent',
+    default   => $bool_force_conf_d ? {
+      true    => 'absent',
+      default => 'present',
+    }
+  }
+  $manage_sourceslist_file = $apt::bool_absent ? {
+    true      => 'absent',
+    default   => $bool_force_sources_list_d ? {
+      true    => 'absent',
+      default => 'present',
+    }
   }
   $manage_audit = $apt::bool_audit_only ? {
     true  => 'all',
@@ -88,7 +212,7 @@ class apt (
   }
 
   file { 'apt.conf':
-    ensure  => $apt::manage_file,
+    ensure  => $apt::manage_config_file,
     path    => $apt::config_file,
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
@@ -96,6 +220,18 @@ class apt (
     require => Package[$apt::package],
     source  => $apt::manage_file_source,
     content => $apt::manage_file_content,
+    notify  => Exec['aptget_update'],
+    replace => $apt::manage_file_replace,
+    audit   => $apt::manage_audit,
+  }
+
+  file { 'apt_sources.list':
+    ensure  => $apt::manage_sourceslist_file,
+    path    => $apt::sourceslist_file,
+    mode    => $apt::config_file_mode,
+    owner   => $apt::config_file_owner,
+    group   => $apt::config_file_group,
+    require => Package[$apt::package],
     notify  => Exec['aptget_update'],
     replace => $apt::manage_file_replace,
     audit   => $apt::manage_audit,
