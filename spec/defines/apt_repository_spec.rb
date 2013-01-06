@@ -24,6 +24,10 @@ describe 'apt::repository' do
 # sample1 repository
 deb url1 distro1 repo1/)
     end
+    it 'should not request a source' do
+      content = catalogue.resource('file', 'apt_repository_sample1').send(:parameters)[:source]
+      content.should be_nil
+    end
   end
 
   describe 'Test apt source repository' do
@@ -32,7 +36,7 @@ deb url1 distro1 repo1/)
         'url'        =>  'url2',
         'distro'     =>  'distro2',
         'repository' =>  'repo2',
-        'source'     => true,
+        'src_repo'   =>  true,
       }
     }
 
@@ -45,6 +49,10 @@ deb url1 distro1 repo1/)
       content.should match(/# File managed by Puppet
 
 deb-src url2 distro2 repo2/)
+    end
+    it 'should not request a source' do
+      content = catalogue.resource('file', 'apt_repository_sample2').send(:parameters)[:source]
+      content.should be_nil
     end
   end
 
@@ -66,6 +74,10 @@ deb-src url2 distro2 repo2/)
     it 'should populate correctly sample3.list file' do
       content = catalogue.resource('file', 'apt_repository_sample3').send(:parameters)[:content]
       content.should match(/name: sample3/)
+    end
+    it 'should not request a source' do
+      content = catalogue.resource('file', 'apt_repository_sample3').send(:parameters)[:source]
+      content.should be_nil
     end
   end
 
@@ -89,6 +101,10 @@ deb-src url2 distro2 repo2/)
 
 # sample4 repository
 deb url4 distro4 repo4/)
+    end
+    it 'should not request a source' do
+      content = catalogue.resource('file', 'apt_repository_sample4').send(:parameters)[:source]
+      content.should be_nil
     end
     it 'should execute an adv command' do
       should contain_exec('aptkey_adv_key4').with_command('apt-key adv --keyserver subkeys.pgp.net --recv key4')
@@ -118,6 +134,10 @@ deb url4 distro4 repo4/)
 # sample5 repository
 deb url5 distro5 repo5/)
     end
+    it 'should not request a source' do
+      content = catalogue.resource('file', 'apt_repository_sample5').send(:parameters)[:source]
+      content.should be_nil
+    end
     it 'should execute a wget command' do
       should contain_exec('aptkey_add_key5').with_command('wget -O - key5_url | apt-key add -')
       should contain_exec('aptkey_add_key5').with_unless('apt-key list | grep -q key5')
@@ -136,6 +156,30 @@ deb url5 distro5 repo5/)
 
     it 'should not create a sample6.list file' do
       should contain_file('apt_repository_sample6').with_ensure('absent')
+    end
+  end
+
+  describe 'Test apt repository creation by source' do
+    let(:params) {
+      { 'name'       =>  'sample7',
+        'url'        =>  'url7',
+        'distro'     =>  'distro7',
+        'repository' =>  'repo7',
+        'source'     =>  'puppet://modules/apt/spec',
+      }
+    }
+
+    it 'should create a sample7.list file' do
+      should contain_file('apt_repository_sample7').with_ensure('present')
+      should contain_file('apt_repository_sample7').with_path('/etc/apt/sources.list.d/sample7.list')
+    end
+    it 'should request a valid source' do
+      content = catalogue.resource('file', 'apt_repository_sample7').send(:parameters)[:source]
+      content.should == 'puppet://modules/apt/spec'
+    end
+    it 'should not have content' do
+      content = catalogue.resource('file', 'apt_repository_sample7').send(:parameters)[:content]
+      content.should be_nil
     end
   end
 

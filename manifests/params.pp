@@ -4,9 +4,15 @@ class apt::params  {
 
   $package = 'apt'
   $extra_packages = 'debconf-utils'
+  $force_conf_d = false
+  $force_sources_list_d = false
 
-  $config_file = '/etc/apt/apt.conf'
   $config_dir = '/etc/apt'
+  $config_file = "${apt::params::config_dir}/apt.conf"
+  $sourceslist_file = "${apt::params::config_dir}/sources.list"
+  $aptconfd_dir = "${apt::params::config_dir}/apt.conf.d"
+  $sourceslist_dir = "${apt::params::config_dir}/sources.list.d"
+  $preferences_dir = "${apt::params::config_dir}/preferences.d"
 
   $update_command = '/usr/bin/apt-get -qq update'
 

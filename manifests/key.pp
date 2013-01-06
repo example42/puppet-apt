@@ -1,11 +1,37 @@
-# Define: apt::key
+# = Define: apt::key
 #
-# Add key to keyring
+# Add an APT key to keyring.
+#
+#
+# == Parameters
+#
+# [*name*]
+#   Implicit parameter.
+#   Name of the key to add
+#
+# [*url*]
+#   Url from which fetch the key
+#
+# [*environment*]
+#   Environment to pass to the executed commands
+#
+# [*path*]
+#   Path to pass to the executed commands
+#
+# [*keyserver*]
+#   Key server from which retrieve the key
+#
+# [*fingerprint*]
+#   Fingerprint of the key to retrieve
+#
+#
+# == Examples
 #
 # Usage:
 #  apt::key { "key id":
 #    url => 'key url',
 #  }
+#
 #
 define apt::key (
   $url         = '',

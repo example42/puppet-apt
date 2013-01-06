@@ -45,6 +45,7 @@ describe 'apt' do
     it 'should remove Package[apt]' do should contain_package('apt').with_ensure('absent') end 
     it { should_not contain_service('apt') }
     it 'should remove apt configuration file' do should contain_file('apt.conf').with_ensure('absent') end
+    it 'should remove sources.list file' do should contain_file('apt_sources.list').with_ensure('absent') end
     it { should_not contain_monitor__process }
     it { should_not contain_firewall }
   end
@@ -55,6 +56,10 @@ describe 'apt' do
     it 'should generate a valid template' do
       content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
       content.should match "fqdn: rspec.example42.com"
+    end
+    it 'should not request a source ' do
+      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:source]
+      content.should be_nil
     end
     it 'should generate a template that uses custom options' do
       content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
@@ -68,11 +73,15 @@ describe 'apt' do
 
     it 'should request a valid source ' do
       content = catalogue.resource('file', 'apt.conf').send(:parameters)[:source]
-      content.should == "puppet://modules/apt/spec"
+      content.should == 'puppet://modules/apt/spec'
+    end
+    it 'should not have content' do
+      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
+      content.should be_nil
     end
     it 'should request a valid source dir' do
       content = catalogue.resource('file', 'apt.dir').send(:parameters)[:source]
-      content.should == "puppet://modules/apt/dir/spec"
+      content.should == 'puppet://modules/apt/dir/spec'
     end
     it 'should purge source dir if source_dir_purge is true' do
       content = catalogue.resource('file', 'apt.dir').send(:parameters)[:purge]
@@ -86,6 +95,18 @@ describe 'apt' do
       content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
       content.should match "fqdn: rspec.example42.com"
     end
+  end
+
+  describe 'Test installation without apt.conf file' do
+    let(:params) { {:force_conf_d => true } }
+    it { should contain_package('apt').with_ensure('present') }
+    it { should contain_file('apt.conf').with_ensure('absent') }
+  end
+
+  describe 'Test installation without sources.list file' do
+    let(:params) { {:force_sources_list_d => true } }
+    it { should contain_package('apt').with_ensure('present') }
+    it { should contain_file('apt_sources.list').with_ensure('absent') }
   end
 
 end
