@@ -43,7 +43,7 @@ define apt::repository (
 
   file { "apt_repository_${name}":
     ensure  => $ensure,
-    path    => "${apt::sourcelist_dir}/${name}.list",
+    path    => "${apt::sourceslist_dir}/${name}.list",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,

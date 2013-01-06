@@ -20,7 +20,7 @@ define apt::conf (
 
   file { "apt_conf_${name}":
     ensure  => $ensure,
-    path    => "${apt::aptconf_dir}/${priority}${name}.conf",
+    path    => "${apt::aptconfd_dir}/${priority}${name}.conf",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
