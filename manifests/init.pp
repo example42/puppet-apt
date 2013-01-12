@@ -25,35 +25,35 @@
 #
 # [*my_class*]
 #   Name of a custom class to autoload to manage module's customizations
-#   If defined, ntp class will automatically "include $my_class"
-#   Can be defined also by the (top scope) variable $ntp_myclass
+#   If defined, apt class will automatically "include $my_class"
+#   Can be defined also by the (top scope) variable $apt_my_class
 #
 # [*source*]
 #   Sets the content of source parameter for main configuration file
-#   If defined, ntp main config file will have the param: source => $source
-#   Can be defined also by the (top scope) variable $ntp_source
+#   If defined, apt main config file will have the param: source => $source
+#   Can be defined also by the (top scope) variable $apt_source
 #
 # [*source_dir*]
-#   If defined, the whole ntp configuration directory content is retrieved
+#   If defined, the whole apt configuration directory content is retrieved
 #   recursively from the specified source
 #   (source => $source_dir , recurse => true)
-#   Can be defined also by the (top scope) variable $ntp_source_dir
+#   Can be defined also by the (top scope) variable $apt_source_dir
 #
 # [*source_dir_purge*]
 #   If set to true (default false) the existing configuration directory is
 #   mirrored with the content retrieved from source_dir
 #   (source => $source_dir , recurse => true , purge => true)
-#   Can be defined also by the (top scope) variable $ntp_source_dir_purge
+#   Can be defined also by the (top scope) variable $apt_source_dir_purge
 #
 # [*template*]
 #   Sets the path to the template to use as content for main configuration file
-#   If defined, ntp main config file has: content => content("$template")
+#   If defined, apt main config file has: content => content("$template")
 #   Note source and template parameters are mutually exclusive: don't use both
-#   Can be defined also by the (top scope) variable $ntp_template
+#   Can be defined also by the (top scope) variable $apt_template
 #
 # [*options*]
 #   An hash of custom options to be used in templates for arbitrary settings.
-#   Can be defined also by the (top scope) variable $ntp_options
+#   Can be defined also by the (top scope) variable $aptn_options
 #
 # [*version*]
 #   The package version, used in the ensure parameter of package type.
@@ -63,13 +63,13 @@
 #
 # [*absent*]
 #   Set to 'true' to remove package(s) installed by module
-#   Can be defined also by the (top scope) variable $ntp_absent
+#   Can be defined also by the (top scope) variable $apt_absent
 #
 # [*audit_only*]
 #   Set to 'true' if you don't intend to override existing configuration files
 #   and want to audit the difference between existing files and the ones
 #   managed by Puppet.
-#   Can be defined also by the (top scope) variables $ntp_audit_only
+#   Can be defined also by the (top scope) variables $apt_audit_only
 #   and $audit_only
 #
 # Default class params - As defined in apt::params.
@@ -79,7 +79,7 @@
 # Note also that you can't override/set them via top scope variables.
 #
 # [*package*]
-#   The name of ntp package
+#   The name of apt package
 #
 # [*config_dir*]
 #   Main configuration directory. Used by puppi
