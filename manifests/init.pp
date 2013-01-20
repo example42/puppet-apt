@@ -12,7 +12,7 @@
 #
 # [*extra_packages*]
 #   Extra packages to install, in addition of the one defined by the package parameter.
-#   Can be a comma separated string, or an array.
+#   Can be a comma separated string, or an array.
 #
 # [*force_conf_d*]
 #   Whether or not to delete the apt.conf file and only use the apt.conf.d directory
