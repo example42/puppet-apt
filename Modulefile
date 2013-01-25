@@ -1,8 +1,6 @@
-name    'lab42-apt'
+name 'example42-apt'
 version '0.1.9'
 
-# dependency 'lab42/common', '>= 0.1.0'
-# dependency 'lab42/puppi', '>= 0.1.0'
-# dependency 'lab42/monitor', '>= 0.1.0'
-# dependency 'lab42/backup', '>= 0.1.0'
-# dependency 'lab42/firewall', '>= 0.1.0'
+author ''
+license ''
+dependency 'example42/puppi', '>=2.0.0'
