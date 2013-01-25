@@ -111,7 +111,7 @@ define apt::repository (
     audit   => $apt::manage_audit,
   }
 
-  if $key {
+  if $key and ! defined(Apt::Key[$key]) {
     apt::key { $key:
       url         => $key_url,
       environment => $environment,
