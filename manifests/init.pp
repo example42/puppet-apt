@@ -264,6 +264,10 @@ class apt (
     refreshonly => true,
   }
 
+  Package <| title != $apt::package |> {
+    require +> Exec['aptget_update']
+  }
+
   ### Include custom class if $my_class is set
   if $apt::my_class {
     include $apt::my_class
