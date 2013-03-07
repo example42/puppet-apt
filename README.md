@@ -1,4 +1,4 @@
-= Puppet module: apt
+# Puppet module: apt
 
 Puppet module to manage apt
 
@@ -8,7 +8,7 @@ Puppet module to manage apt
 
 Licence: Apache2
 
-== DESCRIPTION
+## DESCRIPTION
 
 This module installs and manages apt and automatic updates with unattended-upgrades package.
 It's based on Example42's module structure and features standard and
@@ -25,7 +25,7 @@ Customizations for different projects and logic on how to populate configuration
 files should be placed in the $my_project classes.
 
 
-== USAGE
+## USAGE
 
 # Standard Classes
  
