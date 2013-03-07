@@ -6,5 +6,5 @@ fixtures:
     "iptables": "git://github.com/example42/puppet-iptables.git"
     "concat": "git://github.com/example42/puppet-concat.git"
   symlinks:
-    "$1": "#{source_dir}"
+    "apt": "#{source_dir}"
 
