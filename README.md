@@ -49,3 +49,5 @@ files should be placed in the $my_project classes.
         apt::unattended_upgrade_automatic{ 'updates':
           mail => 'boian.mihailov@cvalka.com',
         }
+
+[![Build Status](https://travis-ci.org/example42/puppet-apt.png?branch=master)](https://travis-ci.org/example42/puppet-apt)
