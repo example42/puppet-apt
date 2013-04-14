@@ -34,7 +34,7 @@ files should be placed in the $my_project classes.
 
         apt::conf { '10periodic':
           ensure => present,
-          source => 'puppet:///apt/10periodic',        
+          source => 'puppet:///modules/apt/10periodic',
         }
 
 - Add config via content
