@@ -22,7 +22,7 @@ describe 'apt::unattended_upgrade_automatic' do
     end
     it 'should request a valid source for 10periodic.conf file' do
       content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///apt/10periodic"
+      content.should == "puppet:///modules/apt/10periodic"
     end
   end
 
@@ -43,7 +43,7 @@ describe 'apt::unattended_upgrade_automatic' do
     end
     it 'should request a valid source for 10periodic.conf file' do
       content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///apt/10periodic"
+      content.should == "puppet:///modules/apt/10periodic"
     end
     it 'should create a 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_ensure('present')
@@ -75,7 +75,7 @@ describe 'apt::unattended_upgrade_automatic' do
     end
     it 'should request a valid source for 10periodic.conf file' do
       content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///apt/10periodic"
+      content.should == "puppet:///modules/apt/10periodic"
     end
     it 'should create a 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_ensure('present')
@@ -106,7 +106,7 @@ describe 'apt::unattended_upgrade_automatic' do
     end
     it 'should request a valid source for 10periodic.conf file' do
       content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///apt/10periodic"
+      content.should == "puppet:///modules/apt/10periodic"
     end
     it 'should create a 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_ensure('present')
@@ -140,7 +140,7 @@ Unattended-Upgrade::Package-Blacklist \{/)
     end
     it 'should request a valid source for 10periodic.conf file' do
       content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///apt/10periodic"
+      content.should == "puppet:///modules/apt/10periodic"
     end
     it 'should create a 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_ensure('present')
