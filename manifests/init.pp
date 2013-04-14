@@ -20,6 +20,11 @@
 # [*force_sources_list_d*]
 #   Whether or not to delete the sources.list file and only use the sources.list.d directory
 #
+# [*force_aptget_update*]
+#   Define if you want to trigger an apt-get update before installing ANY package.
+#   Default: false, if you want to force it set to true (not that you may have
+#   dependency cycles if you installa packages in stages before the apt module one.
+#
 # Standard class parameters
 # Define the general class behaviour and customizations
 #
@@ -128,6 +133,7 @@ class apt (
   $extra_packages       = params_lookup( 'extra_packages' ),
   $force_conf_d         = params_lookup( 'force_conf_d' ),
   $force_sources_list_d = params_lookup( 'force_sources_list_d' ),
+  $force_aptget_update  = params_lookup( 'force_aptget_update' ),
   $my_class             = params_lookup( 'my_class' ),
   $source               = params_lookup( 'source' ),
   $source_dir           = params_lookup( 'source_dir' ),
@@ -160,6 +166,7 @@ class apt (
   }
 
   # Sanitize of booleans
+  $bool_force_aptget_update=any2bool($force_aptget_update)
   $bool_force_conf_d=any2bool($force_conf_d)
   $bool_force_sources_list_d=any2bool($force_sources_list_d)
   $bool_source_dir_purge=any2bool($source_dir_purge)
@@ -264,8 +271,10 @@ class apt (
     refreshonly => true,
   }
 
-  Package <| title != $apt::package |> {
-    require +> Exec['aptget_update']
+  if $apt::bool_force_aptget_update {
+    Package <| title != $apt::package |> {
+      require +> Exec['aptget_update']
+    }
   }
 
   ### Include custom class if $my_class is set
