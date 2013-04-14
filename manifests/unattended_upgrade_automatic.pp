@@ -27,7 +27,7 @@ define apt::unattended_upgrade_automatic($mail = '') {
 
   apt::conf { 'periodic':
     ensure   => present,
-    source   => 'puppet:///apt/10periodic',
+    source   => 'puppet:///modules/apt/10periodic',
     priority => '10',
   }
 
