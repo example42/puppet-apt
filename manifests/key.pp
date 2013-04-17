@@ -34,11 +34,11 @@
 #
 #
 define apt::key (
-  $url         = '',
-  $environment = undef,
-  $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
-  $keyserver   = 'subkeys.pgp.net',
-  $fingerprint = ''
+  $url             = '',
+  $environment     = undef,
+  $path            = '/usr/sbin:/usr/bin:/sbin:/bin',
+  $keyserver       = 'subkeys.pgp.net',
+  $fingerprint     = ''
 ) {
 
   if $url != '' {
@@ -56,4 +56,5 @@ define apt::key (
       path        => $path,
     }
   }
+
 }

@@ -33,6 +33,9 @@
 # [*source*]
 #   Source to copy for this repository configuration
 #
+# [*keyring_package*]
+#   Optional name of the keyring package for the repo
+#
 # [*environment*]
 #   Environment to pass to the executed commands
 #
@@ -79,6 +82,7 @@ define apt::repository (
   $template    = '',
   $source      = '',
   $environment = undef,
+  $keyring_package = '',
   $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
   $ensure      = 'present'
   ) {
@@ -117,6 +121,18 @@ define apt::repository (
       environment => $environment,
       path        => $path,
       fingerprint => $key,
+      notify      => Exec['aptget_update'],
+      before      => Exec['aptget_update'],
     }
   }
+
+  if $keyring_package != '' {
+    if !defined(Package[$keyring_package]) {
+      package { $keyring_package:
+        ensure  => present,
+        require => [ Exec['aptget_update'] , File["apt_repository_${name}"] ],
+      }
+    }
+  }
+
 }
