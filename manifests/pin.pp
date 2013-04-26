@@ -1,19 +1,41 @@
 # = Define: apt::pin
 #
 # Pinning packages
+# See man apt_preferences for more details
 #
 #
 # == Parameters
 #
 # [*name*]
-#   Implicit parameter.
-#   Name of the pin to add
+#   Name of the pin to add. Implicit parameter
+#   If you want to specify two or more pins for the same resource,
+#   you can use it, like this:
 #
-# [*version*]
-#   Version to pin
+#  apt::pin { 'firefox_intrepid':
+#    name     => 'firefox',
+#    type     => 'release',
+#    value    => 'intrepid',
+#    priority => "900",
+#  }
+#  apt::pin { 'firefox-4.5':
+#    name     => 'firefox',
+#    type     => 'version',
+#    value    => '4.5.*',
+#    priority => "501",
+#  }
 #
-# [*release*]
-#   Release to pin
+# [*type*]
+#   One of the available pin types: origin, version or release
+#   Default: version.
+#
+# [*value*]
+#   The value to pin to. Depends on the choosen type.
+#   IE:
+#    type  => 'version'
+#    value => '5.8*'
+#
+#    type  => 'release'
+#    value => 'a=stable, v=7.0'
 #
 # [*priority*]
 #   Priority of the configuration to add
@@ -29,28 +51,31 @@
 #
 # Usage:
 #  apt::pin { "packageName":
-#    version  => "version to pin (optional)",
-#    release  => "release to pin (optional)",
-#    priority => "pin priority",
+#    type     => 'pin_type',
+#    value    => 'pin criteria',
+#    priority => 'pin priority',
 #  }
 #
-# You need to set at least version or release to pin and not both.
-# You can provide also a custom template and polulate it as you want:
+# You need to set at least a value, in which case pin type defaults to "version"
+#
+# You can provide also a custom template and populate it as you want:
 #   apt::pin { "cassandra":
 #     template => 'my_site/apt/pin.erb',
 #   }
 #
 # For example, to forcing installation of cassandra 0.7.5, you can pin it:
 #
-#   apt::pin { "cassandra":
-#     version  => "0.7.5",
-#     priority => "1001",
+#   apt::pin { 'cassandra':
+#     type     => 'version',
+#     value    => '0.7.5',
+#     priority => '1001',
 #   }
 #
 # Or, you can force installation of firefox from the intrepid release
 #
-#  apt::pin { "firefox-3.0":
-#    release  => "intrepid",
+#  apt::pin { 'firefox-3.0':
+#    type     => 'release',
+#    value    => 'intrepid',
 #    priority => "900",
 #  }
 #
@@ -60,8 +85,8 @@
 #   }
 #
 define apt::pin (
-  $version  = '',
-  $release  = '',
+  $type     = '',
+  $value    = '',
   $priority = '',
   $template = '',
   $ensure   = 'present'
@@ -69,17 +94,19 @@ define apt::pin (
 
   include apt
 
+  $pin_type = $type ? {
+    ''      => 'version',
+    default => $type,
+  }
+
   $manage_file_content = $template ? {
-    ''        => $version ? {
-      ''      => 'apt/pin-release.erb',
-      default => 'apt/pin-version.erb',
-    },
+    ''        => 'apt/pin.erb',
     default   => $template,
   }
 
-  file { "apt_pin_${name}":
+  file { "apt_pin_${title}":
     ensure  => $ensure,
-    path    => "${apt::preferences_dir}/pin-${name}",
+    path    => "${apt::preferences_dir}/pin-${title}",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
@@ -89,5 +116,4 @@ define apt::pin (
     content => template($manage_file_content),
     audit   => $apt::manage_audit,
   }
-
 }
