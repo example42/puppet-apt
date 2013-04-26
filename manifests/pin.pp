@@ -137,9 +137,6 @@ define apt::pin (
   }
 
   ### Handle shorthands
-  $real_type = ''
-  $real_value = ''
-
   if $origin != '' {
     $real_type = 'origin'
     $real_value = $origin
