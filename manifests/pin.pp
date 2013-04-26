@@ -24,6 +24,27 @@
 #    priority => "501",
 #  }
 #
+# [*version*]
+#   Format:
+#    version => '4.5.*',
+#   can be specified as a shorthand for:
+#    type     => 'version',
+#    value    => '4.5.*',
+#
+# [*release*]
+#   Format:
+#    release => 'intrepid',
+#   can be specified as a shorthand for:
+#     type     => 'release',
+#     value    => 'intrepid',
+#
+# [*origin*]
+#   Format:
+#    origin => 'ftp.debian.org',
+#   can be specified as a shorthand for:
+#     type     => 'origin',
+#     value    => 'ftp.debian.org',
+#
 # [*type*]
 #   One of the available pin types: origin, version or release
 #   Default: version.
@@ -50,13 +71,25 @@
 # == Examples
 #
 # Usage:
+# Short form:
+# You need to set at least version, release or origin to pin.
+# Can't specify more than one.
+#
+#  apt::pin { "packageName":
+#    version  => "version to pin (optional)",
+#    release  => "release to pin (optional)",
+#    origin   => "origin  to pin (optional)",
+#    priority => "pin priority",
+#
+# Complete form:
+# You need to set at least a value, in which case pin type defaults to "version"
+#
 #  apt::pin { "packageName":
 #    type     => 'pin_type',
 #    value    => 'pin criteria',
 #    priority => 'pin priority',
 #  }
 #
-# You need to set at least a value, in which case pin type defaults to "version"
 #
 # You can provide also a custom template and populate it as you want:
 #   apt::pin { "cassandra":
@@ -90,19 +123,46 @@ define apt::pin (
   $value    = '',
   $priority = '',
   $template = '',
+  $version  = '',
+  $release  = '',
+  $origin   = '',
   $ensure   = 'present'
 ) {
 
   include apt
 
-  $pin_package = $package ? {
+  $real_package = $package ? {
     ''      => $name,
     default => $package,
   }
 
-  $pin_type = $type ? {
+  ### Handle shorthands
+  $real_type = ''
+  $real_value = ''
+
+  if $origin != '' {
+    $real_type = 'origin',
+    $real_value = $origin,
+  }
+
+  if $release != '' {
+    $real_type = 'release',
+    $real_value = $release,
+  }
+
+  if $version != '' {
+    $real_type = 'version',
+    $real_value = $version,
+  }
+
+  $real_type = $type ? {
     ''      => 'version',
     default => $type,
+  }
+
+  $real_value = $value ? {
+    ''      => '*',
+    default => $value,
   }
 
   $manage_file_content = $template ? {
