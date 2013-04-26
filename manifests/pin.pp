@@ -6,19 +6,19 @@
 #
 # == Parameters
 #
-# [*name*]
-#   Name of the pin to add. Implicit parameter
+# [*package*]
+#   Name of the package. If empty, defaults to $name
 #   If you want to specify two or more pins for the same resource,
 #   you can use it, like this:
 #
 #  apt::pin { 'firefox_intrepid':
-#    name     => 'firefox',
+#    package  => 'firefox',
 #    type     => 'release',
 #    value    => 'intrepid',
 #    priority => "900",
 #  }
 #  apt::pin { 'firefox-4.5':
-#    name     => 'firefox',
+#    package  => 'firefox',
 #    type     => 'version',
 #    value    => '4.5.*',
 #    priority => "501",
@@ -85,6 +85,7 @@
 #   }
 #
 define apt::pin (
+  $package  = '',
   $type     = '',
   $value    = '',
   $priority = '',
@@ -93,6 +94,11 @@ define apt::pin (
 ) {
 
   include apt
+
+  $pin_package = $package ? {
+    ''      => $name,
+    default => $package,
+  }
 
   $pin_type = $type ? {
     ''      => 'version',
@@ -106,7 +112,7 @@ define apt::pin (
 
   file { "apt_pin_${title}":
     ensure  => $ensure,
-    path    => "${apt::preferences_dir}/pin-${title}-${type}",
+    path    => "${apt::preferences_dir}/pin-${name}-${type}",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
