@@ -141,28 +141,26 @@ define apt::pin (
   $real_value = ''
 
   if $origin != '' {
-    $real_type = 'origin',
-    $real_value = $origin,
+    $real_type = 'origin'
+    $real_value = $origin
   }
 
   if $release != '' {
-    $real_type = 'release',
-    $real_value = $release,
+    $real_type = 'release'
+    $real_value = $release
   }
 
   if $version != '' {
-    $real_type = 'version',
-    $real_value = $version,
+    $real_type = 'version'
+    $real_value = $version
   }
 
-  $real_type = $type ? {
-    ''      => 'version',
-    default => $type,
-  }
-
-  $real_value = $value ? {
-    ''      => '*',
-    default => $value,
+  if $type != '' {
+    $real_type = $type
+    $real_value = $value ? {
+      ''      => '*',
+      default => $value,
+    }
   }
 
   $manage_file_content = $template ? {
