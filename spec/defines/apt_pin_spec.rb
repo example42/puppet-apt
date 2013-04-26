@@ -12,12 +12,12 @@ describe 'apt::pin' do
   }
 
   describe 'Test apt pinning by release' do
-    it 'should create a pin-sample1 file' do
+    it 'should create a pin-sample1-release1 file' do
       should contain_file('apt_pin_sample1').with_ensure('present')
-      should contain_file('apt_pin_sample1').with_path('/etc/apt/preferences.d/pin-sample1')
+      should contain_file('apt_pin_sample1').with_path('/etc/apt/preferences.d/pin-sample1-release1')
     end
-    it 'should populate correctly pin-sample1 file' do
-      content = catalogue.resource('file', 'apt_pin_sample1').send(:parameters)[:content]
+    it 'should populate correctly pin-sample1-release1 file' do
+      content = catalogue.resource('file', 'apt_pin_sample1-release1').send(:parameters)[:content]
       content.should match(/Package: sample1
 Pin: release release1
 Pin-Priority: 10/)
@@ -32,11 +32,11 @@ Pin-Priority: 10/)
       }
     }
 
-    it 'should create a pin-sample2 file' do
+    it 'should create a pin-sample2-version2 file' do
       should contain_file('apt_pin_sample2').with_ensure('present')
-      should contain_file('apt_pin_sample2').with_path('/etc/apt/preferences.d/pin-sample2')
+      should contain_file('apt_pin_sample2').with_path('/etc/apt/preferences.d/pin-sample2-version2')
     end
-    it 'should populate correctly pin-sample2 file' do
+    it 'should populate correctly pin-sample2-version2 file' do
       content = catalogue.resource('file', 'apt_pin_sample2').send(:parameters)[:content]
       content.should match(/Package: sample2
 Pin: version version2
@@ -52,13 +52,14 @@ Pin-Priority: 20/)
     }
     let(:facts) { { :options => {} } }
 
-    it 'should create a pin-sample3 file' do
+    it 'should create a pin-sample3-version file' do
       should contain_file('apt_pin_sample3').with_ensure('present')
-      should contain_file('apt_pin_sample3').with_path('/etc/apt/preferences.d/pin-sample3')
+      should contain_file('apt_pin_sample3').with_path('/etc/apt/preferences.d/pin-sample3-version')
     end
     it 'should populate correctly pin-sample3 file' do
       content = catalogue.resource('file', 'apt_pin_sample3').send(:parameters)[:content]
-      content.should match(/name: sample3/)
+      content.should match(/name: sample3
+version: */)
     end
   end
 
