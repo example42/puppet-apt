@@ -106,7 +106,7 @@ define apt::pin (
 
   file { "apt_pin_${title}":
     ensure  => $ensure,
-    path    => "${apt::preferences_dir}/pin-${title}",
+    path    => "${apt::preferences_dir}/pin-${title}-${type}",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
