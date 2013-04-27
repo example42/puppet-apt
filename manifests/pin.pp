@@ -47,10 +47,11 @@
 #
 # [*type*]
 #   One of the available pin types: origin, version or release
-#   Default: version.
+#   If none of the shorthands nor type is specified, defaults to [*version*].
 #
 # [*value*]
 #   The value to pin to. Depends on the choosen type.
+#   If none specified, defaults to "*".
 #   IE:
 #    type  => 'version'
 #    value => '5.8*'
@@ -152,8 +153,15 @@ define apt::pin (
     $real_value = $version
   }
 
-  if $type != '' {
-    $real_type = $type
+  # If no shorthand succeded, we evaluate $type and $value
+  if $real_type == undef {
+    $real_type = $type ? {
+      ''      => 'version',
+      default => $type,
+    }
+  }
+
+  if $real_value == undef {
     $real_value = $value ? {
       ''      => '*',
       default => $value,
@@ -165,7 +173,7 @@ define apt::pin (
     default   => $template,
   }
 
-  file { "apt_pin_${title}":
+  file { "apt_pin_${name}":
     ensure  => $ensure,
     path    => "${apt::preferences_dir}/pin-${name}-${real_type}",
     mode    => $apt::config_file_mode,
