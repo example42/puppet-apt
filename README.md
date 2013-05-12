@@ -33,7 +33,7 @@ files should be placed in the $my_project classes.
 - Force an apt-get update before the installation on any package (this is very useful but can create dependency cycles in certain conditions)
 
         class { 'apt':
-          force_apt_update => true,
+          force_aptget_update => true,
         }
 
 
