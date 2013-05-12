@@ -30,6 +30,13 @@ files should be placed in the $my_project classes.
  
         include apt              # Install and run apt 
 
+- Force an apt-get update before the installation on any package (this is very useful but can create dependency cycles in certain conditions)
+
+        class { 'apt':
+          force_apt_update => true,
+        }
+
+
 - Add config via source
 
         apt::conf { '10periodic':
@@ -49,5 +56,6 @@ files should be placed in the $my_project classes.
         apt::unattended_upgrade_automatic{ 'updates':
           mail => 'boian.mihailov@cvalka.com',
         }
+
 
 [![Build Status](https://travis-ci.org/example42/puppet-apt.png?branch=master)](https://travis-ci.org/example42/puppet-apt)
