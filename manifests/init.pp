@@ -56,6 +56,13 @@
 #   Note source and template parameters are mutually exclusive: don't use both
 #   Can be defined also by the (top scope) variable $apt_template
 #
+# [*content*]
+#   Defines the content of the main configuration file, to be used as alternative
+#   to template when the content is populated on other ways.
+#   If defined, snmpd main config file has: content => $content
+#   Note: source, template and content are mutually exclusive.
+#   If a template is defined, that has precedence on the content parameter
+#
 # [*options*]
 #   An hash of custom options to be used in templates for arbitrary settings.
 #   Can be defined also by the (top scope) variable $aptn_options
@@ -93,7 +100,15 @@
 #   Main configuration file path
 #
 # [*sourceslist_file*]
-#   The sources.list file
+#   The sources.list file path
+#
+# [*sourceslist_template*]
+#   Sets the path to the template to use as content for the sources.list main file
+#   If defined, sources.list file has: content => content("$template")
+#
+# [*sourceslist_content*]
+#   Sets the content for the sources.list main file. Alternative to $template.
+#   If defined, sources.list file has: content => $content
 #
 # [*aptconfd_dir]
 #   The apt.conf.d directory
@@ -139,6 +154,7 @@ class apt (
   $source_dir           = params_lookup( 'source_dir' ),
   $source_dir_purge     = params_lookup( 'source_dir_purge' ),
   $template             = params_lookup( 'template' ),
+  $content              = params_lookup( 'content' ),
   $options              = params_lookup( 'options' ),
   $version              = params_lookup( 'version' ),
   $absent               = params_lookup( 'absent' ),
@@ -147,6 +163,8 @@ class apt (
   $config_dir           = params_lookup( 'config_dir' ),
   $config_file          = params_lookup( 'config_file' ),
   $sourceslist_file     = params_lookup( 'sourceslist_file' ),
+  $sourceslist_template = params_lookup( 'sourceslist_template' ),
+  $sourceslist_content  = params_lookup( 'sourceslist_content' ),
   $aptconfd_dir         = params_lookup( 'aptconfd_dir' ),
   $sourceslist_dir      = params_lookup( 'sourceslist_dir' ),
   $preferences_dir      = params_lookup( 'preferences_dir' ),
@@ -205,8 +223,19 @@ class apt (
     default   => $apt::source,
   }
   $manage_file_content = $apt::template ? {
-    ''        => undef,
+    ''        => $apt::content ? {
+      ''      => undef,
+      default => $apt::content,
+    },
     default   => template($apt::template),
+  }
+
+  $manage_sourceslist_content = $apt::sourceslist_template ? {
+    ''        => $apt::sourceslist_content ? {
+      ''      => undef,
+      default => $apt::sourceslist_content,
+    },
+    default   => template($apt::sourceslist_template),
   }
 
   ### Resources managed by the module
@@ -240,6 +269,7 @@ class apt (
     group   => $apt::config_file_group,
     require => Package[$apt::package],
     notify  => Exec['aptget_update'],
+    content => $manage_sourceslist_content,
     replace => $apt::manage_file_replace,
     audit   => $apt::manage_audit,
   }

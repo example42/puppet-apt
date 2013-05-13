@@ -11,6 +11,8 @@ class apt::params  {
   $config_dir = '/etc/apt'
   $config_file = "${apt::params::config_dir}/apt.conf"
   $sourceslist_file = "${apt::params::config_dir}/sources.list"
+  $sourceslist_template = ''
+  $sourceslist_content = ''
   $aptconfd_dir = "${apt::params::config_dir}/apt.conf.d"
   $sourceslist_dir = "${apt::params::config_dir}/sources.list.d"
   $preferences_dir = "${apt::params::config_dir}/preferences.d"
@@ -31,6 +33,7 @@ class apt::params  {
   $source_dir = ''
   $source_dir_purge = false
   $template = ''
+  $content = ''
   $options = ''
   $version = 'present'
   $absent = false
