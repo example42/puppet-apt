@@ -5,7 +5,7 @@ class apt::repo::newrelic {
     distro     => 'newrelic',
     repository => 'non-free',
     key        => '548C16BF',
+    key_url    => 'http://download.newrelic.com/548C16BF.gpg',
   }
 
 }
-
