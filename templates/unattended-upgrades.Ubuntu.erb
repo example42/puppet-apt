@@ -1,6 +1,6 @@
 Unattended-Upgrade::Allowed-Origins {
-        "Ubuntu <%= lsbdistcodename %>-security";
-        //"Ubuntu <%= lsbdistcodename %>-updates";
+        "Ubuntu <%= @lsbdistcodename %>-security";
+        //"Ubuntu <%= @lsbdistcodename %>-updates";
 };
 Unattended-Upgrade::Package-Blacklist {
 //  "vim";
@@ -15,8 +15,8 @@ Unattended-Upgrade::Package-Blacklist {
 // must be installed or anything that provides /usr/bin/mail.
 //Unattended-Upgrade::Mail "root@localhost";
 
-<% if mail != "" -%>
-Unattended-Upgrade::Mail "<%= mail %>";
+<% if @mail != "" -%>
+Unattended-Upgrade::Mail "<%= @mail %>";
 <% end -%>
 
 
