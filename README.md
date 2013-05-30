@@ -30,10 +30,10 @@ files should be placed in the $my_project classes.
  
         include apt              # Install and run apt 
 
-- Force an apt-get update before the installation on any package (this is very useful but can create dependency cycles in certain conditions)
+- DO NOT Force an apt-get update before the installation on any package (this is very useful for seamless packages installations). Default true, set to false if you have dependency cycles (or place the apt class in earlier stages)
 
         class { 'apt':
-          force_aptget_update => true,
+          force_aptget_update => false,
         }
 
 
