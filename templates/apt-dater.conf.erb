@@ -1,0 +1,53 @@
+# Managed by puppet
+# Config file of apt-dater in the form of the glib GKeyFile required
+
+[Paths]
+# Default: $XDG_CONFIG_HOME/apt-dater/hosts.conf
+#HostsFile=path-to/hosts.conf
+
+# Default: $XDG_DATA_HOME/apt-dater
+#StatsDir=path-to/stats
+
+[SSH]
+# SSH binary
+Cmd=/usr/bin/ssh
+<% if scope.lookupvar('apt::dater::reuse_ssh') -%>
+OptionalCmdFlags=-t
+<% else -%> 
+OptionalCmdFlags=-t -i <%= scope.lookupvar('apt::dater::manager_ssh_private_file') %>
+<% end -%> 
+
+# SFTP binary
+SFTPCmd=/usr/bin/sftp
+
+#[Screen]
+## Default: $XDG_CONFIG_HOME/apt-dater/screenrc
+#RCFile=path-to/screenrc
+#
+## Default: %m # %u@%h:%p
+#Title=%m # %U%H
+#
+
+# These values requires apt-dater-host to be installed on the target host.
+# You could call apt/aptitude directly (see apt-dater-host source),
+# but this is not recommended.
+[Commands]
+CmdRefresh=apt-dater-host refresh
+CmdUpgrade=apt-dater-host upgrade
+CmdInstall=apt-dater-host install %s
+
+[Appearance]
+# Colors      = (COMPONENT FG BG ';')*
+# COMPONENT ::= 'default' | 'menu' | 'status' | 'selector' | 'hoststatus' |
+#               'query' | 'input'
+# FG        ::= COLOR
+# BG        ::= COLOR
+# COLOR     ::= 'black' | 'blue' | 'cyan' | 'green' | 'magenta' | 'red' |
+#               'white' | 'yellow'
+Colors=menu brightgreen blue;status brightgreen blue;selector black red;
+
+#[TCLFilter]
+#Predefined filter expression on startup.
+#FilterExp=return [expr [string compare $lsb_distri "Debian"] == 0 && $lsb_rel < 5.0]
+#Load this TCL file on startup in the same context as the FilterExp.
+#FilterFile=/patch/to/file.tcl

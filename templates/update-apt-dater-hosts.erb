@@ -1,0 +1,17 @@
+#!/bin/bash
+
+find "<%= scope.lookupvar('apt::dater::manager_fragments_dir') %>" -maxdepth 1 -xdev -type f \
+	| perl -ne '
+		chomp;
+		/\/([^\/]*):([^\/]*):([^\/]*)$/;
+		my ($customer, $host, $port) = ($1, $2, $3);
+		# print "c=$customer, h=$host, p=$port\n";
+		push @{ $hosts{$customer} }, "$host:$port";
+		END {
+			# use Data::Dumper; print Dumper(\%hosts);
+			foreach $customer (sort keys %hosts) {
+				print "[$customer]\n";
+				print "Hosts=", join( ";", @{ $hosts{$customer} }), "\n\n";
+			}
+		}'
+	
