@@ -24,6 +24,8 @@ Customizations for different projects and logic on how to populate configuration
 files should be placed in the $my_project classes.
 
 
+It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) to manage centrally controlled updates via ssh.
+
 ## USAGE
 
 - Standard Classes
@@ -56,6 +58,22 @@ files should be placed in the $my_project classes.
         apt::unattended_upgrade_automatic{ 'updates':
           mail => 'boian.mihailov@cvalka.com',
         }
+
+- Configure a host to be controlled by apt-dater
+
+        class { 'apt::dater':
+          customer => 'ACME Corp.',
+          ssh_key_type => 'ssh-rsa',
+          ssh_key => template('site/apt-dater.pub.key');
+        }
+
+- Configure an apt-dater controller (no self-management) for root
+
+        class { 'apt::dater':
+          role => 'manager',
+          manager_ssh_key => template('site/apt-dater.priv.key');
+        }
+
 
 
 [![Build Status](https://travis-ci.org/example42/puppet-apt.png?branch=master)](https://travis-ci.org/example42/puppet-apt)

@@ -147,7 +147,9 @@ class apt (
   $update_command       = params_lookup( 'update_command' ),
   $extra_packages       = params_lookup( 'extra_packages' ),
   $force_conf_d         = params_lookup( 'force_conf_d' ),
+  $purge_conf_d         = params_lookup( 'purge_conf_d' ),
   $force_sources_list_d = params_lookup( 'force_sources_list_d' ),
+  $purge_sources_list_d = params_lookup( 'purge_sources_list_d' ),
   $force_aptget_update  = params_lookup( 'force_aptget_update' ),
   $my_class             = params_lookup( 'my_class' ),
   $source               = params_lookup( 'source' ),
@@ -186,7 +188,9 @@ class apt (
   # Sanitize of booleans
   $bool_force_aptget_update=any2bool($force_aptget_update)
   $bool_force_conf_d=any2bool($force_conf_d)
+  $bool_purge_conf_d=any2bool($purge_conf_d)
   $bool_force_sources_list_d=any2bool($force_sources_list_d)
+  $bool_purge_sources_list_d=any2bool($purge_sources_list_d)
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_absent=any2bool($absent)
   $bool_audit_only=any2bool($audit_only)
@@ -286,6 +290,44 @@ class apt (
       recurse => true,
       purge   => $apt::bool_source_dir_purge,
       force   => $apt::bool_source_dir_purge,
+      replace => $apt::manage_file_replace,
+      audit   => $apt::manage_audit,
+    }
+  }
+
+  if $bool_purge_conf_d {
+    file { 'apt_conf.dir':
+      ensure  => directory,
+      path    => $apt::aptconfd_dir,
+      mode    => $apt::config_file_mode,
+      owner   => $apt::config_file_owner,
+      group   => $apt::config_file_group,
+      require => Package[$apt::package],
+      source  => "puppet:///modules/apt/empty",
+      notify  => Exec['aptget_update'],
+      ignore  => ['.gitkeep'],
+      recurse => true,
+      purge   => true,
+      force   => true,
+      replace => $apt::manage_file_replace,
+      audit   => $apt::manage_audit,
+    }
+  }
+
+  if $bool_purge_sources_list_d {
+    file { 'apt_sources_list.dir':
+      ensure  => directory,
+      path    => $apt::sourceslist_dir,
+      mode    => $apt::config_file_mode,
+      owner   => $apt::config_file_owner,
+      group   => $apt::config_file_group,
+      require => Package[$apt::package],
+      source  => "puppet:///modules/apt/empty",
+      notify  => Exec['aptget_update'],
+      ignore  => ['.gitkeep'],
+      recurse => true,
+      purge   => true,
+      force   => true,
       replace => $apt::manage_file_replace,
       audit   => $apt::manage_audit,
     }

@@ -5,7 +5,9 @@ class apt::params  {
   $package = 'apt'
   $extra_packages = 'debconf-utils'
   $force_conf_d = false
+  $purge_conf_d = false
   $force_sources_list_d = false
+  $purge_sources_list_d = false
   $force_aptget_update = true
 
   $config_dir = '/etc/apt'
