@@ -64,8 +64,9 @@ class apt::dater::manager {
   }
 
   exec { "update-hosts.conf":
-    command  => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
-    loglevel => debug;
+    command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
+    unless  => "sh -c 'cmp ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated <(/usr/local/bin/update-apt-dater-hosts)'",
+    path    => '/bin:/usr/bin:/sbin:/usr/sbin';
   }
 
   # explicitly define the update order, uses a generated file to get proper diff support from File
