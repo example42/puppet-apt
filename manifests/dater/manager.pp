@@ -38,6 +38,12 @@ class apt::dater::manager {
       mode    => 0600,
       owner   => $apt::dater::manager_user;
 
+    "${apt::dater::manager_ad_conf_dir}/hosts.conf":
+      ensure => $apt::dater::manage_file,
+      source => "${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
+      mode   => 0600,
+      owner  => $apt::dater::manager_user;
+
     "/usr/local/bin/update-apt-dater-hosts":
       ensure  => $apt::dater::manage_file,
       content => template("apt/update-apt-dater-hosts.erb"),
@@ -57,8 +63,12 @@ class apt::dater::manager {
       force   => true;
   }
 
-  Apt::Dater::Host_fragment <<| |>> ~> exec { "update-hosts.conf":
-    command     => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf",
-    refreshonly => true;
+  exec { "update-hosts.conf":
+    command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
+    unless  => "sh -c 'cmp ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated <(/usr/local/bin/update-apt-dater-hosts)'",
+    path    => '/bin:/usr/bin:/sbin:/usr/sbin';
   }
+
+  # explicitly define the update order, uses a generated file to get proper diff support from File
+  Apt::Dater::Host_fragment <<| |>> ~> Exec["update-hosts.conf"] -> File["${apt::dater::manager_ad_conf_dir}/hosts.conf"]
 }
