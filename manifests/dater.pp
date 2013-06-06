@@ -108,6 +108,7 @@ class apt::dater (
   $ssh_key_options  = params_lookup('ssh_key_options'),
   $ssh_key_type     = params_lookup('ssh_key_type'),
   $ssh_key          = params_lookup('ssh_key'),
+  $ssh_port         = params_lookup('ssh_port'),
   $manager_user     = params_lookup('manager_user'),
   $manager_home_dir = params_lookup('manager_home_dir'),
   $manager_ssh_key  = params_lookup('manager_ssh_key'),) inherits apt::dater::params {
