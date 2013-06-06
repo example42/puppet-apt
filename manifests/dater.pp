@@ -40,6 +40,8 @@
 #
 # [*role*]
 #   One of 'host', 'manager' or 'all'.
+#   A manager controls one or more hosts via ssh and sudo to run apt-get and aptitude to
+#   install pending updates.
 #
 # [*customer*]
 #   A grouping to be displayed in the apt-dater interface. Should be a simple alphanumeric string.
@@ -92,26 +94,26 @@
 # See README for details.
 #
 class apt::dater (
-  $my_class         = params_lookup('my_class'),
-  $version          = params_lookup('version'),
-  $absent           = params_lookup('absent'),
-  $noops            = params_lookup('noops'),
-  $debug            = params_lookup('debug', 'global'),
-  $role             = params_lookup('role'),
-  $customer         = params_lookup('customer'),
-  $package          = params_lookup('package'),
-  $host_package     = params_lookup('host_package'),
-  $host_user        = params_lookup('host_user'),
-  $host_home_dir    = params_lookup('host_home_dir'),
-  $reuse_host_user  = params_lookup('reuse_host_user'),
-  $reuse_ssh        = params_lookup('reuse_ssh'),
-  $ssh_key_options  = params_lookup('ssh_key_options'),
-  $ssh_key_type     = params_lookup('ssh_key_type'),
-  $ssh_key          = params_lookup('ssh_key'),
-  $ssh_port         = params_lookup('ssh_port'),
-  $manager_user     = params_lookup('manager_user'),
-  $manager_home_dir = params_lookup('manager_home_dir'),
-  $manager_ssh_key  = params_lookup('manager_ssh_key'),) inherits apt::dater::params {
+  $my_class          = params_lookup('my_class'),
+  $version           = params_lookup('version'),
+  $absent            = params_lookup('absent'),
+  $noops             = params_lookup('noops'),
+  $debug             = params_lookup('debug', 'global'),
+  $role              = params_lookup('role'),
+  $customer          = params_lookup('customer'),
+  $package           = params_lookup('package'),
+  $host_package      = params_lookup('host_package'),
+  $host_user         = params_lookup('host_user'),
+  $host_home_dir     = params_lookup('host_home_dir'),
+  $reuse_host_user   = params_lookup('reuse_host_user'),
+  $reuse_ssh         = params_lookup('reuse_ssh'),
+  $ssh_key_options   = params_lookup('ssh_key_options'),
+  $ssh_key_type      = params_lookup('ssh_key_type'),
+  $ssh_key           = params_lookup('ssh_key'),
+  $ssh_port_override = params_lookup('ssh_port_override'),
+  $manager_user      = params_lookup('manager_user'),
+  $manager_home_dir  = params_lookup('manager_home_dir'),
+  $manager_ssh_key   = params_lookup('manager_ssh_key'),) inherits apt::dater::params {
   $bool_absent = any2bool($apt::dater::absent)
   $bool_noops = any2bool($apt::dater::noops)
   $bool_debug = any2bool($apt::dater::debug)

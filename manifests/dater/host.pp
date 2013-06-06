@@ -1,5 +1,10 @@
 class apt::dater::host {
-  include apt::dater
+  include apt::dater, openssh
+
+  $ssh_port = $apt::dater::ssh_port_override ? {
+    undef   => $openssh::port,
+    default => $apt::dater::ssh_port_override,
+  }
 
   if !defined(Package[$apt::dater::host_package]) {
     package { $apt::dater::host_package:
@@ -40,6 +45,6 @@ class apt::dater::host {
     customer => $apt::dater::customer,
     ssh_user => $apt::dater::host_user,
     ssh_name => $::fqdn,
-    ssh_port => $apt::dater::ssh_port;
+    ssh_port => $ssh_port;
   }
 }

@@ -31,7 +31,7 @@ class apt::dater::params {
   $ssh_key_options = []
   $ssh_key_type = ''
   $ssh_key = ''
-  $ssh_port = 22
+  $ssh_port_override = undef
 
   $manager_user = 'root'
   $manager_home_dir = $::operatingsystem ? {
