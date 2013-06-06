@@ -40,6 +40,6 @@ class apt::dater::host {
     customer => $apt::dater::customer,
     ssh_user => $apt::dater::host_user,
     ssh_name => $::fqdn,
-    ssh_port => 22;
+    ssh_port => $apt::dater::ssh_port;
   }
 }
