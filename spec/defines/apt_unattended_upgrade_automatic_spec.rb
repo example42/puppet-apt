@@ -52,14 +52,14 @@ describe 'apt::unattended_upgrade_automatic' do
     it 'should populate correctly 50unattended-upgrades.conf file' do
       content = catalogue.resource('file', 'apt_conf_unattended-upgrades').send(:parameters)[:content]
       content.should match(/Unattended-Upgrade::Allowed-Origins \{
-  "Debian stable";
+  "Debian squeeze";
   "Debian squeeze-security";
 \};/)
     end
   end
 
-  describe 'Test automatic unattended upgrade for lenny' do
-    let(:facts) { { :lsbdistid => 'Debian', :lsbdistcodename => 'lenny' } }
+  describe 'Test automatic unattended upgrade for wheezy' do
+    let(:facts) { { :lsbdistid => 'Debian', :lsbdistcodename => 'wheezy' } }
 
     it 'should create a 99unattended-upgrade.conf file' do
       should contain_file('apt_conf_unattended-upgrade').with_ensure('present')
@@ -84,7 +84,8 @@ describe 'apt::unattended_upgrade_automatic' do
     it 'should populate correctly 50unattended-upgrades.conf file' do
       content = catalogue.resource('file', 'apt_conf_unattended-upgrades').send(:parameters)[:content]
       content.should match(/Unattended-Upgrade::Allowed-Origins \{
-        "Debian oldstable";
+  "Debian wheezy";
+  "Debian wheezy-security";
 \};/)
     end
   end
