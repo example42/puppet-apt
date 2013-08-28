@@ -34,7 +34,7 @@ class apt::dater::host {
     }
   }
 
-  sudo::directive { "apt-dater": content => "$apt::dater::host_user ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude"; }
+  sudo::directive { "apt-dater": content => "$apt::dater::host_user ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude\n"; }
 
   @@apt::dater::host_fragment { $fqdn:
     customer => $apt::dater::customer,
