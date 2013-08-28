@@ -44,6 +44,12 @@ class apt::dater::manager {
       mode   => 0600,
       owner  => $apt::dater::manager_user;
 
+    "${apt::dater::manager_ad_conf_dir}/screenrc":
+      ensure  => $apt::dater::manage_file,
+      content => template("apt/apt-dater-screenrc.erb"),
+      mode    => 0600,
+      owner   => $apt::dater::manager_user;
+
     "/usr/local/bin/update-apt-dater-hosts":
       ensure  => $apt::dater::manage_file,
       content => template("apt/update-apt-dater-hosts.erb"),
