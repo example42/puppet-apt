@@ -4,7 +4,7 @@ class apt::dater::host {
   if !defined(Package[$apt::dater::host_package]) {
     package { $apt::dater::host_package:
       ensure => $apt::dater::manage_package,
-      noop   => $apt::dater::bool_noops,
+      noop   => $apt::dater::noops,
     }
   }
 

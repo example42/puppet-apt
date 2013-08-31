@@ -4,7 +4,7 @@ class apt::dater::manager {
   if !defined(Package[$apt::dater::package]) {
     package { $apt::dater::package:
       ensure => $apt::dater::manage_package,
-      noop   => $apt::dater::bool_noops,
+      noop   => $apt::dater::noops,
     }
   }
 

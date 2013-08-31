@@ -26,7 +26,7 @@
 # [*noops*]
 #   Set noop metaparameter to true for all the resources managed by the module.
 #   Basically you can run a dryrun for this specific module if you set
-#   this to true. Default: false
+#   this to true. Default: undef
 #
 # [*debug*]
 #   Set to 'true' to enable modules debugging
@@ -111,9 +111,10 @@ class apt::dater (
   $ssh_port         = params_lookup('ssh_port'),
   $manager_user     = params_lookup('manager_user'),
   $manager_home_dir = params_lookup('manager_home_dir'),
-  $manager_ssh_key  = params_lookup('manager_ssh_key'),) inherits apt::dater::params {
+  $manager_ssh_key  = params_lookup('manager_ssh_key')
+  ) inherits apt::dater::params {
+
   $bool_absent = any2bool($apt::dater::absent)
-  $bool_noops = any2bool($apt::dater::noops)
   $bool_debug = any2bool($apt::dater::debug)
   $bool_reuse_host_user = any2bool($apt::dater::reuse_host_user)
   $bool_reuse_ssh = any2bool($apt::dater::reuse_ssh)
@@ -169,7 +170,7 @@ class apt::dater (
       group   => 'root',
       content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'
       ),
-      noop    => $apt::dater::bool_noops,
+      noop    => $apt::dater::noops,
     }
   }
 }
