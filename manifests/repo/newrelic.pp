@@ -1,3 +1,5 @@
+# = Class: apt::repo::newrelic
+#
 class apt::repo::newrelic {
 
   apt::repository { 'newrelic':

@@ -1,3 +1,5 @@
+# = Class: apt::dater::host
+#
 class apt::dater::host {
   include apt::dater
 
@@ -20,11 +22,11 @@ class apt::dater::host {
   if !$apt::dater::bool_reuse_ssh {
     file { "${apt::dater::host_home_dir}/.ssh":
       ensure => directory,
-      mode   => 0700,
+      mode   => '0700',
       owner  => $apt::dater::host_user;
     }
 
-    ssh_authorized_key { "apt-dater-key":
+    ssh_authorized_key { 'apt-dater-key':
       ensure  => $apt::dater::manage_host_user,
       user    => $apt::dater::host_user,
       options => $apt::dater::ssh_key_options,
@@ -34,9 +36,11 @@ class apt::dater::host {
     }
   }
 
-  sudo::directive { "apt-dater": content => "$apt::dater::host_user ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude\n"; }
+  sudo::directive { 'apt-dater':
+    content => "${apt::dater::host_user} ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude\n";
+  }
 
-  @@apt::dater::host_fragment { $fqdn:
+  @@apt::dater::host_fragment { $::fqdn:
     customer => $apt::dater::customer,
     ssh_user => $apt::dater::host_user,
     ssh_name => $::fqdn,

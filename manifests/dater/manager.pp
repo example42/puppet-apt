@@ -1,3 +1,5 @@
+# = Class: apt::dater::manager
+#
 class apt::dater::manager {
   include apt::dater
 
@@ -12,7 +14,7 @@ class apt::dater::manager {
     if !defined(File[$apt::dater::manager_ssh_dir]) {
       file { $apt::dater::manager_ssh_dir:
         ensure => $apt::dater::manage_directory,
-        mode   => 0700,
+        mode   => '0700',
         owner  => $apt::dater::manager_user;
       }
     }
@@ -20,7 +22,7 @@ class apt::dater::manager {
     file { $apt::dater::manager_ssh_private_file:
       ensure  => $apt::dater::manage_file,
       content => $apt::dater::manager_ssh_key,
-      mode    => 0600,
+      mode    => '0600',
       owner   => $apt::dater::manager_user;
     }
 
@@ -29,39 +31,39 @@ class apt::dater::manager {
   file {
     $apt::dater::manager_ad_conf_dir:
       ensure => $apt::dater::manage_directory,
-      mode   => 0700,
+      mode   => '0700',
       owner  => $apt::dater::manager_user;
 
     "${apt::dater::manager_ad_conf_dir}/apt-dater.conf":
       ensure  => $apt::dater::manage_file,
-      content => template("apt/apt-dater.conf.erb"),
-      mode    => 0600,
+      content => template('apt/apt-dater.conf.erb'),
+      mode    => '0600',
       owner   => $apt::dater::manager_user;
 
     "${apt::dater::manager_ad_conf_dir}/hosts.conf":
       ensure => $apt::dater::manage_file,
       source => "${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
-      mode   => 0600,
+      mode   => '0600',
       owner  => $apt::dater::manager_user;
 
     "${apt::dater::manager_ad_conf_dir}/screenrc":
       ensure  => $apt::dater::manage_file,
-      content => template("apt/apt-dater-screenrc.erb"),
-      mode    => 0600,
+      content => template('apt/apt-dater-screenrc.erb'),
+      mode    => '0600',
       owner   => $apt::dater::manager_user;
 
-    "/usr/local/bin/update-apt-dater-hosts":
+    '/usr/local/bin/update-apt-dater-hosts':
       ensure  => $apt::dater::manage_file,
-      content => template("apt/update-apt-dater-hosts.erb"),
-      mode    => 0755,
+      content => template('apt/update-apt-dater-hosts.erb'),
+      mode    => '0755',
       owner   => root,
       group   => root,
-      notify  => Exec["update-hosts.conf"];
+      notify  => Exec['update-hosts.conf'];
 
     $apt::dater::manager_fragments_dir:
       ensure  => $apt::dater::manage_directory,
       source  => 'puppet:///modules/apt/empty',
-      mode    => 0700,
+      mode    => '0700',
       owner   => $apt::dater::manager_user,
       recurse => true,
       ignore  => ['.gitkeep'],
@@ -69,12 +71,12 @@ class apt::dater::manager {
       force   => true;
   }
 
-  exec { "update-hosts.conf":
+  exec { 'update-hosts.conf':
     command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
     unless  => "bash -c 'cmp ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated <(/usr/local/bin/update-apt-dater-hosts)'",
     path    => '/bin:/usr/bin:/sbin:/usr/sbin';
   }
 
   # explicitly define the update order, uses a generated file to get proper diff support from File
-  Apt::Dater::Host_fragment <<| |>> ~> Exec["update-hosts.conf"] -> File["${apt::dater::manager_ad_conf_dir}/hosts.conf"]
+  Apt::Dater::Host_fragment <<| |>> ~> Exec['update-hosts.conf'] -> File["${apt::dater::manager_ad_conf_dir}/hosts.conf"]
 }

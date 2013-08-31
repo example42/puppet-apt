@@ -1,3 +1,5 @@
+# = Class: apt::repo::virtualbox
+#
 class apt::repo::virtualbox {
 
   apt::repository { 'virtualbox':

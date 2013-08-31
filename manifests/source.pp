@@ -38,7 +38,7 @@ define apt::source (
     key        => $key_real,
     key_url    => $key_source_real,
   }
-  
+
   if $include_src {
     apt::repository {"${title}-src":
       url        => $location,
