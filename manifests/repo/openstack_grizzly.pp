@@ -3,7 +3,7 @@
 # This class installs the openstack repo
 #
 class apt::repo::openstack_grizzly (
-  $release = 'grizzly' 
+  $release = 'grizzly'
   ) {
 
   case $::operatingsystem {
