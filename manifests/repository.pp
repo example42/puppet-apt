@@ -24,6 +24,9 @@
 # [*key*]
 #   Fingerprint of the key to retrieve
 #
+# [*keyserver*]
+#   Keyserver to use
+#
 # [*key_url*]
 #   Url from which fetch the key
 #
@@ -79,6 +82,7 @@ define apt::repository (
   $src_repo    = false,
   $key         = '',
   $key_url     = '',
+  $keyserver   = 'subkeys.pgp.net',
   $template    = '',
   $source      = '',
   $environment = undef,
@@ -119,6 +123,7 @@ define apt::repository (
     apt::key { $key:
       url         => $key_url,
       environment => $environment,
+      keyserver   => $keyserver,
       path        => $path,
       fingerprint => $key,
       notify      => Exec['aptget_update'],
