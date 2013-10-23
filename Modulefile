@@ -1,5 +1,5 @@
 name 'example42-apt'
-version '0.1.11'
+version '0.1.12'
 
 author ''
 license ''
