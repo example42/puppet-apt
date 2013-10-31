@@ -135,7 +135,7 @@ define apt::repository (
     if !defined(Package[$keyring_package]) {
       package { $keyring_package:
         ensure  => present,
-        require => [ Exec['aptget_update'] , File["apt_repository_${name}"] ],
+        require => [ File["apt_repository_${name}"] ],
       }
     }
   }
