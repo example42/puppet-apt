@@ -29,10 +29,16 @@ class apt::dater::manager {
   }
 
   file {
+    $apt::dater::manager_conf_dir:
+      ensure  => $apt::dater::manage_directory,
+      mode    => '0700',
+      owner   => $apt::dater::manager_user;
+
     $apt::dater::manager_ad_conf_dir:
-      ensure => $apt::dater::manage_directory,
-      mode   => '0700',
-      owner  => $apt::dater::manager_user;
+      ensure  => $apt::dater::manage_directory,
+      mode    => '0700',
+      owner   => $apt::dater::manager_user,
+      require => File[$apt::dater::manager_conf_dir];
 
     "${apt::dater::manager_ad_conf_dir}/apt-dater.conf":
       ensure  => $apt::dater::manage_file,
