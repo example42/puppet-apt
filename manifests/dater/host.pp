@@ -37,7 +37,7 @@ class apt::dater::host {
   }
 
   sudo::directive { 'apt-dater':
-    content => "${apt::dater::host_user} ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude\n";
+    content => "${apt::dater::host_user} ALL=NOPASSWD: ${apt::dater::host_update_cmd}\n";
   }
 
   @@apt::dater::host_fragment { $::fqdn:
