@@ -22,6 +22,10 @@ class apt::dater::params {
   $host_package = $::operatingsystem ? {
     default => 'apt-dater-host',
   }
+  $host_update_cmd = $::operatingsystem ? {
+    /(?i:RedHat|Centos|Scientific|Fedora)/ => '/usr/bin/yum',
+    default                                => '/usr/bin/apt-get, /usr/bin/aptitude',
+  }
   $host_user = 'apt-dater'
   $host_home_dir = $::operatingsystem ? {
     default => '/var/lib/apt-dater',

@@ -24,7 +24,7 @@ Customizations for different projects and logic on how to populate configuration
 files should be placed in the $my_project classes.
 
 
-It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) to manage centrally controlled updates via ssh.
+It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) to manage centrally controlled updates via ssh on deb-based and yum-based systems.
 
 ## USAGE
 

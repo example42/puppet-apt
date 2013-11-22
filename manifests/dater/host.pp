@@ -3,10 +3,23 @@
 class apt::dater::host {
   include apt::dater
 
-  if !defined(Package[$apt::dater::host_package]) {
-    package { $apt::dater::host_package:
-      ensure => $apt::dater::manage_package,
-      noop   => $apt::dater::noops,
+  case $::operatingsystem {
+    /(?i:Debian|Ubuntu|Mint)/: {
+      if !defined(Package[$apt::dater::host_package]) {
+        package { $apt::dater::host_package:
+          ensure => $apt::dater::manage_package,
+          noop   => $apt::dater::noops,
+        }
+      }
+    }
+    /(?i:RedHat|Centos|Scientific|Fedora)/: {
+      file { '/usr/bin/apt-dater-host':
+        ensure  => 'present',
+        owner   => $apt::dater::host_user,
+        group   => $apt::dater::host_user,
+        mode    => '0750',
+        source  => 'puppet:///modules/apt/apt-dater-host-yum',
+      }
     }
   }
 
@@ -37,7 +50,7 @@ class apt::dater::host {
   }
 
   sudo::directive { 'apt-dater':
-    content => "${apt::dater::host_user} ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude\n";
+    content => "${apt::dater::host_user} ALL=NOPASSWD: ${apt::dater::host_update_cmd}\n";
   }
 
   @@apt::dater::host_fragment { $::fqdn:
