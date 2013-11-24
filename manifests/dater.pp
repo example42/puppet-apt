@@ -101,6 +101,7 @@ class apt::dater (
   $customer         = params_lookup('customer'),
   $package          = params_lookup('package'),
   $host_package     = params_lookup('host_package'),
+  $host_update_cmd  = params_lookup('host_update_cmd'),
   $host_user        = params_lookup('host_user'),
   $host_home_dir    = params_lookup('host_home_dir'),
   $reuse_host_user  = params_lookup('reuse_host_user'),
