@@ -32,7 +32,7 @@ define apt::ppa(
 
   exec { "add-apt-repository-${name}":
     environment  => $exec_environment,
-    command      => "/usr/bin/add-apt-repository ${options} ${name}",
+    command      => "/usr/bin/add-apt-repository ${options} ${name} && apt-get update",
     unless       => "/usr/bin/test -s ${sources_list_d}/${sources_list_d_filename}",
     logoutput    => 'on_failure',
   }
