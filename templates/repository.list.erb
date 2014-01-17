@@ -2,8 +2,8 @@
 
 <% if (@src_repo == false) -%>
 # <%= @name %> repository
-deb <%= @url %> <%= @distro %> <%= @repository %>
+deb <%= @trusted ? "[trusted=yes] " : "" %><%= @url %> <%= @distro %> <%= @repository %>
 <% else -%>
-deb-src <%= @url %> <%= @distro %> <%= @repository %>
+deb-src <%= @trusted ? "[trusted=yes] " : "" %><%= @url %> <%= @distro %> <%= @repository %>
 <% end -%>
 
