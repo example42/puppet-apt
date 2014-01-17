@@ -12,7 +12,7 @@ describe 'apt::repository' do
     }
   }
 
-  describe 'Test apt repository' do
+  describe 'Test untrusted apt repository' do
     it 'should create a sample1.list file' do
       should contain_file('apt_repository_sample1').with_ensure('present')
       should contain_file('apt_repository_sample1').with_path('/etc/apt/sources.list.d/sample1.list')
@@ -28,13 +28,39 @@ deb url1 distro1 repo1/)
     end
   end
 
-  describe 'Test apt source repository' do
+  describe 'Test trusted apt repository' do
+    let(:params) {
+      { 'name'       =>  'sample1',
+        'url'        =>  'url1',
+        'distro'     =>  'distro1',
+        'repository' =>  'repo1',
+        'trusted'    =>  true,
+      }
+    }
+
+    it 'should create a sample1.list file' do
+      should contain_file('apt_repository_sample1').with_ensure('present')
+      should contain_file('apt_repository_sample1').with_path('/etc/apt/sources.list.d/sample1.list')
+    end
+    it 'should populate correctly sample1.list file' do
+      should contain_file('apt_repository_sample1').with_content(/# File managed by Puppet
+
+# sample1 repository
+deb \[trusted=yes\] url1 distro1 repo1/)
+    end
+    it 'should not request a source' do
+      should contain_file('apt_repository_sample1').without_source
+    end
+  end
+
+  describe 'Test untrusted apt source repository' do
     let(:params) {
       { 'name'       =>  'sample2',
         'url'        =>  'url2',
         'distro'     =>  'distro2',
         'repository' =>  'repo2',
         'src_repo'   =>  true,
+        'trusted'    =>  false,
       }
     }
 
@@ -46,6 +72,31 @@ deb url1 distro1 repo1/)
       should contain_file('apt_repository_sample2').with_content(/# File managed by Puppet
 
 deb-src url2 distro2 repo2/)
+    end
+    it 'should not request a source' do
+      should contain_file('apt_repository_sample2').without_source
+    end
+  end
+
+  describe 'Test trusted apt source repository' do
+    let(:params) {
+      { 'name'       =>  'sample2',
+        'url'        =>  'url2',
+        'distro'     =>  'distro2',
+        'repository' =>  'repo2',
+        'src_repo'   =>  true,
+        'trusted'    =>  true,
+      }
+    }
+
+    it 'should create a sample2.list file' do
+      should contain_file('apt_repository_sample2').with_ensure('present')
+      should contain_file('apt_repository_sample2').with_path('/etc/apt/sources.list.d/sample2.list')
+    end
+    it 'should populate correctly sample2.list file' do
+      should contain_file('apt_repository_sample2').with_content(/# File managed by Puppet
+
+deb-src \[trusted=yes\] url2 distro2 repo2/)
     end
     it 'should not request a source' do
       should contain_file('apt_repository_sample2').without_source

@@ -88,7 +88,8 @@ define apt::repository (
   $environment = undef,
   $keyring_package = '',
   $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
-  $ensure      = 'present'
+  $ensure      = 'present',
+  $trusted     = false,
   ) {
   include apt
 
