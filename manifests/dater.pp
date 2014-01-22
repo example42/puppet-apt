@@ -141,6 +141,7 @@ class apt::dater (
 
   $manager_ssh_dir = "${apt::dater::manager_home_dir}/.ssh"
   $manager_ssh_private_file = "${apt::dater::manager_ssh_dir}/id_apt_dater"
+  $manager_home_conf_dir = "${apt::dater::manager_home_dir}/.config"
   $manager_ad_conf_dir = "${apt::dater::manager_home_dir}/.config/apt-dater"
   $manager_ad_hosts_file = "${apt::dater::manager_ad_conf_dir}/hosts.conf"
   $manager_fragments_dir = "${settings::vardir}/apt-dater-fragments"

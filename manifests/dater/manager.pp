@@ -26,6 +26,14 @@ class apt::dater::manager {
 
   }
 
+  # only manage the ~/.config directory iff we need it created
+  if ($apt::dater::manage_directory == 'directory') {
+    file { $apt::dater::manager_home_conf_dir:
+      ensure => $apt::dater::manage_directory,
+      owner  => $apt::dater::manager_user;
+    }
+  }
+
   file {
     $apt::dater::manager_ad_conf_dir:
       ensure => $apt::dater::manage_directory,
@@ -66,7 +74,8 @@ class apt::dater::manager {
   exec { "update-hosts.conf":
     command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
     unless  => "bash -c 'cmp ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated <(/usr/local/bin/update-apt-dater-hosts)'",
-    path    => '/bin:/usr/bin:/sbin:/usr/sbin';
+    path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+    require => File[$apt::dater::manager_ad_conf_dir];
   }
 
   # explicitly define the update order, uses a generated file to get proper diff support from File
