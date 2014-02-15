@@ -22,8 +22,7 @@
 #
 # [*force_aptget_update*]
 #   Define if you want to trigger an apt-get update before installing ANY package.
-#   Default: false, if you want to force it set to true (not that you may have
-#   dependency cycles if you installa packages in stages before the apt module one.
+#   Default: true, if you have dependency issues you might need to set this to false
 #
 # Standard class parameters
 # Define the general class behaviour and customizations
@@ -196,6 +195,11 @@ class apt (
   $bool_audit_only=any2bool($audit_only)
 
   # Logic management according to parameters provided by users
+  $manage_notify = $apt::bool_force_aptget_update ? {
+    true  => 'Exec[aptget_update]',
+    false => undef,
+  }
+
   $manage_package = $apt::bool_absent ? {
     true  => 'absent',
     false => $apt::version,
@@ -260,7 +264,7 @@ class apt (
     require => Package[$apt::package],
     source  => $apt::manage_file_source,
     content => $apt::manage_file_content,
-    notify  => Exec['aptget_update'],
+    notify  => $apt::manage_notify,
     replace => $apt::manage_file_replace,
     audit   => $apt::manage_audit,
   }
@@ -272,7 +276,7 @@ class apt (
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
     require => Package[$apt::package],
-    notify  => Exec['aptget_update'],
+    notify  => $apt::manage_notify,
     content => $manage_sourceslist_content,
     replace => $apt::manage_file_replace,
     audit   => $apt::manage_audit,
@@ -286,7 +290,7 @@ class apt (
       path    => $apt::config_dir,
       require => Package[$apt::package],
       source  => $apt::source_dir,
-      notify  => Exec['aptget_update'],
+      notify  => $apt::manage_notify,
       recurse => true,
       purge   => $apt::bool_source_dir_purge,
       force   => $apt::bool_source_dir_purge,
@@ -304,7 +308,7 @@ class apt (
       group   => $apt::config_file_group,
       require => Package[$apt::package],
       source  => 'puppet:///modules/apt/empty',
-      notify  => Exec['aptget_update'],
+      notify  => $apt::manage_notify,
       ignore  => ['.gitkeep'],
       recurse => true,
       purge   => true,
@@ -323,7 +327,7 @@ class apt (
       group   => $apt::config_file_group,
       require => Package[$apt::package],
       source  => 'puppet:///modules/apt/empty',
-      notify  => Exec['aptget_update'],
+      notify  => $apt::manage_notify,
       ignore  => ['.gitkeep'],
       recurse => true,
       purge   => true,
@@ -337,11 +341,7 @@ class apt (
     content => "// File managed by Puppet. Triggers an apt-get update on first run\n",
   }
 
-  exec { 'aptget_update':
-    command     => $apt::update_command,
-    logoutput   => false,
-    refreshonly => true,
-  }
+  include apt::apt_get_update
 
   if $apt::bool_force_aptget_update {
     Package <| title != $apt::package |> {
