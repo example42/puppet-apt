@@ -9,6 +9,7 @@ class apt::repo::percona {
     distro     => $::lsbdistcodename,
     repository => 'main',
     key        => 'CD2EFD2A',
+    keyserver  => 'keys.gnupg.net',
   }
 
 }
