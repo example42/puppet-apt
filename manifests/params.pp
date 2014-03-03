@@ -8,7 +8,7 @@ class apt::params  {
   $purge_conf_d = false
   $force_sources_list_d = false
   $purge_sources_list_d = false
-  $force_aptget_update = true
+  $force_apt_update = true
 
   $config_dir = '/etc/apt'
   $config_file = "${apt::params::config_dir}/apt.conf"

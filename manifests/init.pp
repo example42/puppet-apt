@@ -20,7 +20,7 @@
 # [*force_sources_list_d*]
 #   Whether or not to delete the sources.list file and only use the sources.list.d directory
 #
-# [*force_aptget_update*]
+# [*force_apt_update*]
 #   Define if you want to trigger an apt-get update before installing ANY package.
 #   Default: true, if you have dependency issues you might need to set this to false
 #
@@ -149,7 +149,7 @@ class apt (
   $purge_conf_d         = params_lookup( 'purge_conf_d' ),
   $force_sources_list_d = params_lookup( 'force_sources_list_d' ),
   $purge_sources_list_d = params_lookup( 'purge_sources_list_d' ),
-  $force_aptget_update  = params_lookup( 'force_aptget_update' ),
+  $force_apt_update     = params_lookup( 'force_apt_update' ),
   $my_class             = params_lookup( 'my_class' ),
   $source               = params_lookup( 'source' ),
   $source_dir           = params_lookup( 'source_dir' ),
@@ -185,7 +185,7 @@ class apt (
   }
 
   # Sanitize of booleans
-  $bool_force_aptget_update=any2bool($force_aptget_update)
+  $bool_force_apt_update=any2bool($force_apt_update)
   $bool_force_conf_d=any2bool($force_conf_d)
   $bool_purge_conf_d=any2bool($purge_conf_d)
   $bool_force_sources_list_d=any2bool($force_sources_list_d)
@@ -195,8 +195,8 @@ class apt (
   $bool_audit_only=any2bool($audit_only)
 
   # Logic management according to parameters provided by users
-  $manage_notify = $apt::bool_force_aptget_update ? {
-    true  => 'Exec[aptget_update]',
+  $manage_notify = $apt::bool_force_apt_update ? {
+    true  => 'Exec[apt_update]',
     false => undef,
   }
 
@@ -343,9 +343,9 @@ class apt (
 
   include apt::apt_get_update
 
-  if $apt::bool_force_aptget_update {
+  if $apt::bool_force_apt_update {
     Package <| title != $apt::package |> {
-      require +> Exec['aptget_update']
+      require +> Exec['apt_update']
     }
   }
 
