@@ -105,7 +105,7 @@ define apt::repository (
     default   => undef,
   }
 
-  file { "apt_repository_${name}":
+  file { "${name}.list":
     ensure  => $ensure,
     path    => "${apt::sourceslist_dir}/${name}.list",
     mode    => $apt::config_file_mode,
@@ -135,7 +135,7 @@ define apt::repository (
     if !defined(Package[$keyring_package]) {
       package { $keyring_package:
         ensure  => present,
-        require => [ File["apt_repository_${name}"] ],
+        require => File["${name}.list"],
       }
     }
   }
