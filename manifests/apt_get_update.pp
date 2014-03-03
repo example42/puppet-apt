@@ -1,5 +1,5 @@
 class apt::apt_get_update (
-  $refreshonly = true,
+  $refreshonly = true
   ) {
   exec { 'apt_update':
     command     => $apt::update_command,
