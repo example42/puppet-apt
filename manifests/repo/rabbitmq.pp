@@ -10,6 +10,7 @@ class apt::repo::rabbitmq {
     repository      => 'main',
     key_url         => 'http://www.rabbitmq.com/rabbitmq-signing-key-public.asc',
     key             => '056E8E56',
+    keyserver       => 'keys.gnupg.net',
   }
 
 }
