@@ -9,6 +9,7 @@ class apt::params  {
   $force_sources_list_d = false
   $purge_sources_list_d = false
   $force_preferences_d = false
+  $purge_preferences_d = false
   $force_aptget_update = true
 
   $config_dir = '/etc/apt'

@@ -164,6 +164,7 @@ class apt (
   $force_sources_list_d = params_lookup( 'force_sources_list_d' ),
   $purge_sources_list_d = params_lookup( 'purge_sources_list_d' ),
   $force_preferences_d  = params_lookup( 'force_preferences_d' ),
+  $purge_preferences_d  = params_lookup( 'purge_preferences_d' ),
   $force_aptget_update  = params_lookup( 'force_aptget_update' ),
   $my_class             = params_lookup( 'my_class' ),
   $source               = params_lookup( 'source' ),
@@ -209,6 +210,7 @@ class apt (
   $bool_force_sources_list_d=any2bool($force_sources_list_d)
   $bool_purge_sources_list_d=any2bool($purge_sources_list_d)
   $bool_force_preferences_d=any2bool($force_preferences_d)
+  $bool_purge_preferences_d=any2bool($purge_preferences_d)
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_absent=any2bool($absent)
   $bool_audit_only=any2bool($audit_only)
@@ -382,6 +384,25 @@ class apt (
     content => $manage_preferences_content,
     replace => $apt::manage_file_replace,
     audit   => $apt::manage_audit,
+  }
+
+  if $bool_purge_preferences_d {
+    file { 'apt_preferences.dir':
+      ensure  => directory,
+      path    => $apt::preferences_dir,
+      mode    => $apt::config_file_mode,
+      owner   => $apt::config_file_owner,
+      group   => $apt::config_file_group,
+      require => Package[$apt::package],
+      source  => 'puppet:///modules/apt/empty',
+      notify  => $apt::manage_notify,
+      ignore  => ['.gitkeep'],
+      recurse => true,
+      purge   => true,
+      force   => true,
+      replace => $apt::manage_file_replace,
+      audit   => $apt::manage_audit,
+    }
   }
 
   apt::conf { 'update_trigger':
