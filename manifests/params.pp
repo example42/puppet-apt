@@ -8,6 +8,7 @@ class apt::params  {
   $purge_conf_d = false
   $force_sources_list_d = false
   $purge_sources_list_d = false
+  $force_preferences_d = false
   $force_aptget_update = true
 
   $config_dir = '/etc/apt'
@@ -15,6 +16,9 @@ class apt::params  {
   $sourceslist_file = "${apt::params::config_dir}/sources.list"
   $sourceslist_template = ''
   $sourceslist_content = ''
+  $preferences_file = "${apt::params::config_dir}/preferences"
+  $preferences_template = ''
+  $preferences_content = ''
   $aptconfd_dir = "${apt::params::config_dir}/apt.conf.d"
   $sourceslist_dir = "${apt::params::config_dir}/sources.list.d"
   $preferences_dir = "${apt::params::config_dir}/preferences.d"
