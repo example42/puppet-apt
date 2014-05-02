@@ -291,18 +291,20 @@ class apt (
     ensure => $apt::manage_package,
   }
 
-  file { 'apt.conf':
-    ensure  => $apt::manage_config_file,
-    path    => $apt::config_file,
-    mode    => $apt::config_file_mode,
-    owner   => $apt::config_file_owner,
-    group   => $apt::config_file_group,
-    require => Package[$apt::package],
-    source  => $apt::manage_file_source,
-    content => $apt::manage_file_content,
-    notify  => $apt::manage_notify,
-    replace => $apt::manage_file_replace,
-    audit   => $apt::manage_audit,
+  if $content or $source {
+    file { 'apt.conf':
+      ensure  => $apt::manage_config_file,
+      path    => $apt::config_file,
+      mode    => $apt::config_file_mode,
+      owner   => $apt::config_file_owner,
+      group   => $apt::config_file_group,
+      require => Package[$apt::package],
+      source  => $apt::manage_file_source,
+      content => $apt::manage_file_content,
+      notify  => $apt::manage_notify,
+      replace => $apt::manage_file_replace,
+      audit   => $apt::manage_audit,
+    }
   }
 
   file { 'apt_sources.list':
@@ -373,17 +375,19 @@ class apt (
     }
   }
 
-  file { 'apt_preferences':
-    ensure  => $apt::manage_preferences_file,
-    path    => $apt::preferences_file,
-    mode    => $apt::config_file_mode,
-    owner   => $apt::config_file_owner,
-    group   => $apt::config_file_group,
-    require => Package[$apt::package],
-    notify  => $apt::manage_notify,
-    content => $manage_preferences_content,
-    replace => $apt::manage_file_replace,
-    audit   => $apt::manage_audit,
+  if $manage_preferences_content {
+    file { 'apt_preferences':
+      ensure  => $apt::manage_preferences_file,
+      path    => $apt::preferences_file,
+      mode    => $apt::config_file_mode,
+      owner   => $apt::config_file_owner,
+      group   => $apt::config_file_group,
+      require => Package[$apt::package],
+      notify  => $apt::manage_notify,
+      content => $manage_preferences_content,
+      replace => $apt::manage_file_replace,
+      audit   => $apt::manage_audit,
+    }
   }
 
   if $bool_purge_preferences_d {
