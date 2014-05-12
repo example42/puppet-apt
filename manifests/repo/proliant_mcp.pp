@@ -5,6 +5,7 @@ class apt::repo::proliant_mcp ($distro = $::lsbdistcodename) {
     distro     => "${distro}/current",
     repository => 'non-free',
     key        => '2689B887',
+    key_url    => 'http://downloads.linux.hp.com/SDR/repo/mcp/GPG-KEY-mcp';
   }
 
 }
