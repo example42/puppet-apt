@@ -291,7 +291,7 @@ class apt (
     ensure => $apt::manage_package,
   }
 
-  if $content or $source {
+  if $content or $source or $manage_config_file == 'absent' {
     file { 'apt.conf':
       ensure  => $apt::manage_config_file,
       path    => $apt::config_file,
@@ -375,7 +375,7 @@ class apt (
     }
   }
 
-  if $manage_preferences_content {
+  if $manage_preferences_content or $apt::manage_preferences_file == 'absent' {
     file { 'apt_preferences':
       ensure  => $apt::manage_preferences_file,
       path    => $apt::preferences_file,
