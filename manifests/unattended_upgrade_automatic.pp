@@ -32,14 +32,7 @@ define apt::unattended_upgrade_automatic($mail = '') {
   }
 
   case $::lsbdistid {
-    'Debian': {
-      apt::conf { 'unattended-upgrades':
-        ensure   => present,
-        content  => template("apt/unattended-upgrades.${::lsbdistcodename}.erb"),
-        priority => '50',
-      }
-    }
-    'Ubuntu': {
+    'Debian','Ubuntu': {
       apt::conf { 'unattended-upgrades':
         ensure   => present,
         content  => template("apt/unattended-upgrades.${::lsbdistid}.erb"),
