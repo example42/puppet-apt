@@ -1,9 +1,9 @@
 class apt::apt_get_update (
-  $refreshonly = true,
+  $refreshonly = true
   ) {
-  exec { 'aptget_update':
+  exec { 'apt_update':
     command     => $apt::update_command,
-    logoutput   => false,
+    logoutput   => 'on_failure',
     refreshonly => $refreshonly,
   }
 }

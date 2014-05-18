@@ -35,7 +35,7 @@ It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) 
 - DO NOT Force an apt-get update before the installation on any package (this is very useful for seamless packages installations). Default true, set to false if you have dependency cycles (or place the apt class in earlier stages)
 
         class { 'apt':
-          force_aptget_update => false,
+          force_apt_update => false,
         }
 
 

@@ -180,8 +180,8 @@ define apt::pin (
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
     require => Package[$apt::package],
-    before  => Exec['aptget_update'],
-    notify  => Exec['aptget_update'],
+    before  => Exec['apt_update'],
+    notify  => Exec['apt_update'],
     content => template($manage_file_content),
     audit   => $apt::manage_audit,
   }

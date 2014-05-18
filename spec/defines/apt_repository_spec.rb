@@ -14,19 +14,17 @@ describe 'apt::repository' do
 
   describe 'Test apt repository' do
     it 'should create a sample1.list file' do
-      should contain_file('apt_repository_sample1').with_ensure('present')
-      should contain_file('apt_repository_sample1').with_path('/etc/apt/sources.list.d/sample1.list')
+      should contain_file('sample1.list').with_ensure('present')
+      should contain_file('sample1.list').with_path('/etc/apt/sources.list.d/sample1.list')
     end
     it 'should populate correctly sample1.list file' do
-      content = catalogue.resource('file', 'apt_repository_sample1').send(:parameters)[:content]
-      content.should match(/# File managed by Puppet
+      should contain_file('sample1.list').with_content(/# File managed by Puppet
 
 # sample1 repository
 deb url1 distro1 repo1/)
     end
     it 'should not request a source' do
-      content = catalogue.resource('file', 'apt_repository_sample1').send(:parameters)[:source]
-      content.should be_nil
+      should contain_file('sample1.list').without_source
     end
   end
 
@@ -41,18 +39,16 @@ deb url1 distro1 repo1/)
     }
 
     it 'should create a sample2.list file' do
-      should contain_file('apt_repository_sample2').with_ensure('present')
-      should contain_file('apt_repository_sample2').with_path('/etc/apt/sources.list.d/sample2.list')
+      should contain_file('sample2.list').with_ensure('present')
+      should contain_file('sample2.list').with_path('/etc/apt/sources.list.d/sample2.list')
     end
     it 'should populate correctly sample2.list file' do
-      content = catalogue.resource('file', 'apt_repository_sample2').send(:parameters)[:content]
-      content.should match(/# File managed by Puppet
+      should contain_file('sample2.list').with_content(/# File managed by Puppet
 
 deb-src url2 distro2 repo2/)
     end
     it 'should not request a source' do
-      content = catalogue.resource('file', 'apt_repository_sample2').send(:parameters)[:source]
-      content.should be_nil
+      should contain_file('sample2.list').without_source
     end
   end
 
@@ -68,16 +64,14 @@ deb-src url2 distro2 repo2/)
     let(:facts) { { :options => {} } }
 
     it 'should create a sample3.list file' do
-      should contain_file('apt_repository_sample3').with_ensure('present')
-      should contain_file('apt_repository_sample3').with_path('/etc/apt/sources.list.d/sample3.list')
+      should contain_file('sample3.list').with_ensure('present')
+      should contain_file('sample3.list').with_path('/etc/apt/sources.list.d/sample3.list')
     end
     it 'should populate correctly sample3.list file' do
-      content = catalogue.resource('file', 'apt_repository_sample3').send(:parameters)[:content]
-      content.should match(/name: sample3/)
+      should contain_file('sample3.list').with_content(/name: sample3/)
     end
     it 'should not request a source' do
-      content = catalogue.resource('file', 'apt_repository_sample3').send(:parameters)[:source]
-      content.should be_nil
+      should contain_file('sample3.list').without_source
     end
   end
 
@@ -92,19 +86,17 @@ deb-src url2 distro2 repo2/)
     }
 
     it 'should create a sample4.list file' do
-      should contain_file('apt_repository_sample4').with_ensure('present')
-      should contain_file('apt_repository_sample4').with_path('/etc/apt/sources.list.d/sample4.list')
+      should contain_file('sample4.list').with_ensure('present')
+      should contain_file('sample4.list').with_path('/etc/apt/sources.list.d/sample4.list')
     end
     it 'should populate correctly sample4.list file' do
-      content = catalogue.resource('file', 'apt_repository_sample4').send(:parameters)[:content]
-      content.should match(/# File managed by Puppet
+      should contain_file('sample4.list').with_content(/# File managed by Puppet
 
 # sample4 repository
 deb url4 distro4 repo4/)
     end
     it 'should not request a source' do
-      content = catalogue.resource('file', 'apt_repository_sample4').send(:parameters)[:source]
-      content.should be_nil
+      should contain_file('sample4.list').without_source
     end
     it 'should execute an adv command' do
       should contain_exec('aptkey_adv_key4').with_command('apt-key adv --keyserver subkeys.pgp.net --recv key4')
@@ -124,19 +116,17 @@ deb url4 distro4 repo4/)
     }
 
     it 'should create a sample5.list file' do
-      should contain_file('apt_repository_sample5').with_ensure('present')
-      should contain_file('apt_repository_sample5').with_path('/etc/apt/sources.list.d/sample5.list')
+      should contain_file('sample5.list').with_ensure('present')
+      should contain_file('sample5.list').with_path('/etc/apt/sources.list.d/sample5.list')
     end
     it 'should populate correctly sample5.list file' do
-      content = catalogue.resource('file', 'apt_repository_sample5').send(:parameters)[:content]
-      content.should match(/# File managed by Puppet
+      should contain_file('sample5.list').with_content(/# File managed by Puppet
 
 # sample5 repository
 deb url5 distro5 repo5/)
     end
     it 'should not request a source' do
-      content = catalogue.resource('file', 'apt_repository_sample5').send(:parameters)[:source]
-      content.should be_nil
+      should contain_file('sample5.list').without_source
     end
     it 'should execute a wget command' do
       should contain_exec('aptkey_add_key5').with_command('wget -O - key5_url | apt-key add -')
@@ -155,7 +145,7 @@ deb url5 distro5 repo5/)
     }
 
     it 'should not create a sample6.list file' do
-      should contain_file('apt_repository_sample6').with_ensure('absent')
+      should contain_file('sample6.list').with_ensure('absent')
     end
   end
 
@@ -170,16 +160,14 @@ deb url5 distro5 repo5/)
     }
 
     it 'should create a sample7.list file' do
-      should contain_file('apt_repository_sample7').with_ensure('present')
-      should contain_file('apt_repository_sample7').with_path('/etc/apt/sources.list.d/sample7.list')
+      should contain_file('sample7.list').with_ensure('present')
+      should contain_file('sample7.list').with_path('/etc/apt/sources.list.d/sample7.list')
     end
     it 'should request a valid source' do
-      content = catalogue.resource('file', 'apt_repository_sample7').send(:parameters)[:source]
-      content.should == 'puppet://modules/apt/spec'
+      should contain_file('sample7.list').with_source('puppet://modules/apt/spec')
     end
     it 'should not have content' do
-      content = catalogue.resource('file', 'apt_repository_sample7').send(:parameters)[:content]
-      content.should be_nil
+      should contain_file('sample7.list').without_content
     end
   end
 

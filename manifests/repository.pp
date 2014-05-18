@@ -105,15 +105,15 @@ define apt::repository (
     default   => undef,
   }
 
-  file { "apt_repository_${name}":
+  file { "${name}.list":
     ensure  => $ensure,
     path    => "${apt::sourceslist_dir}/${name}.list",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
     require => Package[$apt::package],
-    before  => Exec['aptget_update'],
-    notify  => Exec['aptget_update'],
+    before  => Exec['apt_update'],
+    notify  => Exec['apt_update'],
     source  => $manage_file_source,
     content => $manage_file_content,
     audit   => $apt::manage_audit,
@@ -126,8 +126,8 @@ define apt::repository (
       keyserver   => $keyserver,
       path        => $path,
       fingerprint => $key,
-      notify      => Exec['aptget_update'],
-      before      => Exec['aptget_update'],
+      notify      => Exec['apt_update'],
+      before      => Exec['apt_update'],
     }
   }
 
@@ -135,7 +135,7 @@ define apt::repository (
     if !defined(Package[$keyring_package]) {
       package { $keyring_package:
         ensure  => present,
-        require => [ File["apt_repository_${name}"] ],
+        require => File["${name}.list"],
       }
     }
   }
