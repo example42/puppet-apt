@@ -105,8 +105,8 @@ describe 'apt::unattended_upgrade_automatic' do
     end
     it 'should populate correctly 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Allowed-Origins \{
-        "Ubuntu precise-security";
-        \/\/"Ubuntu precise-updates";
+  "Ubuntu precise-security";
+  \/\/"Ubuntu precise-updates";
 \};
 Unattended-Upgrade::Package-Blacklist \{/)
     end

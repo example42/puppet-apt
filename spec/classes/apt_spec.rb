@@ -83,7 +83,7 @@ describe 'apt' do
   end
 
   describe 'Test customizations - custom class' do
-    let(:params) { {:my_class => "apt::spec" } }
+    let(:params) { {:my_class => "apt::spec", :template => "apt/spec.erb" } }
     it 'should automatically include a custom class' do
       should contain_file('apt.conf').with_content(/fqdn: rspec.example42.com/)
     end
