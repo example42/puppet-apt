@@ -65,7 +65,7 @@ define apt::source (
       command     => "/usr/bin/apt-get -y install ${required_packages}",
       logoutput   => 'on_failure',
       refreshonly => true,
-      subscribe   => File["${name}.list"],
+      subscribe   => File["apt_repository_${name}"],
       before      => Exec['aptget_update'],
     }
   }
