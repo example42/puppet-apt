@@ -7,7 +7,7 @@
 # == Parameters
 #
 # [*package*]
-#   Name of the package. If empty, defaults to $name
+#   Name of the package, or array of names. If empty, defaults to $name.
 #   If you want to specify two or more pins for the same resource,
 #   you can use it, like this:
 #

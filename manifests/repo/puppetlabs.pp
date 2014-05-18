@@ -7,6 +7,7 @@ class apt::repo::puppetlabs ($distro = $::lsbdistcodename, $dependencies = true)
     repository => 'main',
     # key      => '1054B7A24BD6EC30',
     key        => '4BD6EC30',
+    key_url    => 'http://apt.puppetlabs.com/pubkey.gpg';
   }
 
   if $dependencies {
@@ -16,6 +17,7 @@ class apt::repo::puppetlabs ($distro = $::lsbdistcodename, $dependencies = true)
       repository => 'dependencies',
       # key      => '1054B7A24BD6EC30',
       key        => '4BD6EC30',
+      key_url    => 'http://apt.puppetlabs.com/pubkey.gpg';
     }
   }
 }

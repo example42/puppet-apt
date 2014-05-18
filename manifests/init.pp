@@ -20,7 +20,10 @@
 # [*force_sources_list_d*]
 #   Whether or not to delete the sources.list file and only use the sources.list.d directory
 #
-# [*force_apt_update*]
+# [*force_preferences_d*]
+#   Whether or not to delete the preferences file and only use preferences.d directory
+#
+# [*force_aptget_update*]
 #   Define if you want to trigger an apt-get update before installing ANY package.
 #   Default: true, if you have dependency issues you might need to set this to false
 #
@@ -109,6 +112,17 @@
 #   Sets the content for the sources.list main file. Alternative to $template.
 #   If defined, sources.list file has: content => $content
 #
+# [*preferences_file*]
+#   The preferences file path
+#
+# [*preferences_template*]
+#   Sets the path to the template to use as content for the preferences main file
+#   If defined, preferences file has: content => content("$template")
+#
+# [*preferences_content*]
+#   Sets the content for the preferences main file. Alternative to $preferences_template.
+#   If defined, preferences file has: content => $content
+#
 # [*aptconfd_dir]
 #   The apt.conf.d directory
 #
@@ -149,7 +163,9 @@ class apt (
   $purge_conf_d         = params_lookup( 'purge_conf_d' ),
   $force_sources_list_d = params_lookup( 'force_sources_list_d' ),
   $purge_sources_list_d = params_lookup( 'purge_sources_list_d' ),
-  $force_apt_update     = params_lookup( 'force_apt_update' ),
+  $force_preferences_d  = params_lookup( 'force_preferences_d' ),
+  $purge_preferences_d  = params_lookup( 'purge_preferences_d' ),
+  $force_aptget_update  = params_lookup( 'force_aptget_update' ),
   $my_class             = params_lookup( 'my_class' ),
   $source               = params_lookup( 'source' ),
   $source_dir           = params_lookup( 'source_dir' ),
@@ -166,6 +182,9 @@ class apt (
   $sourceslist_file     = params_lookup( 'sourceslist_file' ),
   $sourceslist_template = params_lookup( 'sourceslist_template' ),
   $sourceslist_content  = params_lookup( 'sourceslist_content' ),
+  $preferences_file     = params_lookup( 'preferences_file' ),
+  $preferences_template = params_lookup( 'preferences_template' ),
+  $preferences_content  = params_lookup( 'preferences_content' ),
   $aptconfd_dir         = params_lookup( 'aptconfd_dir' ),
   $sourceslist_dir      = params_lookup( 'sourceslist_dir' ),
   $preferences_dir      = params_lookup( 'preferences_dir' ),
@@ -185,18 +204,20 @@ class apt (
   }
 
   # Sanitize of booleans
-  $bool_force_apt_update=any2bool($force_apt_update)
+  $bool_force_aptget_update=any2bool($force_aptget_update)
   $bool_force_conf_d=any2bool($force_conf_d)
   $bool_purge_conf_d=any2bool($purge_conf_d)
   $bool_force_sources_list_d=any2bool($force_sources_list_d)
   $bool_purge_sources_list_d=any2bool($purge_sources_list_d)
+  $bool_force_preferences_d=any2bool($force_preferences_d)
+  $bool_purge_preferences_d=any2bool($purge_preferences_d)
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_absent=any2bool($absent)
   $bool_audit_only=any2bool($audit_only)
 
   # Logic management according to parameters provided by users
-  $manage_notify = $apt::bool_force_apt_update ? {
-    true  => 'Exec[apt_update]',
+  $manage_notify = $apt::bool_force_aptget_update ? {
+    true  => 'Exec[aptget_update]',
     false => undef,
   }
 
@@ -214,6 +235,13 @@ class apt (
   $manage_sourceslist_file = $apt::bool_absent ? {
     true      => 'absent',
     default   => $bool_force_sources_list_d ? {
+      true    => 'absent',
+      default => 'present',
+    }
+  }
+  $manage_preferences_file = $apt::bool_absent ? {
+    true      => 'absent',
+    default   => $bool_force_preferences_d ? {
       true    => 'absent',
       default => 'present',
     }
@@ -246,6 +274,14 @@ class apt (
     default   => template($apt::sourceslist_template),
   }
 
+  $manage_preferences_content = $apt::preferences_template ? {
+    ''        => $apt::preferences_content ? {
+      ''      => undef,
+      default => $apt::preferences_content,
+    },
+    default   => template($apt::preferences_template),
+  }
+
   ### Resources managed by the module
   package { $apt::package:
     ensure => $apt::manage_package,
@@ -255,18 +291,20 @@ class apt (
     ensure => $apt::manage_package,
   }
 
-  file { 'apt.conf':
-    ensure  => $apt::manage_config_file,
-    path    => $apt::config_file,
-    mode    => $apt::config_file_mode,
-    owner   => $apt::config_file_owner,
-    group   => $apt::config_file_group,
-    require => Package[$apt::package],
-    source  => $apt::manage_file_source,
-    content => $apt::manage_file_content,
-    notify  => $apt::manage_notify,
-    replace => $apt::manage_file_replace,
-    audit   => $apt::manage_audit,
+  if $content or $source or $manage_config_file == 'absent' {
+    file { 'apt.conf':
+      ensure  => $apt::manage_config_file,
+      path    => $apt::config_file,
+      mode    => $apt::config_file_mode,
+      owner   => $apt::config_file_owner,
+      group   => $apt::config_file_group,
+      require => Package[$apt::package],
+      source  => $apt::manage_file_source,
+      content => $apt::manage_file_content,
+      notify  => $apt::manage_notify,
+      replace => $apt::manage_file_replace,
+      audit   => $apt::manage_audit,
+    }
   }
 
   file { 'apt_sources.list':
@@ -337,15 +375,49 @@ class apt (
     }
   }
 
+  if $manage_preferences_content or $apt::manage_preferences_file == 'absent' {
+    file { 'apt_preferences':
+      ensure  => $apt::manage_preferences_file,
+      path    => $apt::preferences_file,
+      mode    => $apt::config_file_mode,
+      owner   => $apt::config_file_owner,
+      group   => $apt::config_file_group,
+      require => Package[$apt::package],
+      notify  => $apt::manage_notify,
+      content => $manage_preferences_content,
+      replace => $apt::manage_file_replace,
+      audit   => $apt::manage_audit,
+    }
+  }
+
+  if $bool_purge_preferences_d {
+    file { 'apt_preferences.dir':
+      ensure  => directory,
+      path    => $apt::preferences_dir,
+      mode    => $apt::config_file_mode,
+      owner   => $apt::config_file_owner,
+      group   => $apt::config_file_group,
+      require => Package[$apt::package],
+      source  => 'puppet:///modules/apt/empty',
+      notify  => $apt::manage_notify,
+      ignore  => ['.gitkeep'],
+      recurse => true,
+      purge   => true,
+      force   => true,
+      replace => $apt::manage_file_replace,
+      audit   => $apt::manage_audit,
+    }
+  }
+
   apt::conf { 'update_trigger':
     content => "// File managed by Puppet. Triggers an apt-get update on first run\n",
   }
 
   include apt::apt_get_update
 
-  if $apt::bool_force_apt_update {
+  if $apt::bool_force_aptget_update {
     Package <| title != $apt::package |> {
-      require +> Exec['apt_update']
+      require +> Exec['aptget_update']
     }
   }
 
