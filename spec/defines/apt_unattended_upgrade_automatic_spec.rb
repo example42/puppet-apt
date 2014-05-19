@@ -13,16 +13,14 @@ describe 'apt::unattended_upgrade_automatic' do
       should contain_file('apt_conf_unattended-upgrade').with_path('/etc/apt/apt.conf.d/99unattended-upgrade.conf')
     end
     it 'should populate correctly 99unattended-upgrade.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrade').send(:parameters)[:content]
-      content.should match(/APT::Periodic::Unattended-Upgrade "1";/)
+      should contain_file('apt_conf_unattended-upgrade').with_content(/APT::Periodic::Unattended-Upgrade "1";/)
     end
     it 'should create a 10periodic.conf file' do
       should contain_file('apt_conf_periodic').with_ensure('present')
       should contain_file('apt_conf_periodic').with_path('/etc/apt/apt.conf.d/10periodic.conf')
     end
     it 'should request a valid source for 10periodic.conf file' do
-      content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///modules/apt/10periodic"
+      should contain_file('apt_conf_periodic').with_source('puppet:///modules/apt/10periodic')
     end
   end
 
@@ -34,24 +32,21 @@ describe 'apt::unattended_upgrade_automatic' do
       should contain_file('apt_conf_unattended-upgrade').with_path('/etc/apt/apt.conf.d/99unattended-upgrade.conf')
     end
     it 'should populate correctly 99unattended-upgrade.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrade').send(:parameters)[:content]
-      content.should match(/APT::Periodic::Unattended-Upgrade "1";/)
+      should contain_file('apt_conf_unattended-upgrade').with_content(/APT::Periodic::Unattended-Upgrade "1";/)
     end
     it 'should create a 10periodic.conf file' do
       should contain_file('apt_conf_periodic').with_ensure('present')
       should contain_file('apt_conf_periodic').with_path('/etc/apt/apt.conf.d/10periodic.conf')
     end
     it 'should request a valid source for 10periodic.conf file' do
-      content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///modules/apt/10periodic"
+      should contain_file('apt_conf_periodic').with_source('puppet:///modules/apt/10periodic')
     end
     it 'should create a 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_ensure('present')
       should contain_file('apt_conf_unattended-upgrades').with_path('/etc/apt/apt.conf.d/50unattended-upgrades.conf')
     end
     it 'should populate correctly 50unattended-upgrades.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrades').send(:parameters)[:content]
-      content.should match(/Unattended-Upgrade::Allowed-Origins \{
+      should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Allowed-Origins \{
   "Debian squeeze";
   "Debian squeeze-security";
 \};/)
@@ -66,24 +61,21 @@ describe 'apt::unattended_upgrade_automatic' do
       should contain_file('apt_conf_unattended-upgrade').with_path('/etc/apt/apt.conf.d/99unattended-upgrade.conf')
     end
     it 'should populate correctly 99unattended-upgrade.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrade').send(:parameters)[:content]
-      content.should match(/APT::Periodic::Unattended-Upgrade "1";/)
+      should contain_file('apt_conf_unattended-upgrade').with_content(/APT::Periodic::Unattended-Upgrade "1";/)
     end
     it 'should create a 10periodic.conf file' do
       should contain_file('apt_conf_periodic').with_ensure('present')
       should contain_file('apt_conf_periodic').with_path('/etc/apt/apt.conf.d/10periodic.conf')
     end
     it 'should request a valid source for 10periodic.conf file' do
-      content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///modules/apt/10periodic"
+      should contain_file('apt_conf_periodic').with_source('puppet:///modules/apt/10periodic')
     end
     it 'should create a 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_ensure('present')
       should contain_file('apt_conf_unattended-upgrades').with_path('/etc/apt/apt.conf.d/50unattended-upgrades.conf')
     end
     it 'should populate correctly 50unattended-upgrades.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrades').send(:parameters)[:content]
-      content.should match(/Unattended-Upgrade::Allowed-Origins \{
+      should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Allowed-Origins \{
   "Debian wheezy";
   "Debian wheezy-security";
 \};/)
@@ -98,26 +90,23 @@ describe 'apt::unattended_upgrade_automatic' do
       should contain_file('apt_conf_unattended-upgrade').with_path('/etc/apt/apt.conf.d/99unattended-upgrade.conf')
     end
     it 'should populate correctly 99unattended-upgrade.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrade').send(:parameters)[:content]
-      content.should match(/APT::Periodic::Unattended-Upgrade "1";/)
+      should contain_file('apt_conf_unattended-upgrade').with_content(/APT::Periodic::Unattended-Upgrade "1";/)
     end
     it 'should create a 10periodic.conf file' do
       should contain_file('apt_conf_periodic').with_ensure('present')
       should contain_file('apt_conf_periodic').with_path('/etc/apt/apt.conf.d/10periodic.conf')
     end
     it 'should request a valid source for 10periodic.conf file' do
-      content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///modules/apt/10periodic"
+      should contain_file('apt_conf_periodic').with_source('puppet:///modules/apt/10periodic')
     end
     it 'should create a 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_ensure('present')
       should contain_file('apt_conf_unattended-upgrades').with_path('/etc/apt/apt.conf.d/50unattended-upgrades.conf')
     end
     it 'should populate correctly 50unattended-upgrades.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrades').send(:parameters)[:content]
-      content.should match(/Unattended-Upgrade::Allowed-Origins \{
-        "Ubuntu precise-security";
-        \/\/"Ubuntu precise-updates";
+      should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Allowed-Origins \{
+  "Ubuntu precise-security";
+  \/\/"Ubuntu precise-updates";
 \};
 Unattended-Upgrade::Package-Blacklist \{/)
     end
@@ -132,24 +121,21 @@ Unattended-Upgrade::Package-Blacklist \{/)
       should contain_file('apt_conf_unattended-upgrade').with_path('/etc/apt/apt.conf.d/99unattended-upgrade.conf')
     end
     it 'should populate correctly 99unattended-upgrade.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrade').send(:parameters)[:content]
-      content.should match(/APT::Periodic::Unattended-Upgrade "1";/)
+      should contain_file('apt_conf_unattended-upgrade').with_content(/APT::Periodic::Unattended-Upgrade "1";/)
     end
     it 'should create a 10periodic.conf file' do
       should contain_file('apt_conf_periodic').with_ensure('present')
       should contain_file('apt_conf_periodic').with_path('/etc/apt/apt.conf.d/10periodic.conf')
     end
     it 'should request a valid source for 10periodic.conf file' do
-      content = catalogue.resource('file', 'apt_conf_periodic').send(:parameters)[:source]
-      content.should == "puppet:///modules/apt/10periodic"
+      should contain_file('apt_conf_periodic').with_source('puppet:///modules/apt/10periodic')
     end
     it 'should create a 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_ensure('present')
       should contain_file('apt_conf_unattended-upgrades').with_path('/etc/apt/apt.conf.d/50unattended-upgrades.conf')
     end
     it 'should populate correctly 50unattended-upgrades.conf file' do
-      content = catalogue.resource('file', 'apt_conf_unattended-upgrades').send(:parameters)[:content]
-      content.should match(/Unattended-Upgrade::Mail "root@somewhere";/)
+      should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Mail "root@somewhere";/)
     end
   end
 

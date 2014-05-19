@@ -291,7 +291,7 @@ class apt (
     ensure => $apt::manage_package,
   }
 
-  if $content or $source or $manage_config_file == 'absent' {
+  if $manage_file_content or $manage_file_source or $manage_config_file == 'absent' {
     file { 'apt.conf':
       ensure  => $apt::manage_config_file,
       path    => $apt::config_file,
