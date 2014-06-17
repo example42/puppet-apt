@@ -36,8 +36,9 @@ Unattended-Upgrade::Origins-Pattern {
 //      "o=Debian,a=stable";
 //      "o=Debian,a=stable-updates";
 //      "o=Debian,a=proposed-updates";
-        "origin=Debian,archive=<%= @lsbdistcodename %>";
-        "origin=Debian,archive=<%= @lsbdistcodename %>-security";
+        "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian";
+        "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian-Security";
+//      "origin=Debian,codename=<%= @lsbdistcodename %>-updates,label=Debian";
 };
 
 // List of packages to not update (regexp are supported)
