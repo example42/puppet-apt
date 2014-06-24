@@ -36,10 +36,12 @@ class apt::dater::host {
 
   sudo::directive { "apt-dater": content => "$apt::dater::host_user ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude"; }
 
-  @@apt::dater::host_fragment { $fqdn:
-    customer => $apt::dater::customer,
-    ssh_user => $apt::dater::host_user,
-    ssh_name => $::fqdn,
-    ssh_port => $apt::dater::ssh_port;
+  if $::fqdn {
+    @@apt::dater::host_fragment { $::fqdn:
+      customer => $apt::dater::customer,
+      ssh_user => $apt::dater::host_user,
+      ssh_name => $::fqdn,
+      ssh_port => $apt::dater::ssh_port;
+    }
   }
 }
