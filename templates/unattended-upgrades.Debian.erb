@@ -20,17 +20,24 @@
 // derived from /etc/debian_version:
 //   ${distro_id}            Installed origin.
 //   ${distro_codename}      Installed codename (eg, "jessie")
-<% if @lsbdistcodename != 'squeeze' -%>
-Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian";
-        "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian-Security";
-        "origin=Debian,codename=<%= @lsbdistcodename %>-updates,label=Debian";
-};
-<% else -%>
+<% if @lsbdistcodename == 'squeeze' -%>
 // unattended-upgrades (<< 0.70) doesn't support Origins-Pattern
 Unattended-Upgrade::Allowed-Origins {
   "Debian <%= @lsbdistcodename %>";
   "Debian <%= @lsbdistcodename %>-security";
+};
+<% elsif @lsbdistcodename == 'wheezy' -%>
+// unattended-upgrades (<< 0.80~exp2) doesn't support  codename
+Unattended-Upgrade::Origins-Pattern {
+        "origin=Debian,archive=stable,label=Debian";
+        "origin=Debian,archive=stable,label=Debian-Security";
+        "origin=Debian,archive=stable-updates,label=Debian";
+};
+<% else -%>
+Unattended-Upgrade::Origins-Pattern {
+        "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian";
+        "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian-Security";
+        "origin=Debian,codename=<%= @lsbdistcodename %>-updates,label=Debian";
 };
 <% end -%>
 
