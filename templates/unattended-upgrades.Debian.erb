@@ -23,8 +23,7 @@
 <% if @lsbdistcodename == 'squeeze' -%>
 // unattended-upgrades (<< 0.70) doesn't support Origins-Pattern
 Unattended-Upgrade::Allowed-Origins {
-  "Debian <%= @lsbdistcodename %>";
-  "Debian <%= @lsbdistcodename %>-security";
+  "Debian oldstable";
 };
 <% elsif @lsbdistcodename == 'wheezy' -%>
 // unattended-upgrades (<< 0.80~exp2) doesn't support  codename
