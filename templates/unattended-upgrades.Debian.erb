@@ -20,32 +20,25 @@
 // derived from /etc/debian_version:
 //   ${distro_id}            Installed origin.
 //   ${distro_codename}      Installed codename (eg, "jessie")
-<% if @lsbdistcodename != 'squeeze' -%>
+<% if @lsbdistcodename == 'squeeze' -%>
+// unattended-upgrades (<< 0.70) doesn't support Origins-Pattern
+Unattended-Upgrade::Allowed-Origins {
+  "Debian oldstable";
+  "Debian oldstable-updates";
+  "Debian squeeze-lts";
+};
+<% elsif @lsbdistcodename == 'wheezy' -%>
+// unattended-upgrades (<< 0.80~exp2) doesn't support  codename
 Unattended-Upgrade::Origins-Pattern {
-        // Codename based matching:
-        // This will follow the migration of a release through different
-        // archives (e.g. from testing to stable and later oldstable).
-//      "o=Debian,n=jessie";
-//      "o=Debian,n=jessie-updates";
-//      "o=Debian,n=jessie-proposed-updates";
-//      "o=Debian,n=jessie,l=Debian-Security";
-
-        // Archive or Suite based matching:
-        // Note that this will silently match a different release after
-        // migration to the specified archive (e.g. testing becomes the
-        // new stable).
-//      "o=Debian,a=stable";
-//      "o=Debian,a=stable-updates";
-//      "o=Debian,a=proposed-updates";
+        "origin=Debian,archive=stable,label=Debian";
+        "origin=Debian,archive=stable,label=Debian-Security";
+        "origin=Debian,archive=stable-updates,label=Debian";
+};
+<% else -%>
+Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian";
         "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian-Security";
         "origin=Debian,codename=<%= @lsbdistcodename %>-updates,label=Debian";
-};
-<% else -%>
-// unattended-upgrades (<< 0.70) doesn't support Origins-Pattern
-Unattended-Upgrade::Allowed-Origins {
-  "Debian <%= @lsbdistcodename %>";
-  "Debian <%= @lsbdistcodename %>-security";
 };
 <% end -%>
 
