@@ -47,8 +47,9 @@ describe 'apt::unattended_upgrade_automatic' do
     end
     it 'should populate correctly 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Allowed-Origins \{
-  "Debian squeeze";
-  "Debian squeeze-security";
+  "Debian oldstable";
+  "Debian oldstable-updates";
+  "Debian squeeze-lts";
 \};/)
     end
   end
@@ -75,9 +76,10 @@ describe 'apt::unattended_upgrade_automatic' do
       should contain_file('apt_conf_unattended-upgrades').with_path('/etc/apt/apt.conf.d/50unattended-upgrades.conf')
     end
     it 'should populate correctly 50unattended-upgrades.conf file' do
-      should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Allowed-Origins \{
-  "Debian wheezy";
-  "Debian wheezy-security";
+      should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Origins-Pattern \{
+        "origin=Debian,archive=stable,label=Debian";
+        "origin=Debian,archive=stable,label=Debian-Security";
+        "origin=Debian,archive=stable-updates,label=Debian";
 \};/)
     end
   end
