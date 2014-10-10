@@ -74,6 +74,14 @@ It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) 
           manager_ssh_key => template('site/apt-dater.priv.key');
         }
 
+- Handle dpkg-statoverride
+
+	apt::dpkg_statoverride { '/var/log/puppet':
+	  user  => 'puppet',
+	  group => 'puppet',
+	  mode  => '750',
+	}
+
 
 
 [![Build Status](https://travis-ci.org/example42/puppet-apt.png?branch=master)](https://travis-ci.org/example42/puppet-apt)
