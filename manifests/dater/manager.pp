@@ -28,6 +28,14 @@ class apt::dater::manager {
 
   }
 
+  # only manage the ~/.config directory iff we need it created
+  if ($apt::dater::manage_directory == 'directory') {
+    file { $apt::dater::manager_home_conf_dir:
+      ensure => $apt::dater::manage_directory,
+      owner  => $apt::dater::manager_user;
+    }
+  }
+
   file {
     $apt::dater::manager_conf_dir:
       ensure  => $apt::dater::manage_directory,
