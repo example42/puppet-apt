@@ -18,6 +18,10 @@ env:
   - PUPPET_VERSION="~> 3.7.0"
 matrix:
   exclude:
+    # this fails with "Puppet::Parser::Compiler failed with error ArgumentError: wrong number of arguments (1 for 0)"
+    # See https://travis-ci.org/DavidS/puppet-apt/jobs/39963578
+    - rvm: 1.9.3
+      env: PUPPET_VERSION="~> 2.7.0"
     # this fails on "Could not autoload package: constant Puppet::Type::Package"
     # See https://travis-ci.org/DavidS/puppet-apache/jobs/39843058
     - rvm: 2.0.0
