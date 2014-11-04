@@ -6,5 +6,6 @@ pkg/
 Session.vim
 spec/fixtures
 .*.sw[a-z]
-*~
-Gemfile.lock
+*.un~
+/Gemfile.lock
+/.bundle
