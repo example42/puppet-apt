@@ -154,14 +154,14 @@ define apt::pin (
   }
 
   # If no shorthand succeded, we evaluate $type and $value
-  if $real_type == undef {
+  if $origin == '' and $release == '' and $version == '' { # i.e. $real_type == undef
     $real_type = $type ? {
       ''      => 'version',
       default => $type,
     }
   }
 
-  if $real_value == undef {
+  if $origin == '' and $release == '' and $version == '' { # i.e. $real_value == undef
     $real_value = $value ? {
       ''      => '*',
       default => $value,
