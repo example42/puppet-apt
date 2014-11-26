@@ -21,6 +21,10 @@
 # [*ensure*]
 #   Whether to add or delete this configuration
 #
+# [*suffix*]
+#   Prefix of the file generated.
+#   Default: .conf
+#
 #
 # == Examples
 #
@@ -35,7 +39,8 @@ define apt::conf (
   $source    = '' ,
   $content   = '' ,
   $priority  = '10' ,
-  $ensure    = present ) {
+  $ensure    = present,
+  $suffix    = '.conf', ) {
 
   include apt
 
@@ -51,7 +56,7 @@ define apt::conf (
 
   file { "apt_conf_${name}":
     ensure  => $ensure,
-    path    => "${apt::aptconfd_dir}/${priority}${name}.conf",
+    path    => "${apt::aptconfd_dir}/${priority}${name}${suffix}",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
