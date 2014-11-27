@@ -109,8 +109,7 @@ describe 'apt::unattended_upgrade_automatic' do
       should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Allowed-Origins \{
   "Ubuntu precise-security";
   \/\/"Ubuntu precise-updates";
-\};
-Unattended-Upgrade::Package-Blacklist \{/)
+\};/)
     end
   end
 
