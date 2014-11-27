@@ -2,6 +2,9 @@
 Unattended-Upgrade::Allowed-Origins {
   "Ubuntu <%= @lsbdistcodename %>-security";
   //"Ubuntu <%= @lsbdistcodename %>-updates";
+  <%- [@repository].flatten.each do |singlerepo| -%>
+  "<%= singlerepo %>";
+  <%- end -%>
 };
 
 // List of packages to not update (regexp are supported)
