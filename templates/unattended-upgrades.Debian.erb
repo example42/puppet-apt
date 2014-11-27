@@ -27,6 +27,9 @@ Unattended-Upgrade::Allowed-Origins {
   "Debian oldstable";
   "Debian oldstable-updates";
   "Debian squeeze-lts";
+  <%- [@repository].flatten.each do |singlerepo| -%>
+  "<%= singlerepo %>";
+  <%- end -%>
 };
 <% elsif @lsbdistcodename == 'wheezy' -%>
 // unattended-upgrades (<< 0.80~exp2) doesn't support  codename
@@ -34,17 +37,27 @@ Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,archive=stable,label=Debian";
         "origin=Debian,archive=stable,label=Debian-Security";
         "origin=Debian,archive=stable-updates,label=Debian";
+        <%- [@repository].flatten.each do |singlerepo| -%>
+        "<%= singlerepo %>";
+        <%- end -%>
 };
 <% else -%>
 Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian";
         "origin=Debian,codename=<%= @lsbdistcodename %>,label=Debian-Security";
         "origin=Debian,codename=<%= @lsbdistcodename %>-updates,label=Debian";
+        <%- [@repository].flatten.each do |singlerepo| -%>
+        "<%= singlerepo %>";
+        <%- end -%>
+
 };
 <% end -%>
 
 // List of packages to not update (regexp are supported)
 Unattended-Upgrade::Package-Blacklist {
+<%- [@blacklist].flatten.each do |singlepackage| -%>
+    "<%= singlepackage %>";
+<%- end -%>
 //	"vim";
 //	"libc6";
 //	"libc6-dev";
@@ -80,20 +93,36 @@ Unattended-Upgrade::Mail "<%= @mail %>";
 
 // Set this value to "true" to get emails only on errors. Default
 // is to always send a mail if Unattended-Upgrade::Mail is set
+<% if @mailonlyerror != "" -%>
+Unattended-Upgrade::MailOnlyOnError "<%= @mailonlyerror %>";
+<% else -%>
 //Unattended-Upgrade::MailOnlyOnError "true";
+<% end -%>
 
 // Do automatic removal of new unused dependencies after the upgrade
 // (equivalent to apt-get autoremove)
+<% if @automaticremove != "" -%>
+Unattended-Upgrade::Remove-Unused-Dependencies "<%= @automaticremove %>";
+<% else -%>
 //Unattended-Upgrade::Remove-Unused-Dependencies "false";
+<% end -%>
 
 // Automatically reboot *WITHOUT CONFIRMATION* if
 //  the file /var/run/reboot-required is found after the upgrade 
+<% if @automaticreboot != "" -%>
+Unattended-Upgrade::Automatic-Reboot "<%= @automaticreboot %>";
+<% else -%>
 //Unattended-Upgrade::Automatic-Reboot "false";
+<% end -%>
 
 // If automatic reboot is enabled and needed, reboot at the specific
 // time instead of immediately
 //  Default: "now"
+<% if @automatictime != "" -%>
+Unattended-Upgrade::Automatic-Reboot-Time "<%= @automatictime %>";
+<% else -%>
 //Unattended-Upgrade::Automatic-Reboot-Time "02:00";
+<% end -%>
 
 // Use apt bandwidth limit feature, this example limits the download
 // speed to 70kb/sec
