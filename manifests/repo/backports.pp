@@ -7,9 +7,9 @@ class apt::repo::backports(
 ) {
 
   apt::repository { 'backports':
-    url             => $url,
-    distro          => $distro,
-    repository      => $component,
+    url        => $url,
+    distro     => $distro,
+    repository => $component,
   }
 
 }
