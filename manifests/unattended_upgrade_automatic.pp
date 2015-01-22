@@ -77,7 +77,7 @@ define apt::unattended_upgrade_automatic(
         ensure   => present,
         content  => template("apt/unattended-upgrades.${::lsbdistid}.erb"),
         priority => '50',
-        suffix   => "$unattendedfilesuffix",
+        suffix   => $unattendedfilesuffix,
       }
     }
     default: {}
