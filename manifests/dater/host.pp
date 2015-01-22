@@ -21,6 +21,7 @@ class apt::dater::host {
         source => 'puppet:///modules/apt/apt-dater-host-yum',
       }
     }
+    default: {}
   }
 
   if !$apt::dater::bool_reuse_host_user {
