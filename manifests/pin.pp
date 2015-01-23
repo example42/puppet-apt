@@ -68,6 +68,9 @@
 # [*ensure*]
 #   Whether to add or delete this pin
 #
+# [*file_suffix*]
+#   Suffix of the prefs file created, on some distribution it must be .pref
+#
 #
 # == Examples
 #
@@ -119,15 +122,16 @@
 #   }
 #
 define apt::pin (
-  $package  = '',
-  $type     = '',
-  $value    = '',
-  $priority = '',
-  $template = '',
-  $version  = '',
-  $release  = '',
-  $origin   = '',
-  $ensure   = 'present'
+  $package     = '',
+  $type        = '',
+  $value       = '',
+  $priority    = '',
+  $template    = '',
+  $version     = '',
+  $release     = '',
+  $origin      = '',
+  $ensure      = 'present',
+  $file_suffix = ''
 ) {
 
   include apt
@@ -175,7 +179,7 @@ define apt::pin (
 
   file { "apt_pin_${name}":
     ensure  => $ensure,
-    path    => "${apt::preferences_dir}/pin-${name}-${real_type}",
+    path    => "${apt::preferences_dir}/pin-${name}-${real_type}${file_suffix}",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
