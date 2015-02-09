@@ -2,8 +2,8 @@
 
 <% if (@src_repo == false) -%>
 # <%= @name %> repository
-deb <%= @trusted ? "[trusted=yes] " : "" %><%= @url %> <%= @distro %> <%= [@repository].flatten.join(' ') %>
+deb <%= @trusted_source ? "[trusted=yes] " : "" %><%= @url %> <%= @distro %> <%= [@repository].flatten.join(' ') %>
 <% else -%>
-deb-src <%= @trusted ? "[trusted=yes] " : "" %><%= @url %> <%= @distro %> <%= [@repository].flatten.join(' ') %>
+deb-src <%= @trusted_source ? "[trusted=yes] " : "" %><%= @url %> <%= @distro %> <%= [@repository].flatten.join(' ') %>
 <% end -%>
 

@@ -30,11 +30,11 @@ deb url1 distro1 repo1/)
 
   describe 'Test trusted apt repository' do
     let(:params) {
-      { 'name'       =>  'sample1',
-        'url'        =>  'url1',
-        'distro'     =>  'distro1',
-        'repository' =>  'repo1',
-        'trusted'    =>  true,
+      { 'name'           =>  'sample1',
+        'url'            =>  'url1',
+        'distro'         =>  'distro1',
+        'repository'     =>  'repo1',
+        'trusted_source' =>  true,
       }
     }
 
@@ -55,12 +55,12 @@ deb \[trusted=yes\] url1 distro1 repo1/)
 
   describe 'Test untrusted apt source repository' do
     let(:params) {
-      { 'name'       =>  'sample2',
-        'url'        =>  'url2',
-        'distro'     =>  'distro2',
-        'repository' =>  'repo2',
-        'src_repo'   =>  true,
-        'trusted'    =>  false,
+      { 'name'           =>  'sample2',
+        'url'            =>  'url2',
+        'distro'         =>  'distro2',
+        'repository'     =>  'repo2',
+        'src_repo'       =>  true,
+        'trusted_source' =>  false,
       }
     }
 
@@ -80,12 +80,12 @@ deb-src url2 distro2 repo2/)
 
   describe 'Test trusted apt source repository' do
     let(:params) {
-      { 'name'       =>  'sample2',
-        'url'        =>  'url2',
-        'distro'     =>  'distro2',
-        'repository' =>  'repo2',
-        'src_repo'   =>  true,
-        'trusted'    =>  true,
+      { 'name'           =>  'sample2',
+        'url'            =>  'url2',
+        'distro'         =>  'distro2',
+        'repository'     =>  'repo2',
+        'src_repo'       =>  true,
+        'trusted_source' =>  true,
       }
     }
 
