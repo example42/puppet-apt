@@ -10,7 +10,7 @@ define apt::ppa(
 
   $sources_list_d = $apt::sourceslist_dir
 
-  if ! $release {
+  if !$release or $release == '' {
     fail('lsbdistcodename fact not available: release parameter required')
   }
 

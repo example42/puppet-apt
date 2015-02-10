@@ -158,7 +158,7 @@ class apt::dater (
   }
 
   # Include custom class if $my_class is set
-  if $apt::dater::my_class {
+  if $apt::dater::my_class and $apt::dater::my_class != '' {
     include $apt::dater::my_class
   }
 
