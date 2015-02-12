@@ -1,6 +1,7 @@
 # = Class: apt::repo::puppetlabs
 #
 class apt::repo::puppetlabs ($distro = $::lsbdistcodename, $dependencies = true) {
+  validate_bool($dependencies)
   apt::repository { 'puppetlabs':
     url        => 'http://apt.puppetlabs.com',
     distro     => $distro,

@@ -322,7 +322,7 @@ class apt (
 
   # The whole apt configuration directory is managed only
   # if $apt::source_dir is provided
-  if $apt::source_dir and $apt::config_dir != '' {
+  if $apt::source_dir and $apt::source_dir != '' and $apt::config_dir != '' {
     file { 'apt.dir':
       ensure  => directory,
       path    => $apt::config_dir,
@@ -375,7 +375,7 @@ class apt (
     }
   }
 
-  if $manage_preferences_content or $apt::manage_preferences_file == 'absent' {
+  if ($manage_preferences_content and $manage_preferences_content != '') or $apt::manage_preferences_file == 'absent' {
     file { 'apt_preferences':
       ensure  => $apt::manage_preferences_file,
       path    => $apt::preferences_file,
@@ -422,7 +422,7 @@ class apt (
   }
 
   ### Include custom class if $my_class is set
-  if $apt::my_class {
+  if $apt::my_class and $apt::my_class != '' {
     include $apt::my_class
   }
 

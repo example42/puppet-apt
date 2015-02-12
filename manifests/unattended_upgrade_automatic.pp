@@ -63,12 +63,14 @@ define apt::unattended_upgrade_automatic(
     ensure   => present,
     content  => "APT::Periodic::Unattended-Upgrade \"1\";\n",
     priority => '99',
+    suffix   => $unattendedfilesuffix,
   }
 
   apt::conf { 'periodic':
     ensure   => present,
     source   => 'puppet:///modules/apt/10periodic',
     priority => '10',
+    suffix   => $unattendedfilesuffix,
   }
 
   case $::lsbdistid {
@@ -77,7 +79,7 @@ define apt::unattended_upgrade_automatic(
         ensure   => present,
         content  => template("apt/unattended-upgrades.${::lsbdistid}.erb"),
         priority => '50',
-        suffix   => "$unattendedfilesuffix",
+        suffix   => $unattendedfilesuffix,
       }
     }
     default: {}

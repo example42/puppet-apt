@@ -14,13 +14,14 @@ class apt::dater::host {
     }
     /(?i:RedHat|Centos|Scientific|Fedora)/: {
       file { '/usr/bin/apt-dater-host':
-        ensure  => 'present',
-        owner   => $apt::dater::host_user,
-        group   => $apt::dater::host_user,
-        mode    => '0750',
-        source  => 'puppet:///modules/apt/apt-dater-host-yum',
+        ensure => 'present',
+        owner  => $apt::dater::host_user,
+        group  => $apt::dater::host_user,
+        mode   => '0750',
+        source => 'puppet:///modules/apt/apt-dater-host-yum',
       }
     }
+    default: {}
   }
 
   if !$apt::dater::bool_reuse_host_user {

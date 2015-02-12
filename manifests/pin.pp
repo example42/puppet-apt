@@ -68,6 +68,8 @@
 # [*ensure*]
 #   Whether to add or delete this pin
 #
+# [*suffix*]
+#   Suffix of the prefs file created, on some distribution it must be .pref
 #
 # == Examples
 #
@@ -127,7 +129,8 @@ define apt::pin (
   $version  = '',
   $release  = '',
   $origin   = '',
-  $ensure   = 'present'
+  $ensure   = 'present',
+  $suffix   = ''
 ) {
 
   include apt
@@ -154,14 +157,14 @@ define apt::pin (
   }
 
   # If no shorthand succeded, we evaluate $type and $value
-  if $real_type == undef {
+  if $origin == '' and $release == '' and $version == '' { # i.e. $real_type == undef
     $real_type = $type ? {
       ''      => 'version',
       default => $type,
     }
   }
 
-  if $real_value == undef {
+  if $origin == '' and $release == '' and $version == '' { # i.e. $real_value == undef
     $real_value = $value ? {
       ''      => '*',
       default => $value,
@@ -175,7 +178,7 @@ define apt::pin (
 
   file { "apt_pin_${name}":
     ensure  => $ensure,
-    path    => "${apt::preferences_dir}/pin-${name}-${real_type}",
+    path    => "${apt::preferences_dir}/pin-${name}-${real_type}${suffix}",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,

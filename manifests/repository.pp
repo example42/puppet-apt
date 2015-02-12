@@ -79,17 +79,17 @@ define apt::repository (
   $url,
   $distro,
   $repository,
-  $src_repo    = false,
-  $key         = '',
-  $key_url     = '',
-  $keyserver   = 'subkeys.pgp.net',
-  $template    = '',
-  $source      = '',
-  $environment = undef,
+  $src_repo        = false,
+  $key             = '',
+  $key_url         = '',
+  $keyserver       = 'subkeys.pgp.net',
+  $template        = '',
+  $source          = '',
+  $environment     = undef,
   $keyring_package = '',
-  $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
-  $ensure      = 'present',
-  $trusted     = false,
+  $path            = '/usr/sbin:/usr/bin:/sbin:/bin',
+  $ensure          = 'present',
+  $trusted_source  = false,
   ) {
   include apt
 
@@ -120,7 +120,7 @@ define apt::repository (
     audit   => $apt::manage_audit,
   }
 
-  if $key and ! defined(Apt::Key[$key]) {
+  if $key and $key != '' and ! defined(Apt::Key[$key]) {
     apt::key { $key:
       url         => $key_url,
       environment => $environment,
