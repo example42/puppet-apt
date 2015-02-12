@@ -413,7 +413,7 @@ class apt (
     content => "// File managed by Puppet. Triggers an apt-get update on first run\n",
   }
 
-  include apt::apt_get_update
+  include ::apt::apt_get_update
 
   if $apt::bool_force_aptget_update {
     Package <| title != $apt::package |> {

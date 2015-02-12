@@ -5,6 +5,7 @@
 # Makes use of the apt::repository define to do the work
 #
 define apt::source (
+  $comment           = $name,
   $ensure            = present,
   $location          = '',
   $release           = 'UNDEF',
@@ -39,6 +40,8 @@ define apt::source (
   } else {
     $release_real = $release
   }
+
+  include apt
 
   apt::repository {$title:
     url        => $location,
