@@ -76,10 +76,12 @@ define apt::unattended_upgrade_automatic(
   case $::lsbdistid {
     'Debian','Ubuntu': {
       apt::conf { 'unattended-upgrades':
-        ensure   => present,
-        content  => template("apt/unattended-upgrades.${::lsbdistid}.erb"),
-        priority => '50',
-        suffix   => $unattendedfilesuffix,
+        ensure               => present,
+        content              => template("apt/unattended-upgrades.${::lsbdistid}.erb"),
+        priority             => '50',
+        suffix               => $unattendedfilesuffix,
+        notify_aptget_update => false,
+        require              => Package['unattended-upgrades'],
       }
     }
     default: {}
