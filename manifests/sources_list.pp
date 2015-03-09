@@ -53,7 +53,6 @@ define apt::sources_list (
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
     require => Package[$apt::package],
-    before  => Exec['aptget_update'],
     notify  => Exec['aptget_update'],
     source  => $manage_file_source,
     content => $manage_file_content,

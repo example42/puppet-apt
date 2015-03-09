@@ -35,11 +35,14 @@
 #
 #
 define apt::conf (
-  $source    = '' ,
-  $content   = '' ,
-  $priority  = '10' ,
-  $ensure    = present,
-  $suffix    = '.conf' ) {
+  $source               = '' ,
+  $content              = '' ,
+  $priority             = '10' ,
+  $ensure               = present,
+  $suffix               = '.conf',
+  $notify_aptget_update = true ) {
+
+  $bool_notify_aptget_update=any2bool($notify_aptget_update)
 
   include apt
 
@@ -53,6 +56,11 @@ define apt::conf (
     default   => $content,
   }
 
+  $manage_notify = $bool_notify_aptget_update ? {
+    true  => 'Exec[aptget_update]',
+    false => undef,
+  }
+
   file { "apt_conf_${name}":
     ensure  => $ensure,
     path    => "${apt::aptconfd_dir}/${priority}${name}${suffix}",
@@ -60,8 +68,7 @@ define apt::conf (
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
     require => Package[$apt::package],
-    before  => Exec['aptget_update'],
-    notify  => Exec['aptget_update'],
+    notify  => $manage_notify,
     source  => $manage_file_source,
     content => $manage_file_content,
     audit   => $apt::manage_audit,
