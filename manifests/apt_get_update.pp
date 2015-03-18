@@ -1,3 +1,5 @@
+# = Class: apt::apt_get_update
+#
 class apt::apt_get_update (
   $refreshonly = true,
   ) {
