@@ -24,7 +24,7 @@ class apt::unattended_upgrade {
       ensure  => file,
       owner   => 'root',
       group   => 'root',
-      mode    => '0644',
+      mode    => '0755',
       source  => 'puppet:///modules/apt/unattended-upgrades.kernel-postinst',
       require => Package['unattended-upgrades'],
   }
