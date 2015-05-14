@@ -191,7 +191,8 @@ class apt (
   $config_dir_mode      = params_lookup( 'config_dir_mode' ),
   $config_file_mode     = params_lookup( 'config_file_mode' ),
   $config_file_owner    = params_lookup( 'config_file_owner' ),
-  $config_file_group    = params_lookup( 'config_file_group' )
+  $config_file_group    = params_lookup( 'config_file_group' ),
+  $keyserver            = params_lookup( 'keyserver' )
   ) inherits apt::params {
 
   ### Definition of some variables used in the module
