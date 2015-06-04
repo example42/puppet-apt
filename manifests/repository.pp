@@ -82,7 +82,7 @@ define apt::repository (
   $src_repo        = false,
   $key             = '',
   $key_url         = '',
-  $keyserver       = 'subkeys.pgp.net',
+  $keyserver       = '',
   $template        = '',
   $source          = '',
   $environment     = undef,
@@ -93,6 +93,10 @@ define apt::repository (
   ) {
   include apt
 
+  $real_keyserver = $keyserver ? {
+    ''      => $apt::keyserver,
+    default => $keyserver,
+  }
   $manage_file_source = $source ? {
     ''        => undef,
     default   => $source,
@@ -123,7 +127,7 @@ define apt::repository (
     apt::key { $key:
       url         => $key_url,
       environment => $environment,
-      keyserver   => $keyserver,
+      keyserver   => $real_keyserver,
       path        => $path,
       fingerprint => $key,
       notify      => Exec['aptget_update'],

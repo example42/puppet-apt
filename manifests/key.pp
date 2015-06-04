@@ -37,9 +37,16 @@ define apt::key (
   $url             = '',
   $environment     = undef,
   $path            = '/usr/sbin:/usr/bin:/sbin:/bin',
-  $keyserver       = 'subkeys.pgp.net',
+  $keyserver       = '',
   $fingerprint     = ''
 ) {
+
+  include apt
+
+  $real_keyserver = $keyserver ? {
+    ''      => $apt::keyserver,
+    default => $keyserver,
+  }
 
   if $url != '' {
     exec { "aptkey_add_${name}":
@@ -50,7 +57,7 @@ define apt::key (
     }
   } else {
     exec { "aptkey_adv_${name}":
-      command     => "apt-key adv --keyserver ${keyserver} --recv ${fingerprint}",
+      command     => "apt-key adv --keyserver ${real_keyserver} --recv ${fingerprint}",
       unless      => "apt-key list | grep -q ${name}",
       environment => $environment,
       path        => $path,
