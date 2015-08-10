@@ -2,7 +2,7 @@
 #
 # This class installs the 10gen repo for MongoDB
 #
-class apt::repo::10gen {
+class apt::repo::mongodb_10gen {
 
   case $::operatingsystem {
   Ubuntu: {
