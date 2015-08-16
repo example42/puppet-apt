@@ -82,6 +82,43 @@ It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) 
 	  mode  => '750',
 	}
 
+- Manage apt keys
+
+    apt::key { 'key id':
+      url         => 'key url',
+      keyserver   => 'keyserver.net',
+      fingerprint => 'key fingerprint'
+    }
+
+- Manage sources-list.d entries
+
+    Add repository to sources.list.d in a way that's compatible with the Puppetlabs apt module
+
+    apt::source { 'source':
+      ensure      => present,
+      comment     => 'another source',
+      location    => 'http://myrepo.net/path',
+      release     => 'jessie',
+      repos       => 'main',
+      include_srv => true,
+      key         => 'key',
+      keyserver   => 'keyserver.net',
+    }
+
+- Manage ppa repositories
+
+    apt::ppa { 'ppa:freetuxtv/freetuxtv'
+      release          => 'trusty',
+    }
+
+- Manage package pinning
+
+    apt::pin { 'firefox_intrepid':
+      package  => 'firefox',
+      type     => 'release',
+      value    => 'intrepid',
+      priority => "900",
+    }
 
 
 [![Build Status](https://travis-ci.org/example42/puppet-apt.png?branch=master)](https://travis-ci.org/example42/puppet-apt)
