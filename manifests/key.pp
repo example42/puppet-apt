@@ -51,14 +51,14 @@ define apt::key (
   if $url != '' {
     exec { "aptkey_add_${name}":
       command     => "wget -O - ${url} | apt-key add -",
-      unless      => "apt-key list | grep -q ${name}",
+      unless      => "apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q ${name}",
       environment => $environment,
       path        => $path,
     }
   } else {
     exec { "aptkey_adv_${name}":
       command     => "apt-key adv --keyserver ${real_keyserver} --recv ${fingerprint}",
-      unless      => "apt-key list | grep -q ${name}",
+      unless      => "apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q ${name}",
       environment => $environment,
       path        => $path,
     }

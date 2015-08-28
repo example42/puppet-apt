@@ -151,7 +151,7 @@ deb url4 distro4 repo4/)
     end
     it 'should execute an adv command' do
       should contain_exec('aptkey_adv_key4').with_command('apt-key adv --keyserver subkeys.pgp.net --recv key4')
-      should contain_exec('aptkey_adv_key4').with_unless('apt-key list | grep -q key4')
+      should contain_exec('aptkey_adv_key4').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q key4')
     end
   end
 
@@ -181,7 +181,7 @@ deb url5 distro5 repo5/)
     end
     it 'should execute a wget command' do
       should contain_exec('aptkey_add_key5').with_command('wget -O - key5_url | apt-key add -')
-      should contain_exec('aptkey_add_key5').with_unless('apt-key list | grep -q key5')
+      should contain_exec('aptkey_add_key5').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q key5')
     end
   end
 
