@@ -62,6 +62,8 @@ define apt::conf (
       $real_manage_file_content = $content
     }
     validate_re($real_manage_file_content, ';$', "The content attribute does not end with a semicolon. Content: ${content}")
+  } else {
+    $real_manage_file_content = undef
   }
 
   $manage_notify = $bool_notify_aptget_update ? {
