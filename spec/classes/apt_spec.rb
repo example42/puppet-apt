@@ -1,4 +1,4 @@
-require "#{File.join(File.dirname(__FILE__),'..','spec_helper.rb')}"
+require 'spec_helper'
 
 describe 'apt' do
 
@@ -10,7 +10,7 @@ describe 'apt' do
     it { should contain_package('apt').with_ensure('present') }
     it { should contain_package('debconf-utils').with_ensure('present') }
     it { should_not contain_service('apt') }
-    it { should contain_file('apt.conf').with_ensure('present') }
+    it { should_not contain_file('apt.conf') }
   end
 
   describe 'Test installation of a specific version' do
@@ -22,7 +22,7 @@ describe 'apt' do
     it { should contain_package('apt').with_ensure('present') }
     it { should contain_package('debconf-utils').with_ensure('present') }
     it { should_not contain_service('apt') }
-    it { should contain_file('apt.conf').with_ensure('present') }
+    it { should_not contain_file('apt.conf') }
     it { should_not contain_monitor__process }
     it { should_not contain_firewall }
   end
@@ -54,16 +54,13 @@ describe 'apt' do
     let(:params) { {:template => "apt/spec.erb" , :options => { 'opt_a' => 'value_a' } } }
 
     it 'should generate a valid template' do
-      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
-      content.should match "fqdn: rspec.example42.com"
+      should contain_file('apt.conf').with_content(/fqdn: rspec.example42.com/)
     end
     it 'should not request a source ' do
-      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:source]
-      content.should be_nil
+      should contain_file('apt.conf').without_source
     end
     it 'should generate a template that uses custom options' do
-      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
-      content.should match "value_a"
+      should contain_file('apt.conf').with_content(/value_a/)
     end
 
   end
@@ -72,28 +69,23 @@ describe 'apt' do
     let(:params) { {:source => "puppet://modules/apt/spec" , :source_dir => "puppet://modules/apt/dir/spec" , :source_dir_purge => true } }
 
     it 'should request a valid source ' do
-      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:source]
-      content.should == 'puppet://modules/apt/spec'
+      should contain_file('apt.conf').with_source('puppet://modules/apt/spec')
     end
     it 'should not have content' do
-      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
-      content.should be_nil
+      should contain_file('apt.conf').without_content
     end
     it 'should request a valid source dir' do
-      content = catalogue.resource('file', 'apt.dir').send(:parameters)[:source]
-      content.should == 'puppet://modules/apt/dir/spec'
+      should contain_file('apt.dir').with_source('puppet://modules/apt/dir/spec')
     end
     it 'should purge source dir if source_dir_purge is true' do
-      content = catalogue.resource('file', 'apt.dir').send(:parameters)[:purge]
-      content.should == true
+      should contain_file('apt.dir').with_purge(true)
     end
   end
 
   describe 'Test customizations - custom class' do
-    let(:params) { {:my_class => "apt::spec" } }
+    let(:params) { {:my_class => "apt::spec", :template => "apt/spec.erb" } }
     it 'should automatically include a custom class' do
-      content = catalogue.resource('file', 'apt.conf').send(:parameters)[:content]
-      content.should match "fqdn: rspec.example42.com"
+      should contain_file('apt.conf').with_content(/fqdn: rspec.example42.com/)
     end
   end
 

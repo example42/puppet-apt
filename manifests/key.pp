@@ -37,21 +37,28 @@ define apt::key (
   $url             = '',
   $environment     = undef,
   $path            = '/usr/sbin:/usr/bin:/sbin:/bin',
-  $keyserver       = 'subkeys.pgp.net',
+  $keyserver       = '',
   $fingerprint     = ''
 ) {
 
+  include apt
+
+  $real_keyserver = $keyserver ? {
+    ''      => $apt::keyserver,
+    default => $keyserver,
+  }
+
   if $url != '' {
     exec { "aptkey_add_${name}":
-      command     => "wget -O - ${url} | apt-key add -",
-      unless      => "apt-key list | grep -q ${name}",
+      command     => "wget --no-check-certificate -O - ${url} | apt-key add -",
+      unless      => "apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q ${name}",
       environment => $environment,
       path        => $path,
     }
   } else {
     exec { "aptkey_adv_${name}":
-      command     => "apt-key adv --keyserver ${keyserver} --recv ${fingerprint}",
-      unless      => "apt-key list | grep -q ${name}",
+      command     => "apt-key adv --keyserver ${real_keyserver} --recv ${fingerprint}",
+      unless      => "apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q ${name}",
       environment => $environment,
       path        => $path,
     }

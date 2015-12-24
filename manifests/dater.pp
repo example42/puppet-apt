@@ -101,6 +101,7 @@ class apt::dater (
   $customer         = params_lookup('customer'),
   $package          = params_lookup('package'),
   $host_package     = params_lookup('host_package'),
+  $host_update_cmd  = params_lookup('host_update_cmd'),
   $host_user        = params_lookup('host_user'),
   $host_home_dir    = params_lookup('host_home_dir'),
   $reuse_host_user  = params_lookup('reuse_host_user'),
@@ -142,7 +143,8 @@ class apt::dater (
 
   $manager_ssh_dir = "${apt::dater::manager_home_dir}/.ssh"
   $manager_ssh_private_file = "${apt::dater::manager_ssh_dir}/id_apt_dater"
-  $manager_ad_conf_dir = "${apt::dater::manager_home_dir}/.config/apt-dater"
+  $manager_conf_dir = "${apt::dater::manager_home_dir}/.config"
+  $manager_ad_conf_dir = "${apt::dater::manager_conf_dir}/apt-dater"
   $manager_ad_hosts_file = "${apt::dater::manager_ad_conf_dir}/hosts.conf"
   $manager_fragments_dir = "${settings::vardir}/apt-dater-fragments"
 
@@ -156,7 +158,7 @@ class apt::dater (
   }
 
   # Include custom class if $my_class is set
-  if $apt::dater::my_class {
+  if $apt::dater::my_class and $apt::dater::my_class != '' {
     include $apt::dater::my_class
   }
 

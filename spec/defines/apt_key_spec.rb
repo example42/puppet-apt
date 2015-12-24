@@ -13,7 +13,7 @@ describe 'apt::key' do
   describe 'Test apt key by name' do
     it 'should execute an adv command' do
       should contain_exec('aptkey_adv_sample1').with_command('apt-key adv --keyserver subkeys.pgp.net --recv print1')
-      should contain_exec('aptkey_adv_sample1').with_unless('apt-key list | grep -q sample1')
+      should contain_exec('aptkey_adv_sample1').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q sample1')
     end
   end
 
@@ -27,7 +27,7 @@ describe 'apt::key' do
 
     it 'should execute an adv command' do
       should contain_exec('aptkey_adv_sample2').with_command('apt-key adv --keyserver server2 --recv print2')
-      should contain_exec('aptkey_adv_sample2').with_unless('apt-key list | grep -q sample2')
+      should contain_exec('aptkey_adv_sample2').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q sample2')
     end
   end
 
@@ -40,7 +40,7 @@ describe 'apt::key' do
 
     it 'should execute a wget command' do
       should contain_exec('aptkey_add_sample3').with_command('wget -O - url3 | apt-key add -')
-      should contain_exec('aptkey_add_sample3').with_unless('apt-key list | grep -q sample3')
+      should contain_exec('aptkey_add_sample3').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q sample3')
     end
   end
 
