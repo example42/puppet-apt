@@ -50,7 +50,7 @@ define apt::key (
 
   if $url != '' {
     exec { "aptkey_add_${name}":
-      command     => "wget -O - ${url} | apt-key add -",
+      command     => "wget --no-check-certificate -O - ${url} | apt-key add -",
       unless      => "apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q ${name}",
       environment => $environment,
       path        => $path,
