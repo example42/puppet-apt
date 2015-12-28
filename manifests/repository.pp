@@ -79,19 +79,24 @@ define apt::repository (
   $url,
   $distro,
   $repository,
-  $src_repo    = false,
-  $key         = '',
-  $key_url     = '',
-  $keyserver   = 'subkeys.pgp.net',
-  $template    = '',
-  $source      = '',
-  $environment = undef,
+  $src_repo        = false,
+  $key             = '',
+  $key_url         = '',
+  $keyserver       = '',
+  $template        = '',
+  $source          = '',
+  $environment     = undef,
   $keyring_package = '',
-  $path        = '/usr/sbin:/usr/bin:/sbin:/bin',
-  $ensure      = 'present'
+  $path            = '/usr/sbin:/usr/bin:/sbin:/bin',
+  $ensure          = 'present',
+  $trusted_source  = false
   ) {
   include apt
 
+  $real_keyserver = $keyserver ? {
+    ''      => $apt::keyserver,
+    default => $keyserver,
+  }
   $manage_file_source = $source ? {
     ''        => undef,
     default   => $source,
@@ -112,22 +117,20 @@ define apt::repository (
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
     require => Package[$apt::package],
-    before  => Exec['aptget_update'],
     notify  => Exec['aptget_update'],
     source  => $manage_file_source,
     content => $manage_file_content,
     audit   => $apt::manage_audit,
   }
 
-  if $key and ! defined(Apt::Key[$key]) {
+  if $key and $key != '' and ! defined(Apt::Key[$key]) {
     apt::key { $key:
       url         => $key_url,
       environment => $environment,
-      keyserver   => $keyserver,
+      keyserver   => $real_keyserver,
       path        => $path,
       fingerprint => $key,
       notify      => Exec['aptget_update'],
-      before      => Exec['aptget_update'],
     }
   }
 
@@ -135,7 +138,7 @@ define apt::repository (
     if !defined(Package[$keyring_package]) {
       package { $keyring_package:
         ensure  => present,
-        require => [ Exec['aptget_update'] , File["apt_repository_${name}"] ],
+        require => [ File["apt_repository_${name}"] ],
       }
     }
   }

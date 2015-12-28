@@ -24,7 +24,7 @@ Customizations for different projects and logic on how to populate configuration
 files should be placed in the $my_project classes.
 
 
-It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) to manage centrally controlled updates via ssh.
+It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) to manage centrally controlled updates via ssh on deb-based and yum-based systems.
 
 ## USAGE
 
@@ -74,6 +74,51 @@ It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) 
           manager_ssh_key => template('site/apt-dater.priv.key');
         }
 
+- Handle dpkg-statoverride
+
+	apt::dpkg_statoverride { '/var/log/puppet':
+	  user  => 'puppet',
+	  group => 'puppet',
+	  mode  => '750',
+	}
+
+- Manage apt keys
+
+    apt::key { 'key id':
+      url         => 'key url',
+      keyserver   => 'keyserver.net',
+      fingerprint => 'key fingerprint'
+    }
+
+- Manage sources-list.d entries
+
+    Add repository to sources.list.d in a way that's compatible with the Puppetlabs apt module
+
+    apt::source { 'source':
+      ensure      => present,
+      comment     => 'another source',
+      location    => 'http://myrepo.net/path',
+      release     => 'jessie',
+      repos       => 'main',
+      include_srv => true,
+      key         => 'key',
+      keyserver   => 'keyserver.net',
+    }
+
+- Manage ppa repositories
+
+    apt::ppa { 'ppa:freetuxtv/freetuxtv'
+      release          => 'trusty',
+    }
+
+- Manage package pinning
+
+    apt::pin { 'firefox_intrepid':
+      package  => 'firefox',
+      type     => 'release',
+      value    => 'intrepid',
+      priority => "900",
+    }
 
 
 [![Build Status](https://travis-ci.org/example42/puppet-apt.png?branch=master)](https://travis-ci.org/example42/puppet-apt)

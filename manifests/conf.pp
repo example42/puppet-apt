@@ -21,6 +21,9 @@
 # [*ensure*]
 #   Whether to add or delete this configuration
 #
+# [*suffix*]
+#   Suffix to be added to files generated.
+#
 #
 # == Examples
 #
@@ -32,10 +35,14 @@
 #
 #
 define apt::conf (
-  $source    = '' ,
-  $content   = '' ,
-  $priority  = '10' ,
-  $ensure    = present ) {
+  $source               = '' ,
+  $content              = '' ,
+  $priority             = '10' ,
+  $ensure               = present,
+  $suffix               = '.conf',
+  $notify_aptget_update = true ) {
+
+  $bool_notify_aptget_update=any2bool($notify_aptget_update)
 
   include apt
 
@@ -48,18 +55,30 @@ define apt::conf (
     ''        => undef,
     default   => $content,
   }
+  if $manage_file_content != undef {
+    if ! (chomp($content) =~ /;$/ ) {
+      $real_manage_file_content = "${content};"
+    } else {
+      $real_manage_file_content = $content
+    }
+    validate_re($real_manage_file_content, ';$', "The content attribute does not end with a semicolon. Content: ${content}")
+  }
+
+  $manage_notify = $bool_notify_aptget_update ? {
+    true  => 'Exec[aptget_update]',
+    false => undef,
+  }
 
   file { "apt_conf_${name}":
     ensure  => $ensure,
-    path    => "${apt::aptconfd_dir}/${priority}${name}.conf",
+    path    => "${apt::aptconfd_dir}/${priority}${name}${suffix}",
     mode    => $apt::config_file_mode,
     owner   => $apt::config_file_owner,
     group   => $apt::config_file_group,
     require => Package[$apt::package],
-    before  => Exec['aptget_update'],
-    notify  => Exec['aptget_update'],
+    notify  => $manage_notify,
     source  => $manage_file_source,
-    content => $manage_file_content,
+    content => $real_manage_file_content,
     audit   => $apt::manage_audit,
   }
 

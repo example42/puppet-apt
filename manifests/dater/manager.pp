@@ -28,29 +28,46 @@ class apt::dater::manager {
 
   }
 
-  file {
-    $apt::dater::manager_ad_conf_dir:
+  # only manage the ~/.config directory iff we need it created
+  if ($apt::dater::manage_directory == 'directory') {
+    file { $apt::dater::manager_home_conf_dir:
       ensure => $apt::dater::manage_directory,
-      mode   => '0700',
       owner  => $apt::dater::manager_user;
+    }
+  }
+
+  file {
+    $apt::dater::manager_conf_dir:
+      ensure  => $apt::dater::manage_directory,
+      mode    => '0700',
+      owner   => $apt::dater::manager_user;
+
+    $apt::dater::manager_ad_conf_dir:
+      ensure  => $apt::dater::manage_directory,
+      mode    => '0700',
+      owner   => $apt::dater::manager_user,
+      require => File[$apt::dater::manager_conf_dir];
 
     "${apt::dater::manager_ad_conf_dir}/apt-dater.conf":
       ensure  => $apt::dater::manage_file,
       content => template('apt/apt-dater.conf.erb'),
       mode    => '0600',
-      owner   => $apt::dater::manager_user;
+      owner   => $apt::dater::manager_user,
+      require => File[$apt::dater::manager_ad_conf_dir];
 
     "${apt::dater::manager_ad_conf_dir}/hosts.conf":
       ensure => $apt::dater::manage_file,
       source => "${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
       mode   => '0600',
-      owner  => $apt::dater::manager_user;
+      owner  => $apt::dater::manager_user,
+      require => File[$apt::dater::manager_ad_conf_dir];
 
     "${apt::dater::manager_ad_conf_dir}/screenrc":
       ensure  => $apt::dater::manage_file,
       content => template('apt/apt-dater-screenrc.erb'),
       mode    => '0600',
-      owner   => $apt::dater::manager_user;
+      owner   => $apt::dater::manager_user,
+      require => File[$apt::dater::manager_ad_conf_dir];
 
     '/usr/local/bin/update-apt-dater-hosts':
       ensure  => $apt::dater::manage_file,
@@ -74,7 +91,8 @@ class apt::dater::manager {
   exec { 'update-hosts.conf':
     command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
     unless  => "bash -c 'cmp ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated <(/usr/local/bin/update-apt-dater-hosts)'",
-    path    => '/bin:/usr/bin:/sbin:/usr/sbin';
+    path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+    require => File[$apt::dater::manager_ad_conf_dir],
   }
 
   # explicitly define the update order, uses a generated file to get proper diff support from File
