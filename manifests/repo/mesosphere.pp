@@ -14,7 +14,7 @@ class apt::repo::mesosphere {
     }
     Debian: {
       apt::repository { 'mesosphere':
-        url        => "http://repos.mesosphere.io/debian",
+        url        => 'http://repos.mesosphere.io/debian',
         distro     => $::lsbdistcodename,
         repository => 'main',
         key        => 'E56151BF',
