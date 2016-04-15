@@ -1,0 +1,15 @@
+{
+  "name": "example42-apt",
+  "version": "2.0.16",
+  "summary": "Puppet module for apt",
+  "author": "Alessandro Franceschi",
+  "description": "This module manages apt",
+  "types": [
+
+  ],
+  "checksums": {
+  },
+  "source": "https://github.com/example42/puppet-apt",
+  "project_page": "http://www.example42.com",
+  "license": "Apache2"
+}
