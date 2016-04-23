@@ -9,6 +9,12 @@
   ],
   "checksums": {
   },
+  "dependencies": [
+    {
+      "name": "example42/puppi",
+      "version_requirement": ">=2.0.0"
+    }
+  ],
   "source": "https://github.com/example42/puppet-apt",
   "project_page": "http://www.example42.com",
   "license": "Apache2"
