@@ -5,7 +5,7 @@
 class apt::repo::dotdeb {
 
   case $::operatingsystem {
-  Debian: {
+  'Debian': {
     apt::repository { 'dotdeb':
       url        => 'http://packages.dotdeb.org/',
       distro     => $::lsbdistcodename,

@@ -7,7 +7,7 @@ class apt::repo::openstack_havana (
   ) {
 
   case $::operatingsystem {
-  Ubuntu: {
+  'Ubuntu': {
     apt::repository { "openstack_${release}":
       url             => 'http://ubuntu-cloud.archive.canonical.com/ubuntu',
       distro          => "${::lsbdistcodename}-updates/${release}",
