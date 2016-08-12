@@ -5,6 +5,7 @@ Puppet module to manage apt
 Originally written by Boian Mihailov - boian.mihailov@gmail.com
 Added features by Marco Bonetti
 Adapted to Example42 NextGen layout by Alessandro Franceschi
+Currently maintained by [Mathieu Parent](https://github.com/sathieu)
 
 Licence: Apache2
 
