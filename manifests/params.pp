@@ -47,6 +47,6 @@ class apt::params  {
 
   ### General module variables that can have a site or per module default
   $audit_only = false
-  $keyserver = 'subkeys.pgp.net'
+  $keyserver = 'keyserver.ubuntu.com'
 
 }

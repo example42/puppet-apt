@@ -12,7 +12,7 @@ describe 'apt::key' do
 
   describe 'Test apt key by name' do
     it 'should execute an adv command' do
-      should contain_exec('aptkey_adv_sample1').with_command('apt-key adv --keyserver subkeys.pgp.net --recv print1')
+      should contain_exec('aptkey_adv_sample1').with_command('apt-key adv --keyserver keyserver.ubuntu.com --recv print1')
       should contain_exec('aptkey_adv_sample1').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q sample1')
     end
   end

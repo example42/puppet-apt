@@ -150,7 +150,7 @@ deb url4 distro4 repo4/)
       should contain_file('apt_repository_sample4').without_source
     end
     it 'should execute an adv command' do
-      should contain_exec('aptkey_adv_key4').with_command('apt-key adv --keyserver subkeys.pgp.net --recv key4')
+      should contain_exec('aptkey_adv_key4').with_command('apt-key adv --keyserver keyserver.ubuntu.com --recv key4')
       should contain_exec('aptkey_adv_key4').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q key4')
     end
   end
