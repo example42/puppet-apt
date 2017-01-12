@@ -15,6 +15,10 @@ else
   gem 'puppet', :require => false
 end
 
+if RUBY_VERSION.to_i < 2
+  gem 'json_pure', '<2'
+  gem 'json', '<2'
+end
 
 gem 'puppet-lint'
 gem 'puppetlabs_spec_helper', '>= 0.1.0'
