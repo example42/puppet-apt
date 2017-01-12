@@ -39,13 +39,13 @@ define apt::dpkg_statoverride(
   $ensure = present
 ) {
   case $ensure {
-    present: {
+    present: { # lint:ignore:unquoted_string_in_case
       exec { "dpkg_statoverride_${name}-add":
         command => "dpkg-statoverride --update --add '${user}' '${group}' '${mode}' '${name}'",
         unless  => "dpkg-statoverride --list '${name}' | grep '${user} ${group} ${mode} ${name}'",
       }
     }
-    absent: {
+    absent: { # lint:ignore:unquoted_string_in_case
       exec { "dpkg_statoverride_${name}-add":
         command => "dpkg-statoverride --remove '${name}'",
         onlyif  => "dpkg-statoverride --list '${name}'",

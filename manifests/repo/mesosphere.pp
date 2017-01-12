@@ -3,7 +3,7 @@
 class apt::repo::mesosphere {
 
   case $::operatingsystem {
-    Ubuntu: {
+    'Ubuntu': {
       apt::repository { 'mesosphere':
         url        => 'http://repos.mesosphere.io/ubuntu',
         distro     => $::lsbdistcodename,
@@ -12,7 +12,7 @@ class apt::repo::mesosphere {
         keyserver  => 'keyserver.ubuntu.com',
       }
     }
-    Debian: {
+    'Debian': {
       apt::repository { 'mesosphere':
         url        => 'http://repos.mesosphere.io/debian',
         distro     => $::lsbdistcodename,

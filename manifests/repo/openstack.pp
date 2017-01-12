@@ -8,7 +8,7 @@ class apt::repo::openstack (
   ) {
 
   case $::operatingsystem {
-  Ubuntu: {
+  'Ubuntu': {
     apt::repository { "openstack_${release}":
       url             => 'http://ubuntu-cloud.archive.canonical.com/ubuntu',
       distro          => "${::lsbdistcodename}-${status}/${release}",
@@ -17,7 +17,7 @@ class apt::repo::openstack (
 
     }
   }
-  Debian: {
+  'Debian': {
   }
   default: {}
   }

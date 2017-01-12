@@ -14,7 +14,7 @@ class apt::dater::host {
     }
     /(?i:RedHat|Centos|Scientific|Fedora)/: {
       file { '/usr/bin/apt-dater-host':
-        ensure => 'present',
+        ensure => file,
         owner  => $apt::dater::host_user,
         group  => $apt::dater::host_user,
         mode   => '0750',

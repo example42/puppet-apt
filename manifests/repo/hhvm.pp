@@ -3,7 +3,7 @@
 class apt::repo::hhvm {
 
   case $::operatingsystem {
-    Ubuntu: {
+    'Ubuntu': {
       apt::repository { 'hhvm':
         url        => 'http://dl.hhvm.com/ubuntu',
         distro     => $::lsbdistcodename,
@@ -12,7 +12,7 @@ class apt::repo::hhvm {
         key_url    => 'http://dl.hhvm.com/conf/hhvm.gpg.key',
       }
     }
-    Mint: {
+    'Mint': {
       apt::repository { 'hhvm':
         url        => 'http://dl.hhvm.com/mint',
         distro     => $::lsbdistcodename,
@@ -21,7 +21,7 @@ class apt::repo::hhvm {
         key_url    => 'http://dl.hhvm.com/conf/hhvm.gpg.key',
       }
     }
-    Debian: {
+    'Debian': {
       apt::repository { 'hhvm':
         url        => 'http://dl.hhvm.com/debian',
         distro     => $::lsbdistcodename,

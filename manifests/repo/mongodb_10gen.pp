@@ -5,7 +5,7 @@
 class apt::repo::mongodb_10gen {
 
   case $::operatingsystem {
-  Ubuntu: {
+  'Ubuntu': {
     apt::repository { '10gen':
       url        => 'http://downloads-distro.mongodb.org/repo/ubuntu-upstart',
       distro     => 'dist',
@@ -14,7 +14,7 @@ class apt::repo::mongodb_10gen {
       keyserver  => 'keys.gnupg.net',
     }
   }
-  Debian: {
+  'Debian': {
     apt::repository { '10gen':
       url        => 'http://downloads-distro.mongodb.org/repo/debian-sysvinit',
       distro     => 'dist',

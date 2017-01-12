@@ -5,7 +5,7 @@
 class apt::repo::postgresql {
 
   case $::operatingsystem {
-  Ubuntu: {
+  'Ubuntu': {
     apt::repository { 'postgresql':
       url             => 'http://apt.postgresql.org/pub/repos/apt',
       distro          => "${::lsbdistcodename}-pgdg",
@@ -16,7 +16,7 @@ class apt::repo::postgresql {
 
     }
   }
-  Debian: {
+  'Debian': {
     apt::repository { 'postgresql':
       url             => 'http://apt.postgresql.org/pub/repos/apt',
       distro          => "${::lsbdistcodename}-pgdg",
