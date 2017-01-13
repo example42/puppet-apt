@@ -3,7 +3,7 @@
 # This class installs the Docker repo
 #
 class apt::repo::dockerproject {
-
+  ensure_packages('apt-transport-https')
   case $::operatingsystem {
   'Debian': {
     apt::repository { 'docker':
