@@ -4,6 +4,7 @@ describe 'apt::preferences' do
 
   let(:title) { 'apt::preferences' }
   let(:node) { 'rspec.example42.com' }
+  let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, } }
   let(:params) {
     { 'name'    =>  'sample1',
       'content' =>  'content from template',

@@ -1,6 +1,6 @@
 {
   "name": "example42-apt",
-  "version": "2.0.16",
+  "version": "2.1.0",
   "summary": "Puppet module for apt",
   "author": "Alessandro Franceschi",
   "description": "This module manages apt",
@@ -10,6 +10,10 @@
   "checksums": {
   },
   "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.0 < 5.0.0"
+    },
     {
       "name": "example42/puppi",
       "version_requirement": ">=2.0.0"

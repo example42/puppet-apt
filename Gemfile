@@ -15,8 +15,11 @@ else
   gem 'puppet', :require => false
 end
 
-
-gem 'puppet-lint'
-gem 'puppetlabs_spec_helper', '>= 0.1.0'
+group :development, :unit_tests do
+  gem 'json', '~> 1.0',  :require => false if Gem::Version.new(RUBY_VERSION.dup) < Gem::Version.new('2.0.0')
+  gem 'json_pure', '~> 1.0',  :require => false if Gem::Version.new(RUBY_VERSION.dup) < Gem::Version.new('2.0.0')
+  gem 'puppet-lint'
+  gem 'puppetlabs_spec_helper', '>= 0.1.0'
+end
 
 # vim:ft=ruby

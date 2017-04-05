@@ -4,6 +4,7 @@ describe 'apt::repository' do
 
   let(:title) { 'apt::repository' }
   let(:node) { 'rspec.example42.com' }
+  let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, } }
   let(:params) {
     { 'name'       =>  'sample1',
       'url'        =>  'url1',
@@ -112,7 +113,7 @@ deb-src \[trusted=yes\] url2 distro2 repo2/)
         'template'   =>  'apt/spec.erb',
       }
     }
-    let(:facts) { { :options => {} } }
+    let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, :options => {}, } }
 
     it 'should create a sample3.list file' do
       should contain_file('apt_repository_sample3').with_ensure('present')
@@ -132,7 +133,7 @@ deb-src \[trusted=yes\] url2 distro2 repo2/)
         'url'        =>  'url4',
         'distro'     =>  'distro4',
         'repository' =>  'repo4',
-        'key'        =>  'key4',
+        'key'        =>  '45674567',
       }
     }
 
@@ -149,9 +150,13 @@ deb url4 distro4 repo4/)
     it 'should not request a source' do
       should contain_file('apt_repository_sample4').without_source
     end
-    it 'should execute an adv command' do
-      should contain_exec('aptkey_adv_key4').with_command('apt-key adv --keyserver keyserver.ubuntu.com --recv key4')
-      should contain_exec('aptkey_adv_key4').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q key4')
+    it 'should execute an apt_key' do
+      should contain_apt_key('45674567').only_with(
+        'ensure'  => 'present',
+        'id'      => '45674567',
+        'server'  => 'keyserver.ubuntu.com',
+        'before'  => ["Anchor[apt_key 45674567 present]"],
+      )
     end
   end
 
@@ -161,8 +166,8 @@ deb url4 distro4 repo4/)
         'url'        =>  'url5',
         'distro'     =>  'distro5',
         'repository' =>  'repo5',
-        'key'        =>  'key5',
-        'key_url'    =>  'key5_url',
+        'key'        =>  '56785678',
+        'key_url'    =>  'https://pgp.example.org/key5.gpg',
       }
     }
 
@@ -180,8 +185,13 @@ deb url5 distro5 repo5/)
       should contain_file('apt_repository_sample5').without_source
     end
     it 'should execute a wget command' do
-      should contain_exec('aptkey_add_key5').with_command('wget -O - key5_url | apt-key add -')
-      should contain_exec('aptkey_add_key5').with_unless('apt-key adv --list-public-keys --with-fingerprint --with-colons | grep -q key5')
+      should contain_apt_key('56785678').only_with(
+        'ensure'  => 'present',
+        'id'      => '56785678',
+        'source'  => 'https://pgp.example.org/key5.gpg',
+        'server'  => 'keyserver.ubuntu.com',
+        'before'  => ["Anchor[apt_key 56785678 present]"],
+      )
     end
   end
 

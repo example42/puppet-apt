@@ -83,12 +83,12 @@ It also contains functionality to use [apt-dater](http://www.ibh.de/apt-dater/) 
 	  mode  => '750',
 	}
 
-- Manage apt keys
+- Manage apt keys (Compatible with [puppetlabs-apt](https://forge.puppet.com/puppetlabs/apt)
 
     apt::key { 'key id':
-      url         => 'key url',
-      keyserver   => 'keyserver.net',
-      fingerprint => 'key fingerprint'
+      source => 'key url',
+      server => 'keyserver.net',
+      id     => 'key fingerprint'
     }
 
 - Manage sources-list.d entries

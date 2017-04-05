@@ -3,9 +3,6 @@ fixtures:
     stdlib:   'https://github.com/puppetlabs/puppetlabs-stdlib.git'
     concat:   'https://github.com/puppetlabs/puppetlabs-concat.git'
     puppi:    'https://github.com/example42/puppi.git'
-    monitor:  'https://github.com/example42/puppet-monitor.git'
-    firewall: 'https://github.com/example42/puppet-firewall.git'
-    iptables: 'https://github.com/example42/puppet-iptables.git'
   symlinks:
     'apt': '#{source_dir}'
 

@@ -4,7 +4,7 @@ describe 'apt' do
 
   let(:title) { 'apt' }
   let(:node) { 'rspec.example42.com' }
-  let(:facts) { { :ipaddress => '10.42.42.42' } }
+  let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version} }
 
   describe 'Test standard installation' do
     it { should contain_package('apt').with_ensure('present') }
@@ -16,15 +16,6 @@ describe 'apt' do
   describe 'Test installation of a specific version' do
     let(:params) { {:version => '1.0.42' } }
     it { should contain_package('apt').with_ensure('1.0.42') }
-  end
-
-  describe 'Test standard installation with monitoring and firewalling' do
-    it { should contain_package('apt').with_ensure('present') }
-    it { should contain_package('debconf-utils').with_ensure('present') }
-    it { should_not contain_service('apt') }
-    it { should_not contain_file('apt.conf') }
-    it { should_not contain_monitor__process }
-    it { should_not contain_firewall }
   end
 
   describe 'Test installation of extra packages, as string' do
@@ -46,8 +37,6 @@ describe 'apt' do
     it { should_not contain_service('apt') }
     it 'should remove apt configuration file' do should contain_file('apt.conf').with_ensure('absent') end
     it 'should remove sources.list file' do should contain_file('apt_sources.list').with_ensure('absent') end
-    it { should_not contain_monitor__process }
-    it { should_not contain_firewall }
   end
 
   describe 'Test customizations - template' do
