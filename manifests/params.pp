@@ -49,4 +49,19 @@ class apt::params  {
   $audit_only = false
   $keyserver = 'keyserver.ubuntu.com'
 
+  $config_files = {
+    'conf'   => {
+      'path' => $aptconfd_dir,
+      'ext'  => '',
+    },
+    'pref'   => {
+      'path' => $preferences_dir,
+      'ext'  => '.pref',
+    },
+    'list'   => {
+      'path' => $sourceslist_dir,
+      'ext'  => '.list',
+    }
+  }
+
 }
