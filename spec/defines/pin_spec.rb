@@ -4,6 +4,7 @@ describe 'apt::pin' do
 
   let(:title) { 'apt::pin' }
   let(:node) { 'rspec.example42.com' }
+  let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, } }
   let(:params) {
     { 'name'     =>  'sample1',
       'release'  =>  'release1',
@@ -68,7 +69,7 @@ Pin-Priority: 30/)
         'template' =>  'apt/spec.erb',
       }
     }
-    let(:facts) { { :options => {} } }
+    let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, :options => {}, } }
 
     it 'should create a pin-sample4-version file' do
       should contain_file('apt_pin_sample4').with_ensure('present')

@@ -4,6 +4,7 @@ describe 'apt::repository' do
 
   let(:title) { 'apt::repository' }
   let(:node) { 'rspec.example42.com' }
+  let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, } }
   let(:params) {
     { 'name'       =>  'sample1',
       'url'        =>  'url1',
@@ -112,7 +113,7 @@ deb-src \[trusted=yes\] url2 distro2 repo2/)
         'template'   =>  'apt/spec.erb',
       }
     }
-    let(:facts) { { :options => {} } }
+    let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, :options => {}, } }
 
     it 'should create a sample3.list file' do
       should contain_file('apt_repository_sample3').with_ensure('present')

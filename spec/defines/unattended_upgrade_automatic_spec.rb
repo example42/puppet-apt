@@ -4,7 +4,7 @@ describe 'apt::unattended_upgrade_automatic' do
 
   let(:title) { 'apt::unattended_upgrade_automatic' }
   let(:node) { 'rspec.example42.com' }
-  let(:facts) { { :lsbdistid => 'Unknown' } }
+  let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, } }
   let(:params) { {} }
 
   describe 'Test automatic unattended upgrade for unknown distro' do
@@ -25,7 +25,7 @@ describe 'apt::unattended_upgrade_automatic' do
   end
 
   describe 'Test automatic unattended upgrade for squeeze' do
-    let(:facts) { { :lsbdistid => 'Debian', :lsbdistcodename => 'squeeze' } }
+    let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'squeeze', :puppetversion   => Puppet.version, } }
 
     it 'should create a 99unattended-upgrade.conf file' do
       should contain_file('apt_conf_unattended-upgrade').with_ensure('present')
@@ -55,7 +55,7 @@ describe 'apt::unattended_upgrade_automatic' do
   end
 
   describe 'Test automatic unattended upgrade for wheezy' do
-    let(:facts) { { :lsbdistid => 'Debian', :lsbdistcodename => 'wheezy' } }
+    let(:facts) { { :lsbdistid => 'Debian', :osfamily => 'Debian', :lsbdistcodename => 'wheezy', :puppetversion   => Puppet.version, } }
 
     it 'should create a 99unattended-upgrade.conf file' do
       should contain_file('apt_conf_unattended-upgrade').with_ensure('present')
@@ -85,7 +85,7 @@ describe 'apt::unattended_upgrade_automatic' do
   end
 
   describe 'Test automatic unattended upgrade for Ubuntu' do
-    let(:facts) { { :lsbdistid => 'Ubuntu', :lsbdistcodename => 'precise' } }
+    let(:facts) { { :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'precise', :puppetversion   => Puppet.version, } }
 
     it 'should create a 99unattended-upgrade.conf file' do
       should contain_file('apt_conf_unattended-upgrade').with_ensure('present')
@@ -114,7 +114,7 @@ describe 'apt::unattended_upgrade_automatic' do
   end
 
   describe 'Test automatic unattended upgrade for Ubuntu with mail' do
-    let(:facts) { { :lsbdistid => 'Ubuntu', :lsbdistcodename => 'precise' } }
+    let(:facts) { { :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'precise', :puppetversion   => Puppet.version, } }
     let(:params) { { :mail => 'root@somewhere' } }
 
     it 'should create a 99unattended-upgrade.conf file' do

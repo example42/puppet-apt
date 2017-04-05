@@ -69,7 +69,7 @@ define apt::source(
   }
 
   if ! $release {
-    $_release = $::lsbdistcodename
+    $_release = $::apt::params::xfacts['lsbdistcodename']
     unless $_release {
       fail('lsbdistcodename fact not available: release parameter required')
     }

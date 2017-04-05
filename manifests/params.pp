@@ -2,6 +2,36 @@
 #
 class apt::params  {
 
+  if $::osfamily != 'Debian' {
+    fail('This module only works on Debian or derivatives like Ubuntu')
+  }
+
+  # prior to puppet 3.5.0, defined() couldn't test if a variable was defined.
+  # strict_variables wasn't added until 3.5.0, so this should be fine.
+  if $::puppetversion and versioncmp($::puppetversion, '3.5.0') < 0 {
+    $xfacts = {
+      'lsbdistcodename'     => $::lsbdistcodename,
+      'lsbdistrelease'      => $::lsbdistrelease,
+      'lsbdistid'           => $::lsbdistid,
+    }
+  } else {
+    # Strict variables facts lookup compatibility
+    $xfacts = {
+      'lsbdistcodename' => defined('$lsbdistcodename') ? {
+        true    => $::lsbdistcodename,
+        default => undef,
+      },
+      'lsbdistrelease' => defined('$lsbdistrelease') ? {
+        true    => $::lsbdistrelease,
+        default => undef,
+      },
+      'lsbdistid' => defined('$lsbdistid') ? {
+        true    => $::lsbdistid,
+        default => undef,
+      },
+    }
+  }
+
   $package = 'apt'
   $extra_packages = 'debconf-utils'
   $force_conf_d = false
