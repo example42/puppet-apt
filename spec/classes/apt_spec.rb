@@ -18,15 +18,6 @@ describe 'apt' do
     it { should contain_package('apt').with_ensure('1.0.42') }
   end
 
-  describe 'Test standard installation with monitoring and firewalling' do
-    it { should contain_package('apt').with_ensure('present') }
-    it { should contain_package('debconf-utils').with_ensure('present') }
-    it { should_not contain_service('apt') }
-    it { should_not contain_file('apt.conf') }
-    it { should_not contain_monitor__process }
-    it { should_not contain_firewall }
-  end
-
   describe 'Test installation of extra packages, as string' do
     let(:params) { {:extra_packages => 'aptitude,apt-utils' } }
     it { should contain_package('aptitude').with_ensure('present') }
@@ -46,8 +37,6 @@ describe 'apt' do
     it { should_not contain_service('apt') }
     it 'should remove apt configuration file' do should contain_file('apt.conf').with_ensure('absent') end
     it 'should remove sources.list file' do should contain_file('apt_sources.list').with_ensure('absent') end
-    it { should_not contain_monitor__process }
-    it { should_not contain_firewall }
   end
 
   describe 'Test customizations - template' do
