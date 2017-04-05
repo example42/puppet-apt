@@ -121,16 +121,17 @@
 #   }
 #
 define apt::pin (
-  $package  = '',
-  $type     = '',
-  $value    = '',
-  $priority = '',
-  $template = '',
-  $version  = '',
-  $release  = '',
-  $origin   = '',
-  $ensure   = 'present',
-  $suffix   = ''
+  $ensure      = 'present',
+  $explanation = undef,
+  $package     = '',
+  $type        = '',
+  $value       = '',
+  $priority    = '',
+  $template    = '',
+  $version     = '',
+  $release     = '',
+  $origin      = '',
+  $suffix      = ''
 ) {
 
   include apt
