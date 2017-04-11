@@ -192,8 +192,29 @@ class apt (
   $config_file_mode     = params_lookup( 'config_file_mode' ),
   $config_file_owner    = params_lookup( 'config_file_owner' ),
   $config_file_group    = params_lookup( 'config_file_group' ),
-  $keyserver            = params_lookup( 'keyserver' )
+  $keyserver            = params_lookup( 'keyserver' ),
+  # puppetlabs-apt compatibility
+  $update   = {},
   ) inherits apt::params {
+
+  $frequency_options = ['always','daily','weekly','reluctantly']
+  validate_hash($update)
+  if $update['frequency'] {
+    validate_re($update['frequency'], $frequency_options)
+  }
+  if $update['timeout'] {
+    unless is_integer($update['timeout']) {
+      fail('timeout value for update must be an integer')
+    }
+  }
+  if $update['tries'] {
+    unless is_integer($update['tries']) {
+      fail('tries value for update must be an integer')
+    }
+  }
+
+  $_update = merge($::apt::update_defaults, $update)
+  include ::apt::update
 
   ### Definition of some variables used in the module
   $array_extra_packages = is_array($apt::extra_packages) ? {
@@ -218,7 +239,7 @@ class apt (
 
   # Logic management according to parameters provided by users
   $manage_notify = $apt::bool_force_aptget_update ? {
-    true  => 'Exec[aptget_update]',
+    true  => 'Exec[apt_update]',
     false => undef,
   }
 
@@ -414,11 +435,9 @@ class apt (
     content => "// File managed by Puppet. Triggers an apt-get update on first run\n",
   }
 
-  include ::apt::apt_get_update
-
   if $apt::bool_force_aptget_update {
     Package <| title != $apt::package |> {
-      require +> Exec['aptget_update']
+      require +> Exec['apt_update']
     }
   }
 
