@@ -79,6 +79,8 @@ class apt::params  {
   $audit_only = false
   $keyserver = 'keyserver.ubuntu.com'
 
+  $provider       = '/usr/bin/apt-get'
+
   $config_files = {
     'conf'   => {
       'path' => $aptconfd_dir,
@@ -92,6 +94,12 @@ class apt::params  {
       'path' => $sourceslist_dir,
       'ext'  => '.list',
     }
+  }
+
+  $update_defaults = {
+    'frequency' => 'reluctantly',
+    'timeout'   => undef,
+    'tries'     => undef,
   }
 
   $source_key_defaults = {

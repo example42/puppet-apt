@@ -67,7 +67,7 @@ define apt::conf (
   }
 
   $manage_notify = $bool_notify_aptget_update ? {
-    true  => 'Exec[aptget_update]',
+    true  => 'Exec[apt_update]',
     false => undef,
   }
 
