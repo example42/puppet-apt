@@ -1,3 +1,13 @@
+## Release 2.1.2
+### Summary
+Docker repo
+
+#### Features
+- apt::repo::docker replaces apt::repo::dockerproject. The public key is included.
+
+### Backward incompatible changes
+- Class[apt::repo::dockerproject] is removed, use Class[apt::repo::docker] instead
+
 ## Release 2.1.1
 ### Summary
 A release targeting puppetlabs-apt compatibility.
