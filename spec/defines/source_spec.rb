@@ -70,7 +70,7 @@ describe 'apt::source' do
       }).with_content(/hello.there wheezy main\n/)
       }
 
-      it { is_expected.to contain_file('/etc/apt/sources.list.d/my_source.list').that_notifies('Exec[aptget_update]')}
+      it { is_expected.to contain_file('/etc/apt/sources.list.d/my_source.list').that_notifies('Class[Apt::Update]')}
 
       it { is_expected.to contain_apt__pin('my_source').that_comes_before('Apt::Setting[list-my_source]').with({
         :ensure       => 'present',
