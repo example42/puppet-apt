@@ -77,9 +77,9 @@ describe 'apt::unattended_upgrade_automatic' do
     end
     it 'should populate correctly 50unattended-upgrades.conf file' do
       should contain_file('apt_conf_unattended-upgrades').with_content(/Unattended-Upgrade::Origins-Pattern \{
-        "origin=Debian,archive=oldstable,label=Debian";
-        "origin=Debian,archive=oldstable,label=Debian-Security";
-        "origin=Debian,archive=oldstable-updates,label=Debian";
+        "origin=Debian,archive=oldoldstable,label=Debian";
+        "origin=Debian,archive=oldoldstable,label=Debian-Security";
+        "origin=Debian,archive=oldoldstable-updates,label=Debian";
 \};/)
     end
   end

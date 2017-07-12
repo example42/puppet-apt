@@ -34,9 +34,9 @@ Unattended-Upgrade::Allowed-Origins {
 <% elsif @lsbdistcodename == 'wheezy' -%>
 // unattended-upgrades (<< 0.80~exp2) doesn't support  codename
 Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian,archive=oldstable,label=Debian";
-        "origin=Debian,archive=oldstable,label=Debian-Security";
-        "origin=Debian,archive=oldstable-updates,label=Debian";
+        "origin=Debian,archive=oldoldstable,label=Debian";
+        "origin=Debian,archive=oldoldstable,label=Debian-Security";
+        "origin=Debian,archive=oldoldstable-updates,label=Debian";
         <%- [@repository].flatten.each do |singlerepo| -%>
         "<%= singlerepo %>";
         <%- end -%>
