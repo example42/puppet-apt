@@ -1,6 +1,6 @@
 {
   "name": "example42-apt",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "summary": "Puppet module for apt",
   "author": "Alessandro Franceschi",
   "description": "This module manages apt",
