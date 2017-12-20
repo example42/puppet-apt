@@ -436,8 +436,11 @@ class apt (
   }
 
   if $apt::bool_force_aptget_update {
-    Package <| title != $apt::package |> {
+    Package <| title != $apt::package and title != 'apt-transport-https' |> {
       require +> Exec['apt_update']
+    }
+    Package <| title == 'apt-transport-https' |> {
+      before +> Exec['apt_update']
     }
   }
 
