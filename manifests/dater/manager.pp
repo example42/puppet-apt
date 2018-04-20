@@ -54,6 +54,13 @@ class apt::dater::manager {
       owner   => $apt::dater::manager_user,
       require => File[$apt::dater::manager_ad_conf_dir];
 
+    "${apt::dater::manager_ad_conf_dir}/apt-dater.xml":
+      ensure  => $apt::dater::manage_file,
+      content => template('apt/apt-dater.xml.erb'),
+      mode    => '0600',
+      owner   => $apt::dater::manager_user,
+      require => File[$apt::dater::manager_ad_conf_dir];
+
     "${apt::dater::manager_ad_conf_dir}/hosts.conf":
       ensure  => $apt::dater::manage_file,
       source  => "${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
@@ -88,7 +95,7 @@ class apt::dater::manager {
   }
 
   exec { 'update-hosts.conf':
-    command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
+    command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated ; rm -f ${apt::dater::manager_ad_conf_dir}/hosts.xml",
     unless  => "bash -c 'cmp ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated <(/usr/local/bin/update-apt-dater-hosts)'",
     path    => '/bin:/usr/bin:/sbin:/usr/sbin',
     require => File[$apt::dater::manager_ad_conf_dir],
