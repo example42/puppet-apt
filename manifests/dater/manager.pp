@@ -6,7 +6,6 @@ class apt::dater::manager {
   if !defined(Package[$apt::dater::package]) {
     package { $apt::dater::package:
       ensure => $apt::dater::manage_package,
-      noop   => $apt::dater::noops,
     }
   }
 
@@ -28,9 +27,9 @@ class apt::dater::manager {
 
   }
 
-  # only manage the ~/.config directory iff we need it created
+  # only manage the ~/ directory if we need it created
   if ($apt::dater::manage_directory == 'directory') {
-    file { $apt::dater::manager_home_conf_dir:
+    file { $apt::dater::manager_home_dir:
       ensure => $apt::dater::manage_directory,
       owner  => $apt::dater::manager_user;
     }
@@ -51,6 +50,13 @@ class apt::dater::manager {
     "${apt::dater::manager_ad_conf_dir}/apt-dater.conf":
       ensure  => $apt::dater::manage_file,
       content => template('apt/apt-dater.conf.erb'),
+      mode    => '0600',
+      owner   => $apt::dater::manager_user,
+      require => File[$apt::dater::manager_ad_conf_dir];
+
+    "${apt::dater::manager_ad_conf_dir}/apt-dater.xml":
+      ensure  => $apt::dater::manage_file,
+      content => template('apt/apt-dater.xml.erb'),
       mode    => '0600',
       owner   => $apt::dater::manager_user,
       require => File[$apt::dater::manager_ad_conf_dir];
@@ -89,7 +95,7 @@ class apt::dater::manager {
   }
 
   exec { 'update-hosts.conf':
-    command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated",
+    command => "/usr/local/bin/update-apt-dater-hosts > ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated ; rm -f ${apt::dater::manager_ad_conf_dir}/hosts.xml",
     unless  => "bash -c 'cmp ${apt::dater::manager_ad_conf_dir}/hosts.conf.generated <(/usr/local/bin/update-apt-dater-hosts)'",
     path    => '/bin:/usr/bin:/sbin:/usr/sbin',
     require => File[$apt::dater::manager_ad_conf_dir],
