@@ -23,11 +23,6 @@
 #   Set to 'true' to remove package(s) installed by module
 #   Can be defined also by the (top scope) variable $apt_dater_absent
 #
-# [*noops*]
-#   Set noop metaparameter to true for all the resources managed by the module.
-#   Basically you can run a dryrun for this specific module if you set
-#   this to true. Default: undef
-#
 # [*debug*]
 #   Set to 'true' to enable modules debugging
 #   Can be defined also by the (top scope) variables $apt_dater_debug and $debug
@@ -95,7 +90,6 @@ class apt::dater (
   $my_class         = params_lookup('my_class'),
   $version          = params_lookup('version'),
   $absent           = params_lookup('absent'),
-  $noops            = params_lookup('noops'),
   $debug            = params_lookup('debug', 'global'),
   $role             = params_lookup('role'),
   $customer         = params_lookup('customer'),
@@ -172,7 +166,6 @@ class apt::dater (
       group   => 'root',
       content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'
       ),
-      noop    => $apt::dater::noops,
     }
   }
 }
